@@ -11,7 +11,6 @@
 
 /* eslint-disable no-new */
 const chai = require('chai')
-const fs = require('co-fs-extra')
 const Ioc = require('adonis-fold').Ioc
 const AntlManager = require('../src/Antl/AntlManager')
 const setup = require('./setup')
