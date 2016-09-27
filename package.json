@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "_mocha test",
+    "test": "istanbul cover _mocha --report lcovonly -- -R spec test && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "coverage": "istanbul cover _mocha test"
   },
   "keywords": [
@@ -29,6 +29,7 @@
     "cz-conventional-changelog": "^1.2.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.0.2",
+    "mocha-lcov-reporter": "^1.2.0",
     "sqlite3": "^3.1.4",
     "standard": "^8.1.0"
   },
