@@ -1,0 +1,61 @@
+{
+  "name": "adonis-intl",
+  "version": "1.0.0",
+  "description": "Localization for adonisjs app",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "_mocha test",
+    "coverage": "istanbul cover _mocha test"
+  },
+  "keywords": [
+    "adonis",
+    "adonisjs",
+    "adonis-intl",
+    "intl",
+    "localization"
+  ],
+  "author": "adonisjs,amanvirk",
+  "license": "MIT",
+  "devDependencies": {
+    "adonis-ace": "^3.0.4",
+    "adonis-fold": "^3.0.3",
+    "adonis-lucid": "^3.0.5",
+    "chai": "^3.5.0",
+    "co-mocha": "^1.1.3",
+    "coveralls": "^2.11.14",
+    "cz-conventional-changelog": "^1.2.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.0.2",
+    "sqlite3": "^3.1.4",
+    "standard": "^8.1.0"
+  },
+  "standard": {
+    "global": [
+      "describe",
+      "it",
+      "context",
+      "before",
+      "after",
+      "beforeEach",
+      "afterEach"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "co-fs-extra": "^1.2.1",
+    "flat": "^2.0.1",
+    "intl": "^1.2.5",
+    "intl-format-cache": "^2.0.5",
+    "intl-messageformat": "^1.3.0",
+    "intl-relativeformat": "^1.3.0",
+    "lodash": "^4.16.1",
+    "require-all": "^2.0.0"
+  }
+}
