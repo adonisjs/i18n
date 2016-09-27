@@ -31,6 +31,7 @@
     "istanbul": "^0.4.5",
     "mocha": "^3.0.2",
     "mocha-lcov-reporter": "^1.2.0",
+    "node-exceptions": "^1.0.3",
     "sqlite3": "^3.1.4",
     "standard": "^8.1.0"
   },
