@@ -10,6 +10,7 @@
 */
 
 const chai = require('chai')
+const fs = require('co-fs-extra')
 const setup = require('./setup')
 const Database = require('adonis-lucid/src/Database')
 const Antl = require('../src/Antl/Antl')
@@ -320,6 +321,7 @@ describe('Antl', function () {
 
   context('Via Database Driver', function () {
     before(function * () {
+      yield fs.ensureDir(setup.Helpers.databasePath())
       Database._setConfigProvider(setup.Config)
       yield Database.schema.createTable('locales', (table) => {
         table.increments()
