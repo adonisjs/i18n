@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "test": "istanbul cover _mocha --report lcovonly -- -R spec test && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
+    "test": "node --harmony_proxies ./node_modules/.bin/istanbul cover _mocha --report lcovonly -- -R spec test && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "coverage": "istanbul cover _mocha test"
   },
   "keywords": [
