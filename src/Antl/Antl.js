@@ -12,6 +12,8 @@
 const _ = require('lodash')
 const flatten = require('flat')
 const Formatter = require('../Formatter/Formatter')
+const CatLog = require('cat-log')
+const logger = new CatLog('adonis:antl')
 
 class Antl {
 
@@ -91,6 +93,8 @@ class Antl {
    */
   * load () {
     if (!this._stringsLoaded) {
+      const driverName = this._driver.constructor ? this._driver.constructor.name : 'currently active'
+      logger.verbose('loading and caching %s driver locales', driverName)
       this._localeStrings = yield this._driver.load()
       this._stringsLoaded = true
     }
@@ -211,6 +215,7 @@ class Antl {
    * @param {String} locale
    */
   setLocale (locale) {
+    logger.verbose('switching locale to %s', locale)
     this._locale = locale
   }
 

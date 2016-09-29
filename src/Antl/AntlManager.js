@@ -13,6 +13,8 @@ const Ioc = require('adonis-fold').Ioc
 const Drivers = require('./Drivers')
 const Antl = require('./Antl')
 const CE = require('../Exceptions')
+const CatLog = require('cat-log')
+const logger = new CatLog('adonis:antl')
 
 /**
  * Makes driver instance from the list of official drivers or
@@ -43,6 +45,7 @@ class AntlManager {
    * @param  {Object} value
    */
   static extend (key, value) {
+    logger.verbose('extending by adding new %s driver', key)
     this.extendedDrivers = this.extendedDrivers || {}
     this.extendedDrivers[key] = value
   }
@@ -50,8 +53,8 @@ class AntlManager {
   constructor (Config, View) {
     this.Config = Config
     View.global('antl', this)
-    this.constructor.extendedDrivers = this.constructor.extendedDrivers || {}
     this.driversPool = {}
+    this.constructor.extendedDrivers = this.constructor.extendedDrivers || {}
     this.activeDriver = this._getAntlInstance(Config.get('app.locales.driver'))
   }
 
@@ -84,6 +87,7 @@ class AntlManager {
    * @return {Object}
    */
   driver (driver) {
+    logger.verbose('returning driver instance for %s driver', driver)
     return this._getAntlInstance(driver)
   }
 
