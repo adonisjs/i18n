@@ -1,5 +1,5 @@
 {
-  "name": "adonis-intl",
+  "name": "adonis-antl",
   "version": "1.0.0",
   "description": "Localization for adonisjs app",
   "main": "index.js",

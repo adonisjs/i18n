@@ -11,6 +11,7 @@
 
 const requireAll = require('require-all')
 const _ = require('lodash')
+const fs = require('co-fs-extra')
 
 class FileDriver {
 
@@ -25,6 +26,7 @@ class FileDriver {
   }
 
   constructor (Helpers) {
+    this.Helpers = Helpers
     this.localesDir = Helpers.resourcesPath('locales')
   }
 
@@ -39,6 +41,64 @@ class FileDriver {
       filters: /(.*)\.json$/
     }))
   }
+
+  /**
+   * Returns file contents and silently swallows non-existing
+   * exceptions by returning an empty object.
+   *
+   * @param   {String} fromPath
+   *
+   * @return  {Object}
+   *
+   * @private
+   */
+  * _getFileContents (fromPath) {
+    try {
+      return yield fs.readJson(fromPath)
+    } catch (e) {
+      return {}
+    }
+  }
+
+  /**
+   * Create/update a locale string for a given language
+   * and group.
+   *
+   * @param {String} locale
+   * @param {String} group
+   * @param {String} item
+   * @param {String} text
+   *
+   * @return {Boolean}
+   */
+  * set (locale, group, key, value) {
+    const localeFile = this.Helpers.resourcesPath(`locales/${locale}/${group}.json`)
+    const fileContents = yield this._getFileContents(localeFile)
+    fileContents[key] = value
+    yield fs.writeJson(localeFile, fileContents)
+    return true
+  }
+
+  /**
+   * Removes a locale item for a given language
+   * and group.
+   *
+   * @param  {String} locale
+   * @param  {String} group
+   * @param  {String} item
+   *
+   * @return {Boolean}
+   */
+  * remove (locale, group, key) {
+    const localeFile = this.Helpers.resourcesPath(`locales/${locale}/${group}.json`)
+    const fileContents = yield this._getFileContents(localeFile)
+    if (fileContents[key]) {
+      delete fileContents[key]
+    }
+    yield fs.writeJson(localeFile, fileContents)
+    return true
+  }
+
 }
 
 module.exports = FileDriver

@@ -154,10 +154,14 @@ class Antl {
    *
    * @return {Boolean}
    */
-  set (group, key, value) {
+  * set (group, key, value) {
     const locale = this._getRuntimeLocale()
     this._clearTemporaryLocale()
-    return _.set(this._localeStrings, [locale, group, key], value)
+    const response = yield this._driver.set(locale, group, key, value)
+    if (response) {
+      return _.set(this._localeStrings, [locale, group, key], value)
+    }
+    return false
   }
 
   /**
@@ -182,10 +186,14 @@ class Antl {
    *
    * @return {Boolean}
    */
-  remove (group, key) {
+  * remove (group, key) {
     const locale = this._getRuntimeLocale()
     this._clearTemporaryLocale()
-    return _.set(this._localeStrings, [locale, group, key], undefined)
+    const response = yield this._driver.remove(locale, group, key)
+    if (response) {
+      return _.set(this._localeStrings, [locale, group, key], undefined)
+    }
+    return false
   }
 
   /**

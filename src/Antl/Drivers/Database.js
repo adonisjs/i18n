@@ -72,6 +72,57 @@ class DatabaseDriver {
     }, {})
     .value()
   }
+
+  /**
+   * Returning the base select query to be used for querying
+   * a single locale message item
+   *
+   * @param   {String} locale
+   * @param   {String} group
+   * @param   {String} item
+   *
+   * @return  {Object}
+   *
+   * @private
+   */
+  _getSelectQuery (locale, group, item) {
+    return this.Database.from(this.localesTable).where({ locale, group, item })
+  }
+
+  /**
+   * Create/update a locale string for a given language
+   * and group.
+   *
+   * @param {String} locale
+   * @param {String} group
+   * @param {String} item
+   * @param {String} text
+   *
+   * @return {Boolean}
+   */
+  * set (locale, group, item, text) {
+    const hasValue = yield this._getSelectQuery(locale, group, item)
+
+    if (_.size(hasValue)) {
+      return yield this._getSelectQuery(locale, group, item).update({ text })
+    }
+    return yield this.Database.insert({ locale, group, item, text }).into(this.localesTable)
+  }
+
+  /**
+   * Removes a locale item for a given language
+   * and group.
+   *
+   * @param  {String} locale
+   * @param  {String} group
+   * @param  {String} item
+   *
+   * @return {Boolean}
+   */
+  * remove (locale, group, item) {
+    return yield this._getSelectQuery(locale, group, item).delete()
+  }
+
 }
 
 module.exports = DatabaseDriver

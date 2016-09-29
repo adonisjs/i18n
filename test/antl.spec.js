@@ -121,6 +121,22 @@ describe('Antl', function () {
   })
 
   context('Via File Driver', function () {
+    afterEach(function * () {
+      const defaultLocaleValues = {
+        en: {
+          greeting: 'Hello world',
+          'is.admin': 'false',
+          photos: 'You have {numPhotos, plural, =0 {no photos.} =1 {one photo.} other {# photos.}}'
+        },
+        fr: {
+          billAmount: 'You have to pay {amount, number, curr}'
+        }
+      }
+      yield fs.writeJson(setup.Helpers.resourcesPath('locales/en/messages.json'), defaultLocaleValues.en)
+      yield fs.writeJson(setup.Helpers.resourcesPath('locales/fr/messages.json'), defaultLocaleValues.fr)
+      yield fs.remove(setup.Helpers.resourcesPath('locales/fr/notifications.json'))
+    })
+
     it('should not call the driver load method when loaded the locales once', function * () {
       let calledTimes = 0
       const driver = new File(setup.Helpers)
@@ -170,9 +186,22 @@ describe('Antl', function () {
       const driver = new File(setup.Helpers)
       const antl = new Antl(setup.Config, driver)
       yield antl.load()
-      antl.for('fr').set('messages', 'greeting', 'Bonjour')
+      yield antl.for('fr').set('messages', 'greeting', 'Bonjour')
+      const fileContents = yield fs.readJson(setup.Helpers.resourcesPath('locales/fr/messages.json'))
+      assert.equal(fileContents.greeting, 'Bonjour')
       const message = antl.for('fr').get('messages.greeting')
       assert.equal(message, 'Bonjour')
+    })
+
+    it('should be create the file when trying to set the value for a non-existing group', function * () {
+      const driver = new File(setup.Helpers)
+      const antl = new Antl(setup.Config, driver)
+      yield antl.load()
+      yield antl.for('fr').set('notifications', 'alert', 'Stay alert')
+      const fileContents = yield fs.readJson(setup.Helpers.resourcesPath('locales/fr/notifications.json'))
+      assert.equal(fileContents.alert, 'Stay alert')
+      const message = antl.for('fr').get('notifications.alert')
+      assert.equal(message, 'Stay alert')
     })
 
     it('should format a message defined inside the locales directory', function * () {
@@ -242,7 +271,7 @@ describe('Antl', function () {
       const antl = new Antl(setup.Config, driver)
       yield antl.load()
       Formats.addFormat('curr', {style: 'currency'})
-      antl.for('fr').set('messages', 'billAmount', 'Pay Now {amount, number, curr}')
+      yield antl.for('fr').set('messages', 'billAmount', 'Pay Now {amount, number, curr}')
       const message = antl
         .for('fr')
         .formatMessage('messages.billAmount', {amount: 1000}, (message) => {
@@ -256,7 +285,7 @@ describe('Antl', function () {
       const antl = new Antl(setup.Config, driver)
       yield antl.load()
       Formats.addFormat('curr', {style: 'currency'})
-      antl.set('messages', 'is.admin', 'true')
+      yield antl.set('messages', 'is.admin', 'true')
       const message = antl.get('messages.is.admin')
       assert.equal(message, 'true')
     })
@@ -313,7 +342,7 @@ describe('Antl', function () {
       const driver = new File(setup.Helpers)
       const antl = new Antl(setup.Config, driver)
       yield antl.load()
-      antl.remove('messages', 'greeting')
+      yield antl.remove('messages', 'greeting')
       const message = antl.formatMessage('messages.greeting')
       assert.equal(message, 'messages.greeting')
     })
@@ -330,6 +359,9 @@ describe('Antl', function () {
         table.string('item')
         table.text('text')
       })
+    })
+
+    beforeEach(function * () {
       yield Database.table('locales').insert([
         {
           item: 'photos',
@@ -352,6 +384,10 @@ describe('Antl', function () {
 
     after(function * () {
       yield Database.schema.dropTable('locales')
+    })
+
+    afterEach(function * () {
+      yield Database.truncate('locales')
     })
 
     it('should not call the driver load method when loaded the locales once', function * () {
@@ -406,10 +442,12 @@ describe('Antl', function () {
     })
 
     it('should be able to add a new string and value for a custom locale', function * () {
-      const driver = new File(setup.Helpers)
+      const driver = new DatabaseDriver(Database)
       const antl = new Antl(setup.Config, driver)
       yield antl.load()
-      antl.for('fr').set('messages', 'greeting', 'Bonjour')
+      yield antl.for('fr').set('messages', 'greeting', 'Bonjour')
+      const savedString = yield Database.from('locales').where({ locale: 'fr', group: 'messages', item: 'greeting' }).first()
+      assert.equal(savedString.text, 'Bonjour')
       const message = antl.for('fr').get('messages.greeting')
       assert.equal(message, 'Bonjour')
     })
@@ -428,7 +466,10 @@ describe('Antl', function () {
       const antl = new Antl(setup.Config, driver)
       yield antl.load()
       Formats.addFormat('curr', {style: 'currency'})
-      antl.for('fr').set('messages', 'billAmount', 'Pay Now {amount, number, curr}')
+      yield antl.for('fr').set('messages', 'billAmount', 'Pay Now {amount, number, curr}')
+      const savedString = yield Database.from('locales').where({ locale: 'fr', group: 'messages', item: 'billAmount' }).first()
+      assert.equal(savedString.text, 'Pay Now {amount, number, curr}')
+
       const message = antl
         .for('fr')
         .formatMessage('messages.billAmount', {amount: 1000}, (message) => {
@@ -481,7 +522,10 @@ describe('Antl', function () {
       const driver = new DatabaseDriver(Database)
       const antl = new Antl(setup.Config, driver)
       yield antl.load()
-      antl.remove('messages', 'is.admin')
+      yield antl.remove('messages', 'is.admin')
+      const removedString = yield Database.from('locales').where({ locale: 'en', group: 'messages', item: 'is.admin' }).first()
+      assert.equal(removedString, undefined)
+
       const message = antl.formatMessage('messages.is.admin')
       assert.equal(message, 'messages.is.admin')
     })
