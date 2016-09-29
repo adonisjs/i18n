@@ -276,6 +276,18 @@ class Antl {
   }
 
   /**
+   * Formats date to a relative unit
+   *
+   * @param  {String} value
+   * @param  {Object} [options]
+   *
+   * @return {String}
+   */
+  formatRelative (value, options) {
+    return Formatter.formatRelative(value, this._getRuntimeLocales(), _.merge(this._defaults, options))
+  }
+
+  /**
    * Formats a message
    *
    * @param  {String} key

@@ -17,6 +17,7 @@ const Formats = require('./Formats')
 const intlNumber = fnCache(Intl.NumberFormat)
 const intlDate = fnCache(Intl.DateTimeFormat)
 const intlMessage = fnCache(require('intl-messageformat'))
+const intlRelativeFormat = fnCache(require('intl-relativeformat'))
 
 /**
  * Build options by merging defaults, format
@@ -73,7 +74,7 @@ Formatter.formatAmount = function (value, locales, currency, options) {
  * @param  {Array}  locales
  * @param  {Object} [options]
  *
- * @return {Object}
+ * @return {String}
  */
 Formatter.formatDate = function (value, locales, options) {
   return intlDate(locales, _buildOptions(options)).format(value)
@@ -98,4 +99,17 @@ Formatter.formatMessage = function (message, locales, values, callback) {
     options = message.buildOptions()
   }
   return intlMessage(message, locales, options).format(values)
+}
+
+/**
+ * Formats date using relative formatter
+ *
+ * @param  {String} value
+ * @param  {Array}  locales
+ * @param  {Object} [options]
+ *
+ * @return {String}
+ */
+Formatter.formatRelative = function (value, locales, options) {
+  return intlRelativeFormat(locales, _buildOptions(options)).format(value)
 }

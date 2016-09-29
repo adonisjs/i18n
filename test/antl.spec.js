@@ -118,6 +118,27 @@ describe('Antl', function () {
         })
       assert.equal(message, 'You have to pay $30.00 with tax of 10%')
     })
+
+    it('should be able to format a date to the relative unit', function () {
+      const antl = new Antl(setup.Config)
+      const before3Hours = new Date().setHours(new Date().getHours() - 3)
+      const message = antl.formatRelative(before3Hours)
+      assert.equal(message, '3 hours ago')
+    })
+
+    it('should return the difference back in minutes', function () {
+      const antl = new Antl(setup.Config)
+      const before3Hours = new Date().setHours(new Date().getHours() - 3)
+      const message = antl.formatRelative(before3Hours, {units: 'minute'})
+      assert.equal(message, '180 minutes ago')
+    })
+
+    it('should return the difference back in numeric style', function () {
+      const antl = new Antl(setup.Config)
+      const before3Hours = new Date().setDate(new Date().getDate() - 1)
+      const message = antl.formatRelative(before3Hours, {style: 'numeric'})
+      assert.equal(message, '1 day ago')
+    })
   })
 
   context('Via File Driver', function () {
