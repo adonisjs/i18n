@@ -12,12 +12,14 @@
 global.Intl = require('intl')
 const fnCache = require('intl-format-cache')
 const _ = require('lodash')
+const haye = require('haye')
 const Message = require('./Message')
 const Formats = require('./Formats')
 const intlNumber = fnCache(Intl.NumberFormat)
 const intlDate = fnCache(Intl.DateTimeFormat)
 const intlMessage = fnCache(require('intl-messageformat'))
 const intlRelativeFormat = fnCache(require('intl-relativeformat'))
+const expressionRegex = /\[(.*)\]/
 
 /**
  * Build options by merging defaults, format
@@ -38,6 +40,39 @@ const _buildOptions = function (options, extras) {
 }
 
 const Formatter = exports = module.exports = {}
+
+/**
+ * Parses string expression of the options to an object
+ * to be passed to formatMessage method.
+ *
+ * @param   {Array} expressionsArray
+ *
+ * @return  {Object}
+ *
+ * @private
+ */
+Formatter._parseExpression = function (expressionsArray, message) {
+  expressionsArray.forEach((expression) => {
+    const tokens = expression.split(expressionRegex)
+    const formatAndType = _.first(tokens).split(':')
+
+    /**
+     * Throw exception when a proper format is not passed
+     * Expression should have format and type seperated
+     * with a colon.
+     *
+     * @example
+     * curr:number
+     * usd:number
+     */
+    if (_.size(formatAndType) !== 2) {
+      throw new Error('Invalid formatMessage expression')
+    }
+
+    const options = _.nth(tokens, 1) ? haye.fromQS(_.nth(tokens, 1)).toJSON() : {}
+    message.passFormat(_.first(formatAndType)).to(_.last(formatAndType)).withValues(options)
+  })
+}
 
 /**
  * Formats a number using Intl.NumberFormat
@@ -91,13 +126,31 @@ Formatter.formatDate = function (value, locales, options) {
  *
  * @return {String}
  */
-Formatter.formatMessage = function (message, locales, values, callback) {
+Formatter.formatMessage = function (message, locales, values) {
   let options = {}
-  if (typeof (callback) === 'function') {
+  const args = _.slice(arguments, 3)
+
+  /**
+   * If 4th argument is a function, pass the message instance to
+   * the callback and let it build the message.
+   */
+  if (_.isFunction(_.first(args))) {
     const message = new Message()
-    callback(message)
+    args[0](message)
     options = message.buildOptions()
   }
+
+  /**
+   * If 4th is a string, assume it as an expression and pass
+   * all following arguments to the parseExpression method
+   * and let it build the options.
+   */
+  if (_.isString(_.first(args))) {
+    const message = new Message()
+    Formatter._parseExpression(args, message)
+    options = message.buildOptions()
+  }
+
   return intlMessage(message, locales, options).format(values)
 }
 

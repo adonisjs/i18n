@@ -107,6 +107,14 @@ describe('Antl', function () {
       assert.equal(message, 'You have to pay $30.00')
     })
 
+    it('should be able to format a message with runtime currency code injected via string expression', function () {
+      const antl = new Antl(setup.Config)
+      Formats.addFormat('curr', { style: 'currency' })
+      const message = antl
+        .formatMessage('You have to pay {total, number, curr}', {total: 30}, 'curr:number[currency=USD]')
+      assert.equal(message, 'You have to pay $30.00')
+    })
+
     it('should be able to form a complex message with predefined formats', function () {
       const antl = new Antl(setup.Config)
       Formats.addFormat('curr', { style: 'currency' })
