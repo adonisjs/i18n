@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
 */
 
-const Formats = require('./Formats')
+const Formats = require('../Formats')
 const _ = require('lodash')
 
 class Message {

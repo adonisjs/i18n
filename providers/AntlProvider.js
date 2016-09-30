@@ -1,6 +1,7 @@
 'use strict'
 
 const ServiceProvider = require('adonis-fold').ServiceProvider
+const co = require('co')
 
 class AntlProvider extends ServiceProvider {
 
@@ -10,10 +11,15 @@ class AntlProvider extends ServiceProvider {
    * the formats store.
    */
   * boot () {
-    const Antl = this.app.use('Adonis/Addons/Antl')
-    const Formats = this.app.use('Adonis/Addons/AntlFormats')
-    Formats.addFormat('curr', {style: 'currency'})
-    yield Antl.load()
+    const self = this
+    require('../src/Antl/formats')
+    this.app.once('bind:autoload', () => {
+      co(function * () {
+        const Antl = self.app.use('Adonis/Addons/Antl')
+        yield Antl.load()
+        self.app.emit('antl:loaded')
+      })
+    })
   }
 
   /**
@@ -33,7 +39,7 @@ class AntlProvider extends ServiceProvider {
     this.app.manager('Adonis/Addons/Antl', AntlManager)
 
     this.app.bind('Adonis/Addons/AntlFormats', () => {
-      return require('../src/Formatter/Formats')
+      return require('../src/Formats')
     })
   }
 

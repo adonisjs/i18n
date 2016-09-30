@@ -9,8 +9,8 @@
  * file that was distributed with this source code.
 */
 
-const Message = require('../src/Formatter/Message')
-const Formats = require('../src/Formatter/Formats')
+const Message = require('../src/Message')
+const Formats = require('../src/Formats')
 const chai = require('chai')
 const assert = chai.assert
 

@@ -11,7 +11,7 @@
 
 const _ = require('lodash')
 const flatten = require('flat')
-const Formatter = require('../Formatter/Formatter')
+const Formatter = require('../Formatter')
 const CatLog = require('cat-log')
 const logger = new CatLog('adonis:antl')
 

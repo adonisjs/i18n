@@ -13,10 +13,11 @@ const chai = require('chai')
 const fs = require('co-fs-extra')
 const setup = require('./setup')
 const Database = require('adonis-lucid/src/Database')
-const Antl = require('../src/Antl/Antl')
-const Formats = require('../src/Formatter/Formats')
+const Antl = require('../src/Antl')
+const Formats = require('../src/Formats')
 const File = require('../src/Antl/Drivers').file
 const DatabaseDriver = require('../src/Antl/Drivers').database
+const clearRequire = require('clear-require')
 const assert = chai.assert
 require('co-mocha')
 
@@ -146,6 +147,38 @@ describe('Antl', function () {
       const before3Hours = new Date().setDate(new Date().getDate() - 1)
       const message = antl.formatRelative(before3Hours, {style: 'numeric'})
       assert.equal(message, '1 day ago')
+    })
+
+    it('should be able to use existing currency formats', function () {
+      const antl = new Antl(setup.Config)
+      clearRequire('../src/Antl/formats')
+      require('../src/Antl/formats')
+      const message = antl.formatNumber(1000, { format: 'usd' })
+      assert.equal(message, '$1,000.00')
+    })
+
+    it('should be able to use existing hhmmss format', function () {
+      const antl = new Antl(setup.Config)
+      clearRequire('../src/Antl/formats')
+      require('../src/Antl/formats')
+      const message = antl.formatDate(new Date(), {format: 'hhmmss'})
+      assert.match(message, /\d+:\d+:\d+\s\w{2}/)
+    })
+
+    it('should be able to pass additional values existing hhmmss format', function () {
+      const antl = new Antl(setup.Config)
+      clearRequire('../src/Antl/formats')
+      require('../src/Antl/formats')
+      const message = antl.formatDate(new Date(), {format: 'hhmmss', hour12: false})
+      assert.match(message, /\d+:\d+:\d+/)
+    })
+
+    it('should be able to use existing ddyymm format', function () {
+      const antl = new Antl(setup.Config)
+      clearRequire('../src/Antl/formats')
+      require('../src/Antl/formats')
+      const message = antl.formatDate(new Date(), {format: 'ddyymm'})
+      assert.match(message, /\d+\/\d+\/\d{4}/)
     })
   })
 

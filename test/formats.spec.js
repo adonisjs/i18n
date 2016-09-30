@@ -11,7 +11,7 @@
 
 const chai = require('chai')
 const assert = chai.assert
-const Formats = require('../src/Formatter/Formats')
+const Formats = require('../src/Formats')
 
 describe('Formats', function () {
   beforeEach(function () {

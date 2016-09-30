@@ -11,7 +11,7 @@
 
 const Ioc = require('adonis-fold').Ioc
 const Drivers = require('./Drivers')
-const Antl = require('./Antl')
+const Antl = require('./index')
 const CE = require('../Exceptions')
 const CatLog = require('cat-log')
 const logger = new CatLog('adonis:antl')

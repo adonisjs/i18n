@@ -10,9 +10,9 @@
 */
 
 const chai = require('chai')
-const Formatter = require('../src/Formatter/Formatter')
-const Formats = require('../src/Formatter/Formats')
-const Message = require('../src/Formatter/Message')
+const Formatter = require('../src/Formatter')
+const Formats = require('../src/Formats')
+const Message = require('../src/Message')
 const assert = chai.assert
 
 describe('Formatter', function () {
