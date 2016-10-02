@@ -1,0 +1,68 @@
+{
+  "name": "adonis-antl",
+  "version": "1.0.1",
+  "description": "Localization for adonisjs app",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "npm run lint && node --harmony_proxies ./node_modules/.bin/istanbul cover _mocha --report lcovonly -- -R spec test && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
+    "coverage": "npm run lint && istanbul cover _mocha test",
+    "lint": "standard"
+  },
+  "keywords": [
+    "adonis",
+    "adonisjs",
+    "adonis-intl",
+    "intl",
+    "localization"
+  ],
+  "author": "adonisjs,amanvirk",
+  "license": "MIT",
+  "devDependencies": {
+    "adonis-ace": "^3.0.4",
+    "adonis-fold": "^3.0.3",
+    "adonis-lucid": "^3.0.5",
+    "chai": "^3.5.0",
+    "clear-require": "^1.0.1",
+    "co-mocha": "^1.1.3",
+    "coveralls": "^2.11.14",
+    "cz-conventional-changelog": "^1.2.0",
+    "istanbul": "^0.4.5",
+    "mocha": "^3.0.2",
+    "mocha-lcov-reporter": "^1.2.0",
+    "sqlite3": "^3.1.4",
+    "standard": "^8.1.0"
+  },
+  "standard": {
+    "global": [
+      "describe",
+      "it",
+      "context",
+      "before",
+      "after",
+      "beforeEach",
+      "afterEach"
+    ]
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "dependencies": {
+    "cat-log": "^1.0.2",
+    "co": "^4.6.0",
+    "co-fs-extra": "^1.2.1",
+    "flat": "^2.0.1",
+    "haye": "^1.0.0",
+    "intl": "^1.2.5",
+    "intl-format-cache": "^2.0.5",
+    "intl-messageformat": "^1.3.0",
+    "intl-relativeformat": "^1.3.0",
+    "lodash": "^4.16.1",
+    "node-exceptions": "^1.0.3",
+    "require-all": "^2.0.0"
+  }
+}
