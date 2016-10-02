@@ -36,6 +36,12 @@ class AntlProvider extends ServiceProvider {
       return new AntlManager(Config, View)
     })
 
+    this.app.bind('Adonis/Commands/Antl:Setup', (app) => {
+      const Helpers = app.use('Adonis/Src/Helpers')
+      const Setup = require('../commands/Setup')
+      return new Setup(Helpers)
+    })
+
     this.app.manager('Adonis/Addons/Antl', AntlManager)
 
     this.app.bind('Adonis/Addons/AntlFormats', () => {
