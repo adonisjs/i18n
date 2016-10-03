@@ -38,6 +38,9 @@ describe('Antl Middleware', function () {
         language: function (languages) {
           const acc = accepts(req)
           return acc.language(languages)
+        },
+        input: function () {
+          return null
         }
       }
       co(function * () {
@@ -66,6 +69,9 @@ describe('Antl Middleware', function () {
         language: function (languages) {
           const acc = accepts(req)
           return acc.language(languages)
+        },
+        input: function () {
+          return null
         }
       }
       co(function * () {
@@ -94,6 +100,9 @@ describe('Antl Middleware', function () {
         language: function (languages) {
           const acc = accepts(req)
           return acc.language(languages)
+        },
+        input: function () {
+          return null
         }
       }
       co(function * () {
@@ -124,6 +133,9 @@ describe('Antl Middleware', function () {
         language: function (languages) {
           const acc = accepts(req)
           return acc.language(languages)
+        },
+        input: function () {
+          return null
         }
       }
       co(function * () {
@@ -143,5 +155,133 @@ describe('Antl Middleware', function () {
     const response = yield request(server).get('/').set('accept-language', 'en-uk').expect(200)
     assert.equal(response.body.currentLocale, 'en-uk')
     yield fs.remove(setup.Helpers.resourcesPath('locales/en-uk'))
+  })
+
+  it('should negotiate the language using the query string', function * () {
+    const self = this
+    yield this.Antl.reload()
+    const middleware = new AntlMiddleware(setup.Config, this.Antl)
+    const server = http.createServer(function (req, res) {
+      const request = {
+        language: function (languages) {
+          const acc = accepts(req)
+          return acc.language(languages)
+        },
+        input: function () {
+          return 'fr'
+        }
+      }
+      co(function * () {
+        yield middleware.handle(request, {}, function * () {})
+      })
+      .then(() => {
+        const currentLocale = self.Antl.getLocale()
+        res.writeHead(200, {'content-type': 'application/json'})
+        res.write(JSON.stringify({ currentLocale }))
+        res.end()
+      }).catch((error) => {
+        res.writeHead(500, {'content-type': 'application/json'})
+        res.write(JSON.stringify({ error: error.message }))
+        res.end()
+      })
+    })
+    const response = yield request(server).get('/').expect(200)
+    assert.equal(response.body.currentLocale, 'fr')
+  })
+
+  it('should negotiate the language by defining multiple languages in the query string', function * () {
+    const self = this
+    yield this.Antl.reload()
+    const middleware = new AntlMiddleware(setup.Config, this.Antl)
+    const server = http.createServer(function (req, res) {
+      const request = {
+        language: function (languages) {
+          const acc = accepts(req)
+          return acc.language(languages)
+        },
+        input: function () {
+          return 'ca,ar,fr'
+        }
+      }
+      co(function * () {
+        yield middleware.handle(request, {}, function * () {})
+      })
+      .then(() => {
+        const currentLocale = self.Antl.getLocale()
+        res.writeHead(200, {'content-type': 'application/json'})
+        res.write(JSON.stringify({ currentLocale }))
+        res.end()
+      }).catch((error) => {
+        res.writeHead(500, {'content-type': 'application/json'})
+        res.write(JSON.stringify({ error: error.message }))
+        res.end()
+      })
+    })
+    const response = yield request(server).get('/').expect(200)
+    assert.equal(response.body.currentLocale, 'fr')
+  })
+
+  it('should return the actual language when query string and header both are missing', function * () {
+    const self = this
+    yield this.Antl.reload()
+    const middleware = new AntlMiddleware(setup.Config, this.Antl)
+    const server = http.createServer(function (req, res) {
+      const request = {
+        language: function (languages) {
+          const acc = accepts(req)
+          return acc.language(languages)
+        },
+        input: function () {
+          return null
+        }
+      }
+      co(function * () {
+        yield middleware.handle(request, {}, function * () {})
+      })
+      .then(() => {
+        const currentLocale = self.Antl.getLocale()
+        res.writeHead(200, {'content-type': 'application/json'})
+        res.write(JSON.stringify({ currentLocale }))
+        res.end()
+      }).catch((error) => {
+        res.writeHead(500, {'content-type': 'application/json'})
+        res.write(JSON.stringify({ error: error.message }))
+        res.end()
+      })
+    })
+    const response = yield request(server).get('/').expect(200)
+    assert.equal(response.body.currentLocale, 'en')
+  })
+
+  it('should return the actual language when query string is set to empty string', function * () {
+    const self = this
+    yield this.Antl.reload()
+    const middleware = new AntlMiddleware(setup.Config, this.Antl)
+    const server = http.createServer(function (req, res) {
+      const request = {
+        language: function (languages) {
+          const acc = accepts(req)
+          return acc.language(languages)
+        },
+        input: function () {
+          return ''
+        }
+      }
+      co(function * () {
+        yield middleware.handle(request, {}, function * () {})
+      })
+      .then(() => {
+        const currentLocale = self.Antl.getLocale()
+        res.writeHead(200, {'content-type': 'application/json'})
+        res.write(JSON.stringify({ currentLocale }))
+        res.end()
+      }).catch((error) => {
+        res.writeHead(500, {'content-type': 'application/json'})
+        res.write(JSON.stringify({ error: error.message }))
+        res.end()
+      })
+    })
+    const response = yield request(server).get('/').expect(200)
+    assert.equal(response.body.currentLocale, 'en')
   })
 })
