@@ -28,6 +28,60 @@ class AntlProvider extends ServiceProvider {
    *
    */
   * register () {
+    this._bindProvider()
+    this._bindMiddleware()
+    this._bindCommands()
+    this._bindFormats()
+  }
+
+  /**
+   * Binds the middleware to be used for detecting the user
+   * language and setting the locale accordingly.
+   *
+   * @private
+   */
+  _bindMiddleware () {
+    this.app.bind('Adonis/Middleware/DetectLocale', (app) => {
+      const Config = app.use('Adonis/Src/Config')
+      const Antl = app.use('Adonis/Addons/Antl')
+      const AntlMiddleware = require('../middleware/Antl')
+      return new AntlMiddleware(Config, Antl)
+    })
+  }
+
+  /**
+   * Binds Ace commands to the IoC container. End user is
+   * required to register the command manually to the
+   * commands list.
+   *
+   * @private
+   */
+  _bindCommands () {
+    this.app.bind('Adonis/Commands/Antl:Setup', (app) => {
+      const Helpers = app.use('Adonis/Src/Helpers')
+      const Setup = require('../commands/Setup')
+      return new Setup(Helpers)
+    })
+  }
+
+  /**
+   * Binds the formats to the IoC container. It can be
+   * used to register/get custom formats.
+   *
+   * @private
+   */
+  _bindFormats () {
+    this.app.bind('Adonis/Addons/AntlFormats', () => {
+      return require('../src/Formats')
+    })
+  }
+
+  /**
+   * Binds the actual provider to the IoC container
+   *
+   * @private
+   */
+  _bindProvider () {
     const AntlManager = require('../src/Antl/AntlManager')
 
     this.app.singleton('Adonis/Addons/Antl', (app) => {
@@ -36,17 +90,12 @@ class AntlProvider extends ServiceProvider {
       return new AntlManager(Config, View)
     })
 
-    this.app.bind('Adonis/Commands/Antl:Setup', (app) => {
-      const Helpers = app.use('Adonis/Src/Helpers')
-      const Setup = require('../commands/Setup')
-      return new Setup(Helpers)
-    })
-
+    /**
+     * Binds the manager to the IoC container. It is required
+     * to allow the end-user to extend the Antl provider
+     * by adding new driver.
+     */
     this.app.manager('Adonis/Addons/Antl', AntlManager)
-
-    this.app.bind('Adonis/Addons/AntlFormats', () => {
-      return require('../src/Formats')
-    })
   }
 
 }
