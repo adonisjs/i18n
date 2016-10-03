@@ -21,6 +21,7 @@
   "author": "adonisjs,amanvirk",
   "license": "MIT",
   "devDependencies": {
+    "accepts": "^1.3.3",
     "adonis-ace": "^3.0.4",
     "adonis-fold": "^3.0.3",
     "adonis-lucid": "^3.0.5",
@@ -33,7 +34,8 @@
     "mocha": "^3.0.2",
     "mocha-lcov-reporter": "^1.2.0",
     "sqlite3": "^3.1.4",
-    "standard": "^8.1.0"
+    "standard": "^8.1.0",
+    "supertest": "^2.0.0"
   },
   "standard": {
     "global": [

@@ -12,15 +12,19 @@
 class AntlMiddleware {
 
   constructor (Config, Antl) {
-    this.allowedLocales = Config.get('app.locales.allowed')
+    this.defaultDriver = Config.get('app.locales.driver')
+    this.defaultLocale = Config.get('app.locales.locale')
     this.Antl = Antl
   }
 
-  * handle (request, response, next) {
-    const requestLanguage = request.language(this.allowedLocales)
-    if (requestLanguage) {
-      this.Antl.setLocale(requestLanguage)
-    }
+  * handle (request, response, next, driver) {
+    driver = driver || this.defaultDriver
+    const driverInstance = this.Antl.driver(driver)
+    yield driverInstance.load()
+    const allowedLocales = driverInstance.locales()
+
+    const requestLanguage = request.language(allowedLocales) || this.defaultLocale
+    this.Antl.setLocale(requestLanguage)
     yield next
   }
 
