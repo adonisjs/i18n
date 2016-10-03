@@ -10,6 +10,8 @@
 */
 
 const preferredLanguages = require('negotiator/lib/language').preferredLanguages
+const CatLog = require('cat-log')
+const logger = new CatLog('adonis:antl')
 
 class AntlMiddleware {
 
@@ -68,6 +70,7 @@ class AntlMiddleware {
     const allowedLocales = driverInstance.locales()
 
     const requestLanguage = this._getViaQueryString(request.input('lang'), allowedLocales) || request.language(allowedLocales)
+    logger.verbose('switching language to %s', requestLanguage)
     this.Antl.setLocale(this._normalizeLocale(requestLanguage))
     yield next
   }
