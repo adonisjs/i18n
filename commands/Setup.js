@@ -19,7 +19,7 @@ class Setup extends Command {
    * @return {String}
    */
   get signature () {
-    return 'antl:setup {-d, --driver:Driver for which the setup process should be executed=@value}'
+    return 'antl:setup {-d, --driver=@value:Driver for which the setup process should be executed}'
   }
 
   /**
