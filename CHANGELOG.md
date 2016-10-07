@@ -1,3 +1,13 @@
+<a name="1.0.4"></a>
+## [1.0.4](https://github.com/adonisjs/adonis-antl/compare/v1.0.3...v1.0.4) (2016-10-07)
+
+
+### Bug Fixes
+
+* **command:** fix command signature ([67a1b7d](https://github.com/adonisjs/adonis-antl/commit/67a1b7d))
+
+
+
 <a name="1.0.3"></a>
 ## [1.0.3](https://github.com/adonisjs/adonis-antl/compare/v1.0.2...v1.0.3) (2016-10-03)
 
