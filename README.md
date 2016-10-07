@@ -52,7 +52,7 @@ const providers = [
 
 ### Registering Aliases
 
-Providers are also defined inside `bootstrap/app.js` file.
+Aliases are also defined inside `bootstrap/app.js` file.
 
 ```javascript
 const aliases = {
