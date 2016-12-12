@@ -19,7 +19,7 @@ const intlNumber = fnCache(Intl.NumberFormat)
 const intlDate = fnCache(Intl.DateTimeFormat)
 const intlMessage = fnCache(require('intl-messageformat'))
 const intlRelativeFormat = fnCache(require('intl-relativeformat'))
-const expressionRegex = /\[(.*)\]/
+const expressionRegex = new RegExp('\\[(.*)\\]')
 
 /**
  * Build options by merging defaults, format
