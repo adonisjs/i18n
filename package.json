@@ -1,6 +1,6 @@
 {
   "name": "adonis-antl",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Localization for adonisjs app",
   "main": "index.js",
   "directories": {
