@@ -1,7 +1,7 @@
 'use strict'
 
 /*
- * adonis-antl
+ * adonis-mail
  *
  * (c) Harminder Virk <virk@adonisjs.com>
  *
@@ -9,43 +9,94 @@
  * file that was distributed with this source code.
 */
 
-const chai = require('chai')
+const test = require('japa')
 const Formatter = require('../src/Formatter')
-const Formats = require('../src/Formats')
-const Message = require('../src/Message')
-const assert = chai.assert
+const pad = function (val) {
+  return val < 10 ? `0${val}` : val
+}
 
-describe('Formatter', function () {
-  before(function () {
-    Formats.clear()
+test.group('Formatter', () => {
+  test('instantiate formatter', (assert) => {
+    const formatter = new Formatter('en-us')
+    assert.instanceOf(formatter, Formatter)
   })
 
-  it('should throw an exception when expression does not define format and type', function () {
-    const parsedExp = () => Formatter._parseExpression(['curr'])
-    assert.throw(parsedExp, 'Invalid formatMessage expression')
+  test('format number', (assert) => {
+    const formatter = new Formatter('en-us')
+    assert.equal(formatter.formatNumber(1000), '1,000')
   })
 
-  it('should return a formatted object to be passed to the formatMessage method', function () {
-    const message = new Message()
-    Formatter._parseExpression(['curr:number'], message)
-    assert.deepEqual(message.buildOptions(), {number: {curr: {}}})
+  test('format number as currency', (assert) => {
+    const formatter = new Formatter('en-us', { currency: 'usd' })
+    assert.equal(formatter.formatNumber(1000, { style: 'currency' }), '$1,000.00')
   })
 
-  it('should pass all runtime options as options to the format object', function () {
-    const message = new Message()
-    Formatter._parseExpression(['curr:number[currency=usd]'], message)
-    assert.deepEqual(message.buildOptions(), {number: {curr: { currency: 'usd' }}})
+  test('format number by defining currency at runtime', (assert) => {
+    const formatter = new Formatter('en-us', { currency: 'usd' })
+    assert.equal(formatter.formatNumber(1000, { style: 'currency', currency: 'inr' }), '₹1,000.00')
   })
 
-  it('should pass multiple runtime options as options to the format object', function () {
-    const message = new Message()
-    Formatter._parseExpression(['curr:number[currency=usd, style=currency]'], message)
-    assert.deepEqual(message.buildOptions(), {number: {curr: { currency: 'usd', style: 'currency' }}})
+  test('do not format for undefined values', (assert) => {
+    const formatter = new Formatter('en-us', { currency: 'usd' })
+    assert.equal(formatter.formatNumber(null), null)
   })
 
-  it('should pass multiple expressions to the format object', function () {
-    const message = new Message()
-    Formatter._parseExpression(['curr:number[currency=usd, style=currency]', 'foo:number[style=percentage]'], message)
-    assert.deepEqual(message.buildOptions(), {number: {curr: { currency: 'usd', style: 'currency' }, foo: { style: 'percentage' }}})
+  test('return fallback text for undefined value', (assert) => {
+    const formatter = new Formatter('en-us', { currency: 'usd' })
+    assert.equal(formatter.formatNumber(null, {}, 'unknown number'), 'unknown number')
+  })
+
+  test('format date', (assert) => {
+    const formatter = new Formatter('en-us')
+    const today = new Date()
+    assert.equal(formatter.formatDate(today.getTime()), `${today.getMonth() + 1}/${today.getDate()}/${today.getFullYear()}`)
+  })
+
+  test('format date for a different locale', (assert) => {
+    const formatter = new Formatter('en-gb')
+    const today = new Date()
+    assert.equal(
+      formatter.formatDate(today.getTime()),
+      `${pad(today.getDate())}/${pad(today.getMonth() + 1)}/${today.getFullYear()}`
+    )
+  })
+
+  test('return null when date is not defined', (assert) => {
+    const formatter = new Formatter()
+    assert.equal(formatter.formatDate(null, {}), null)
+  })
+
+  test('return fallback value when date is not defined', (assert) => {
+    const formatter = new Formatter()
+    assert.equal(formatter.formatDate(null, {}, 'unknown date'), 'unknown date')
+  })
+
+  test('format relative date', (assert) => {
+    const formatter = new Formatter()
+    assert.equal(formatter.formatRelative(new Date()), 'now')
+  })
+
+  test('format relative date in minutes', (assert) => {
+    const formatter = new Formatter()
+    const date = new Date()
+    date.setMinutes(date.getMinutes() - 10)
+    assert.equal(formatter.formatRelative(date), '10 minutes ago')
+  })
+
+  test('force format to be in seconds always', (assert) => {
+    const formatter = new Formatter()
+    const date = new Date()
+    date.setMinutes(date.getMinutes() - 10)
+    assert.equal(formatter.formatRelative(date, { units: 'second' }), '600 seconds ago')
+  })
+
+  test('return null when value doesn\'t exists', (assert) => {
+    const formatter = new Formatter()
+    assert.isNull(formatter.formatRelative(null))
+  })
+
+  test('return fallback value when defined', (assert) => {
+    const formatter = new Formatter()
+    assert.equal(formatter.formatRelative(null, {}, 'unknown date'), 'unknown date')
   })
 })

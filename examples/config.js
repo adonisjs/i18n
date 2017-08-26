@@ -44,6 +44,16 @@ module.exports = {
     | lookup, best fit
     |
     */
-    localeMatcher: 'best fit'
+    localeMatcher: 'best fit',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Currency
+    |--------------------------------------------------------------------------
+    |
+    | The currency to be used by default.
+    |
+    */
+    currency: 'usd'
   }
 }
