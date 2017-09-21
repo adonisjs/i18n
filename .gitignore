@@ -3,3 +3,4 @@ node_modules
 .DS_Store
 npm-debug.log
 test/database/dev.sqlite3
+.nyc_output
