@@ -63,6 +63,18 @@ class AntlFacade {
   }
 
   /**
+   * Returns the default locale from
+   * the config file
+   *
+   * @method defaultLocale
+   *
+   * @return {String}
+   */
+  defaultLocale () {
+    return this._config.locale
+  }
+
+  /**
    * Boots the loader and pull messages from
    * it into memory
    *
