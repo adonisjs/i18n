@@ -12,6 +12,8 @@
 const _ = require('lodash')
 const flatten = require('flat')
 const GE = require('@adonisjs/generic-exceptions')
+const debug = require('debug')('adonis:antl')
+
 const Formatter = require('../Formatter')
 
 /**
@@ -29,10 +31,25 @@ class Antl {
     if (!locale) {
       throw GE.InvalidArgumentException.invalidParameter('Cannot instantiate antl without locale')
     }
-
-    this._locale = locale
     this._messages = messages
-    this._formatter = new Formatter(this._locale)
+
+    debug('instantiated antl for %s locale', locale)
+    this.switchLocale(locale)
+  }
+
+  /**
+   * Switch to a different locale at runtime
+   *
+   * @method switchLocale
+   *
+   * @param {String} locale
+   *
+   * @return {void}
+   */
+  switchLocale (locale) {
+    this._locale = locale
+    this._formatter = new Formatter(locale)
+    debug('switching locale to %s', locale)
   }
 
   /**
@@ -64,6 +81,13 @@ class Antl {
   }
 
   /**
+   * @see('Formatter.formatMessage')
+   */
+  formatMessage (key, ...args) {
+    return this._formatter.formatMessage(this.get(key), ...args)
+  }
+
+  /**
    * Returns raw message for a given key
    *
    * @method get
@@ -91,7 +115,11 @@ class Antl {
      *
      * @type {Array}
      */
-    const fallbackNode = ['*', group, messageKey]
+    const fallbackKey = this._messages['*'] ? '*' : 'fallback'
+    const fallbackNode = [fallbackKey, group, messageKey]
+
+    debug('getting message for %s key from store', localeNode.join('.'))
+    debug('using fallback key as %s', fallbackNode.join('.'))
 
     return _.get(this._messages, localeNode, _.get(this._messages, fallbackNode, defaultValue))
   }

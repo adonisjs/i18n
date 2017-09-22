@@ -72,6 +72,22 @@ test.group('Antl', () => {
     assert.equal(antl.get('validations.email.required'), 'Email is required')
   })
 
+  test('get message from fallback values when fallback key name is `fallback`', (assert) => {
+    const antl = new Antl('en-us', {
+      'en-us': {
+        validations: {
+          'name.required': 'Name is required'
+        }
+      },
+      'fallback': {
+        validations: {
+          'email.required': 'Email is required'
+        }
+      }
+    })
+    assert.equal(antl.get('validations.email.required'), 'Email is required')
+  })
+
   test('return the default value when nothing has been found', (assert) => {
     const antl = new Antl('en-us', {
       'en-us': {

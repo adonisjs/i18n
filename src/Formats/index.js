@@ -9,6 +9,10 @@
  * file that was distributed with this source code.
 */
 
+const GE = require('@adonisjs/generic-exceptions')
+const _ = require('lodash')
+const debug = require('debug')('adonis:antl')
+
 /**
  * Formats is a store to set and get custom
  * formats.
@@ -48,6 +52,7 @@ class Formats {
    * @chainable
    */
   add (name, options) {
+    debug('add new format as %s with options %j', name, options)
     this._registered[name] = options
     return this
   }
@@ -77,6 +82,12 @@ class Formats {
    * @return {Object}
    */
   pass (format, type) {
+    if (!this.get(format)) {
+      throw GE
+        .RuntimeException
+        .invoke(`Cannot pass ${format} format to ${type}. Make sure to register the format using formats.add()`)
+    }
+
     return {
       [type]: {
         [format]: this.get(format)

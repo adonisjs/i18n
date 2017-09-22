@@ -38,4 +38,9 @@ test.group('Formats', (group) => {
       }
     })
   })
+
+  test('throw exception when passing unregistered format', (assert) => {
+    const fn = () => formats.pass('usd', 'number')
+    assert.throw(fn, 'E_RUNTIME_ERROR: Cannot pass usd format to number. Make sure to register the format using formats.add()')
+  })
 })
