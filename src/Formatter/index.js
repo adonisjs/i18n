@@ -24,9 +24,8 @@ const relativeFormatter = cacheFn(require('intl-relativeformat'))
 const messageFormatter = cacheFn(require('intl-messageformat'))
 
 class Formatter {
-  constructor (locale, options) {
+  constructor (locale) {
     this._locale = locale || 'en-us'
-    this._options = options
   }
 
   /**
@@ -52,7 +51,7 @@ class Formatter {
     if (!value) {
       return fallback || null
     }
-    const formattingOptions = Object.assign({}, this._options, options)
+    const formattingOptions = Object.assign({}, options)
     return numberFormatter(this._locale, formattingOptions).format(value)
   }
 
@@ -78,7 +77,7 @@ class Formatter {
     if (!value) {
       return fallback || null
     }
-    const formattingOptions = Object.assign({}, this._options, options)
+    const formattingOptions = Object.assign({}, options)
     return dateFormatter(this._locale, formattingOptions).format(value)
   }
 
@@ -98,7 +97,7 @@ class Formatter {
     if (!value) {
       return fallback || null
     }
-    const formattingOptions = Object.assign({}, this._options, options)
+    const formattingOptions = Object.assign({}, options)
     return relativeFormatter(this._locale, formattingOptions).format(value)
   }
 

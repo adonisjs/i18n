@@ -29,23 +29,18 @@ test.group('Formatter', () => {
   })
 
   test('format number as currency', (assert) => {
-    const formatter = new Formatter('en-us', { currency: 'usd' })
-    assert.equal(formatter.formatNumber(1000, { style: 'currency' }), '$1,000.00')
-  })
-
-  test('format number by defining currency at runtime', (assert) => {
-    const formatter = new Formatter('en-us', { currency: 'usd' })
-    assert.equal(formatter.formatNumber(1000, { style: 'currency', currency: 'inr' }), '₹1,000.00')
+    const formatter = new Formatter('en-us')
+    assert.equal(formatter.formatNumber(1000, { style: 'currency', currency: 'usd' }), '$1,000.00')
   })
 
   test('do not format for undefined values', (assert) => {
-    const formatter = new Formatter('en-us', { currency: 'usd' })
-    assert.equal(formatter.formatNumber(null), null)
+    const formatter = new Formatter('en-us')
+    assert.equal(formatter.formatNumber(null, { currency: 'usd' }), null)
   })
 
   test('return fallback text for undefined value', (assert) => {
-    const formatter = new Formatter('en-us', { currency: 'usd' })
-    assert.equal(formatter.formatNumber(null, {}, 'unknown number'), 'unknown number')
+    const formatter = new Formatter('en-us')
+    assert.equal(formatter.formatNumber(null, { currency: 'usd' }, 'unknown number'), 'unknown number')
   })
 
   test('format date', (assert) => {
