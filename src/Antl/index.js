@@ -125,6 +125,18 @@ class Antl {
   }
 
   /**
+   * Returns an array of locales available. This
+   * list is based of the messages defined.
+   *
+   * @method availableLocales
+   *
+   * @return {Array}
+   */
+  availableLocales () {
+    return _.pullAllWith(_.keys(this._messages), ['*', 'fallback'], _.isEqual)
+  }
+
+  /**
    * Returns a list of strings for the active
    * locale and an optionally selected group.
    *

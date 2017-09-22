@@ -173,4 +173,27 @@ test.group('Antl', () => {
     const antl = new Antl('en-us', messages)
     assert.deepEqual(antl.flatList(), { 'validations.name.required': 'Name is required' })
   })
+
+  test('return list of available locales', (assert) => {
+    const messages = {
+      'en-us': {
+        'validations': {
+          'name.required': 'Name is required'
+        }
+      },
+      'en-gb': {
+        'validations': {
+          'name.required': 'Name is required'
+        }
+      },
+      '*': {
+        'validations': {
+          'email.required': 'Email is required'
+        }
+      }
+    }
+
+    const antl = new Antl('en-us', messages)
+    assert.deepEqual(antl.availableLocales(), ['en-us', 'en-gb'])
+  })
 })
