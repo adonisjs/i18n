@@ -1,94 +1,93 @@
-# AdonisJS Internalization
+# Adonis Mail 🏁
 
-[![Gitter](https://img.shields.io/badge/+%20GITTER-JOIN%20CHAT%20%E2%86%92-1DCE73.svg?style=flat-square)](https://gitter.im/adonisjs/adonis-framework)
-[![Trello](https://img.shields.io/badge/TRELLO-%E2%86%92-89609E.svg?style=flat-square)](https://trello.com/b/yzpqCgdl/adonis-for-humans)
-[![Version](https://img.shields.io/npm/v/adonis-antl.svg?style=flat-square)](https://www.npmjs.com/package/adonis-antl)
-[![Build Status](https://img.shields.io/travis/adonisjs/adonis-antl/master.svg?style=flat-square)](https://travis-ci.org/adonisjs/adonis-antl)
-[![Coverage Status](https://img.shields.io/coveralls/adonisjs/adonis-antl/master.svg?style=flat-square)](https://coveralls.io/github/adonisjs/adonis-antl?branch=master)
-[![Downloads](https://img.shields.io/npm/dt/adonis-antl.svg?style=flat-square)](https://www.npmjs.com/package/adonis-antl)
-[![License](https://img.shields.io/npm/l/adonis-antl.svg?style=flat-square)](https://opensource.org/licenses/MIT)
+The repo contains the code to localize your AdonisJs applications.
 
-> :pray: This repository makes it easy to internationalize your AdonisJs applications.
+It is built on top of [Formatjs.io](https://formatjs.io/) standards.
 
-AdonisJs Internalization is an addon to add support for multiple languages. It ships **Views Helpers** to format dates, numbers, string messages and currency.
+[![NPM Version][npm-image]][npm-url]
+[![Build Status][travis-image]][travis-url]
+[![Appveyor][appveyor-image]][appveyor-url]
+[![Coveralls][coveralls-image]][coveralls-url]
 
-## Table of Contents
-* [Features](#features)
-* [Installation](#installation)
-* [Config](#config)
-* [Usage](#usage)
-* [Official Documentation](#official-documentation)
+<img src="http://res.cloudinary.com/adonisjs/image/upload/q_100/v1497112678/adonis-purple_pzkmzt.svg" width="200px" align="right" hspace="30px" vspace="140px">
 
+## What's in the box?
 
-## Features
+This repo contains following providers.
 
-* Has support for [Intl](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl) and [ICU Messaging Format](http://userguide.icu-project.org/formatparse/messages)
-* Ships with **file** and **database** drivers.
-* Ability to extend drivers.
-* Formatting for relative time, datetime, currency and numbers.
-* Auto detects user locale.
-* Support for named formats.
+1. Ability to format **messages**, **numbers**, **dates** and **currencies**.
+2. Detect user locale using standard HTTP headers.
+3. Provides **View helpers** to keep your views localized.
 
-## Installation
+## Node/OS Target
 
-Installing AdonisJs Internalization (adonis-antl) is a pretty simple process.
+This repo/branch is supposed to run fine on all major OS platforms and targets `Node.js >=7.0`
 
-### Npm install
+## Development
 
-```bash
-npm i --save adonis-antl
+Great! If you are planning to contribute to the framework, make sure to adhere to following conventions, since a consistent code-base is always joy to work with.
+
+Run the following command to see list of available npm scripts.
+
+```
+npm run
 ```
 
-### Setting up provider
+## Environment Variables
 
-Providers are defined inside `bootstrap/app.js` file.
+There is a `.env.example` file in the project root, rename it as `.env` and add values for all services to run tests on your local. 
 
-```javascript
-const providers = [
-  '...',
-  'adonis-antl/providers/AntlProvider'
-]
+DO MAKE SURE TO NOT COMMIT THE `.env` FILE.
+
+### Tests & Linting
+
+1. Lint your code using standardJs. Run `npm run lint` command to check if there are any linting errors.
+2. Make sure you write tests for all the changes/bug fixes.
+3. Also you can write **regression tests**, which shows that something is failing but doesn't breaks the build. Which is actually a nice way to show that something fails. Regression tests are written using `test.failing()` method.
+4. Make sure all the tests are passing on `travis` and `appveyor`.
+
+### General Practices
+
+Since Es6 is in, you should strive to use latest features. For example:
+
+1. Use `Spread` over `arguments` keyword.
+2. Never use `bind` or `call`. After calling these methods, we cannot guarantee the scope of any methods and in AdonisJs codebase we do not override the methods scope.
+3. Make sure to write proper docblock.
+
+## Issues & PR
+
+It is always helpful if we try to follow certain practices when creating issues or PR's, since it will save everyone's time.
+
+1. Always try creating regression tests when you find a bug (if possible).
+2. Share some context on what you are trying to do, with enough code to reproduce the issue.
+3. For general questions, please create a forum thread.
+4. When creating a PR for a feature, make sure to create a parallel PR for docs too.
+
+
+## Regression Tests
+
+Regression tests are tests, which shows how a piece of code fails under certain circumstance, but the beauty is even after the failure, the test suite will never fail. Actually is a nice way to notify about bugs, but making sure everything is green.
+
+The regression tests are created using
+
+```
+test.failing('2 + 2 is always 4, but add method returns 6', (assert) => {
+ assert.true(add(2, 2), 4)
+})
 ```
 
-### Registering Aliases
+Now since the `add` method has a bug, it will return `6` instead of `4`. But the build will pass.
 
-Aliases are also defined inside `bootstrap/app.js` file.
+[appveyor-image]: https://img.shields.io/appveyor/ci/thetutlage/adonis-antl/master.svg?style=flat-square
 
-```javascript
-const aliases = {
-  Antl: 'Adonis/Addons/Antl',
-  Formats: 'Adonis/Addons/AntlFormats'
-}
-```
+[appveyor-url]: https://ci.appveyor.com/project/thetutlage/adonis-antl
 
-That's all and you are good to go.
+[npm-image]: https://img.shields.io/npm/v/@adonisjs/antl.svg?style=flat-square
+[npm-url]: https://npmjs.org/package/@adonisjs/antl
 
-## Config
+[travis-image]: https://img.shields.io/travis/adonisjs/adonis-antl/master.svg?style=flat-square
+[travis-url]: https://travis-ci.org/adonisjs/adonis-antl
 
-Configuration for `adonis-antl` is supposed to be merged inside `config/app.js` file. You can grab the sample configuration from [examples](http://github.com/adonisjs/adonis-antl/examples/config.js)
+[coveralls-image]: https://img.shields.io/coveralls/adonisjs/adonis-antl/develop.svg?style=flat-square
 
-## Usage
-
-Once the installation process has been completed, you are good to make use of the `Antl` alias inside your app.
-
-## Using Locales
-
-```javascript
-const Antl = use('Antl')
-
-Antl.formatAmount('1000', 'USD') // return $1,000.00
-
-// Runtime locale
-Antl.for('fr').formatAmount('1000', 'USD') // return 1 000.00 $US
-```
-
-## Official Documentation
-
-Read more about drivers, formatting messages and available methods at [official documentation](http://adonisjs.com/docs/internationalization)
-
-
-## <a name="contribution-guidelines"></a>Contribution Guidelines
-
-In favor of active development we accept contributions for everyone. You can contribute by submitting a bug, creating pull requests or even improving documentation.
-
-You can find a complete guide to be followed strictly before submitting your pull requests in the [Official Documentation](http://adonisjs.com/docs/contributing).
+[coveralls-url]: https://coveralls.io/github/adonisjs/adonis-antl
