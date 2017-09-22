@@ -43,6 +43,7 @@ const proxyHandler = {
  * @class AntlFacade
  * @binding Adonis/Addons/Antl
  * @alias Antl
+ * @singleton true
  */
 class AntlFacade {
   constructor (Config) {
