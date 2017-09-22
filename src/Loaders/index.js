@@ -10,5 +10,6 @@
 */
 
 module.exports = {
-  file: require('./File')
+  file: require('./File'),
+  database: require('./Database')
 }
