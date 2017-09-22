@@ -41,6 +41,12 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
+  "standard": {
+    "globals": ["use"]
+  },
+  "nyc": {
+    "exclude": ["bin"]
+  },
   "dependencies": {
     "@adonisjs/generic-exceptions": "^1.0.0",
     "debug": "^3.0.1",
