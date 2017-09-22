@@ -45,6 +45,21 @@ class AntlProvider extends ServiceProvider {
   }
 
   /**
+   * Register formats to the IoC container as
+   * `Adonis/Addons/AntlFormats` binding
+   *
+   * @method _registerFormats
+   *
+   * @return {void}
+   *
+   * @private
+   */
+  _registerFormats () {
+    this.app.bind('Adonis/Addons/Antl/Formats', () => require('../src/Formats'))
+    this.app.alias('Adonis/Addons/Antl/Formats', 'Antl/Formats')
+  }
+
+  /**
    * Register bindings
    *
    * @method register
@@ -54,6 +69,7 @@ class AntlProvider extends ServiceProvider {
   register () {
     this._registerAntlFacade()
     this._registerAntlManager()
+    this._registerFormats()
   }
 
   /**
