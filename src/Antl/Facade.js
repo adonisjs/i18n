@@ -49,8 +49,7 @@ class AntlFacade {
   constructor (Config) {
     this._config = Config.merge('app.locales', {
       loader: 'file',
-      locale: 'en',
-      fallbackLocale: 'en'
+      locale: 'en'
     })
 
     /**
