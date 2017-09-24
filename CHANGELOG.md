@@ -1,3 +1,29 @@
+<a name="2.0.0"></a>
+# [2.0.0](https://github.com/adonisjs/adonis-antl/compare/v1.0.5...v2.0.0) (2017-09-24)
+
+
+### Bug Fixes
+
+* **lint:** fix errors causing standardjs to fail ([01353c4](https://github.com/adonisjs/adonis-antl/commit/01353c4))
+* **package:** update intl-relativeformat to version 2.0.0 (#18) ([a33191e](https://github.com/adonisjs/adonis-antl/commit/a33191e))
+* **package:** update node-exceptions to version 2.0.0 (#9) ([e0cc42e](https://github.com/adonisjs/adonis-antl/commit/e0cc42e))
+
+
+### Features
+
+* **antl:** add manager,facade as public API ([412d8cb](https://github.com/adonisjs/adonis-antl/commit/412d8cb))
+* **antl:** return list of available locales ([09119bd](https://github.com/adonisjs/adonis-antl/commit/09119bd))
+* **antl,formats:** add public facing antl api ([394a633](https://github.com/adonisjs/adonis-antl/commit/394a633))
+* **formatter:** add formatter ([9a590ac](https://github.com/adonisjs/adonis-antl/commit/9a590ac))
+* **httpcontext:** set required context getters ([4349eb0](https://github.com/adonisjs/adonis-antl/commit/4349eb0))
+* **instructions:** add instructions file ([620d3f1](https://github.com/adonisjs/adonis-antl/commit/620d3f1))
+* **loader:** add database loader ([b724495](https://github.com/adonisjs/adonis-antl/commit/b724495))
+* **provider:** add provider to register bindings ([1710ed7](https://github.com/adonisjs/adonis-antl/commit/1710ed7))
+* **provider:** register antl formats as a binding ([df955e7](https://github.com/adonisjs/adonis-antl/commit/df955e7))
+* **view:** share antl instance with views as well ([5134092](https://github.com/adonisjs/adonis-antl/commit/5134092))
+
+
+
 <a name="1.0.5"></a>
 ## [1.0.5](https://github.com/adonisjs/adonis-antl/compare/v1.0.4...v1.0.5) (2016-12-12)
 
