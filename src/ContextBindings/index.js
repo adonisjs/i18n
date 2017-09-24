@@ -37,4 +37,12 @@ module.exports = function (Antl, HttpContext) {
     defaultInstance.switchLocale(this.locale)
     return defaultInstance
   }, true)
+
+  /**
+   * If view is attach to http context, then pass
+   * the antl to it as well.
+   */
+  if (HttpContext.view) {
+    HttpContext.view.share({ antl: this.antl })
+  }
 }

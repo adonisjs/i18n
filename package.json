@@ -42,10 +42,14 @@
     }
   },
   "standard": {
-    "globals": ["use"]
+    "globals": [
+      "use"
+    ]
   },
   "nyc": {
-    "exclude": ["bin"]
+    "exclude": [
+      "bin"
+    ]
   },
   "dependencies": {
     "@adonisjs/generic-exceptions": "^1.0.0",
