@@ -1,4 +1,4 @@
-# Adonis Mail 🏁
+# Adonis Antl 🏁
 
 The repo contains the code to localize your AdonisJs applications.
 
