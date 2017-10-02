@@ -17,7 +17,7 @@ module.exports = function (Antl, HttpContext) {
    */
   HttpContext.getter('locale', function () {
     const availableLocales = Antl.availableLocales()
-    const language = this.request.language(availableLocales)
+    const language = this.request.language(availableLocales) || this.request.input('lang')
 
     if (language) {
       debug('setting request locale as %s', language)
