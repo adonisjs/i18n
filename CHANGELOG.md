@@ -1,3 +1,13 @@
+<a name="2.0.1"></a>
+## [2.0.1](https://github.com/adonisjs/adonis-antl/compare/v2.0.0...v2.0.1) (2017-10-03)
+
+
+### Bug Fixes
+
+* **middleware:** read locale from lang query param too ([7dd5314](https://github.com/adonisjs/adonis-antl/commit/7dd5314))
+
+
+
 <a name="2.0.0"></a>
 # [2.0.0](https://github.com/adonisjs/adonis-antl/compare/v1.0.5...v2.0.0) (2017-09-24)
 
