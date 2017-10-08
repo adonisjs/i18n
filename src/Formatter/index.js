@@ -157,7 +157,7 @@ class Formatter {
      * array of results from `Formats.pass` method and
      * parse them accordingly
      */
-    if (formats instanceof Array === true) {
+    if (Array.isArray(formats)) {
       parsedFormats = _.transform(formats, (result, format) => {
         const key = _.findKey(format)
 
