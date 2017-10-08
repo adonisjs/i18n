@@ -53,6 +53,21 @@ class Antl {
   }
 
   /**
+   * Same as @ref('Antl.switchLocale') but instead
+   * returns the reference to `this` for chaining
+   *
+   * @method forLocale
+   *
+   * @param {any} locale
+   *
+   * @chainable
+   */
+  forLocale (locale) {
+    this.switchLocale(locale)
+    return this
+  }
+
+  /**
    * @see('Formatter.formatNumber')
    */
   formatNumber (...args) {
