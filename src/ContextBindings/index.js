@@ -42,7 +42,9 @@ module.exports = function (Antl, HttpContext) {
    * If view is attach to http context, then pass
    * the antl to it as well.
    */
-  if (HttpContext.view) {
-    HttpContext.view.share({ antl: this.antl })
-  }
+  HttpContext.onReady(function (ctx) {
+    if (ctx.view && typeof (ctx.view.share) === 'function') {
+      ctx.view.share({ antl: ctx.antl })
+    }
+  })
 }
