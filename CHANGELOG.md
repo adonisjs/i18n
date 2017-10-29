@@ -1,3 +1,13 @@
+<a name="2.0.3"></a>
+## [2.0.3](https://github.com/adonisjs/adonis-antl/compare/v2.0.2...v2.0.3) (2017-10-29)
+
+
+### Bug Fixes
+
+* **context:** use onReady method to share view locals ([2bd542a](https://github.com/adonisjs/adonis-antl/commit/2bd542a))
+
+
+
 <a name="2.0.2"></a>
 ## [2.0.2](https://github.com/adonisjs/adonis-antl/compare/v2.0.0...v2.0.2) (2017-10-08)
 
