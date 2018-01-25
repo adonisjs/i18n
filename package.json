@@ -52,7 +52,7 @@
     ]
   },
   "dependencies": {
-    "@adonisjs/generic-exceptions": "^1.0.0",
+    "@adonisjs/generic-exceptions": "^2.0.0",
     "debug": "^3.1.0",
     "flat": "^4.0.0",
     "intl": "^1.2.5",
