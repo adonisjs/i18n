@@ -81,11 +81,13 @@ class AntlProvider extends ServiceProvider {
    */
   async boot () {
     const Helpers = this.app.use('Adonis/Src/Helpers')
-    if (!Helpers.isAceCommand()) {
-      const Antl = this.app.use('Adonis/Addons/Antl')
-      await Antl.bootLoader()
-      require('../src/ContextBindings')(Antl, this.app.use('Adonis/Src/HttpContext'))
+    if (Helpers.isAceCommand() && process.argv.slice(2)[0] && process.argv.slice(2)[0].includes('migration:')) {
+      return
     }
+
+    const Antl = this.app.use('Adonis/Addons/Antl')
+    await Antl.bootLoader()
+    require('../src/ContextBindings')(Antl, this.app.use('Adonis/Src/HttpContext'))
   }
 }
 
