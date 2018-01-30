@@ -80,10 +80,12 @@ class AntlProvider extends ServiceProvider {
    * @return {void}
    */
   async boot () {
-    const Antl = this.app.use('Adonis/Addons/Antl')
-    await Antl.bootLoader()
-
-    require('../src/ContextBindings')(Antl, this.app.use('Adonis/Src/HttpContext'))
+    const Helpers = this.app.use('Adonis/Src/Helpers')
+    if (!Helpers.isAceCommand()) {
+      const Antl = this.app.use('Adonis/Addons/Antl')
+      await Antl.bootLoader()
+      require('../src/ContextBindings')(Antl, this.app.use('Adonis/Src/HttpContext'))
+    }
   }
 }
 
