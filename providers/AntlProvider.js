@@ -60,6 +60,19 @@ class AntlProvider extends ServiceProvider {
   }
 
   /**
+   * Returns the first argv from the argvs list
+   *
+   * @method _getFirstArg
+   *
+   * @return {String}
+   *
+   * @private
+   */
+  _getFirstArg () {
+    return process.argv.slice(2)[0] || ''
+  }
+
+  /**
    * Register bindings
    *
    * @method register
@@ -80,9 +93,18 @@ class AntlProvider extends ServiceProvider {
    * @return {void}
    */
   async boot () {
+    const Helpers = this.app.use('Adonis/Src/Helpers')
+
+    /**
+     * Since antl relies on database, we do not boot the loader when executing
+     * migration commands.
+     */
+    if (Helpers.isAceCommand() && this._getFirstArg().includes('migration')) {
+      return
+    }
+
     const Antl = this.app.use('Adonis/Addons/Antl')
     await Antl.bootLoader()
-
     require('../src/ContextBindings')(Antl, this.app.use('Adonis/Src/HttpContext'))
   }
 }
