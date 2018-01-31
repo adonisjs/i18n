@@ -1,3 +1,15 @@
+<a name="2.0.4"></a>
+## [2.0.4](https://github.com/adonisjs/adonis-antl/compare/v2.0.3...v2.0.4) (2018-01-31)
+
+
+### Bug Fixes
+
+* **antl:** do not boot loader during ace command ([f58b43d](https://github.com/adonisjs/adonis-antl/commit/f58b43d))
+* **antl:** ignore ace migration:run command when booting loader ([3feeb20](https://github.com/adonisjs/adonis-antl/commit/3feeb20))
+* **package:** update [@adonisjs](https://github.com/adonisjs)/generic-exceptions to version 2.0.0 ([#27](https://github.com/adonisjs/adonis-antl/issues/27)) ([f25aa98](https://github.com/adonisjs/adonis-antl/commit/f25aa98))
+
+
+
 <a name="2.0.3"></a>
 ## [2.0.3](https://github.com/adonisjs/adonis-antl/compare/v2.0.2...v2.0.3) (2017-10-29)
 
