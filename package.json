@@ -1,6 +1,6 @@
 {
   "name": "@adonisjs/antl",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Localization for adonisjs app",
   "main": "index.js",
   "directories": {
@@ -25,15 +25,15 @@
   "author": "virk",
   "license": "MIT",
   "devDependencies": {
-    "@adonisjs/fold": "^4.0.5",
-    "@adonisjs/sink": "^1.0.13",
-    "coveralls": "^3.0.0",
+    "@adonisjs/fold": "^4.0.8",
+    "@adonisjs/sink": "^1.0.16",
+    "coveralls": "^3.0.1",
     "cz-conventional-changelog": "^2.1.0",
     "japa": "^1.0.6",
     "japa-cli": "^1.0.1",
-    "nyc": "^11.4.1",
+    "nyc": "^12.0.1",
     "semver": "^5.5.0",
-    "standard": "^10.0.3"
+    "standard": "^11.0.1"
   },
   "config": {
     "commitizen": {
@@ -51,14 +51,14 @@
     ]
   },
   "dependencies": {
-    "@adonisjs/generic-exceptions": "^2.0.0",
+    "@adonisjs/generic-exceptions": "^2.0.1",
     "debug": "^3.1.0",
     "flat": "^4.0.0",
     "intl": "^1.2.5",
     "intl-format-cache": "^2.1.0",
     "intl-messageformat": "^2.2.0",
     "intl-relativeformat": "^2.1.0",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.10",
     "require-all": "^2.2.0"
   }
 }
