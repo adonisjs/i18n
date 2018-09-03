@@ -88,6 +88,11 @@ test.group('Antl', () => {
     assert.equal(antl.get('validations.email.required'), 'Email is required')
   })
 
+  test('return current locale', (assert) => {
+    const antl = new Antl('en-us')
+    assert.equal(antl.currentLocale(), 'en-us')
+  })
+
   test('return the default value when nothing has been found', (assert) => {
     const antl = new Antl('en-us', {
       'en-us': {

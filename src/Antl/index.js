@@ -68,6 +68,17 @@ class Antl {
   }
 
   /**
+   * Returns the current locale
+   *
+   * @method currentLocale
+   *
+   * @return {String} locale
+   */
+  currentLocale () {
+    return this._locale
+  }
+
+  /**
    * @see('Formatter.formatNumber')
    */
   formatNumber (...args) {
