@@ -5,3 +5,6 @@ npm-debug.log
 test/database/dev.sqlite3
 .nyc_output
 .nyc_output/*
+yarn.lock
+shrinkwrap.yaml
+package-lock.json
