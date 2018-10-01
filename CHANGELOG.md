@@ -1,3 +1,13 @@
+<a name="2.0.7"></a>
+## [2.0.7](https://github.com/adonisjs/adonis-antl/compare/v2.0.6...v2.0.7) (2018-10-01)
+
+
+### Features
+
+* **antl:** return current locale ([#36](https://github.com/adonisjs/adonis-antl/issues/36)) ([367aabb](https://github.com/adonisjs/adonis-antl/commit/367aabb))
+
+
+
 <a name="2.0.6"></a>
 ## [2.0.6](https://github.com/adonisjs/adonis-antl/compare/v2.0.5...v2.0.6) (2018-06-02)
 
