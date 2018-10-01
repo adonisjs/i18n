@@ -8,3 +8,11 @@ test/database/dev.sqlite3
 yarn.lock
 shrinkwrap.yaml
 package-lock.json
+.DS_STORE
+.idea
+.vscode/
+*.sublime-project
+*.sublime-workspace
+*.log
+build
+dist
