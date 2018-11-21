@@ -125,19 +125,34 @@ test.group('Antl', () => {
     assert.isNull(antl.get('validations.age.required'))
   })
 
-  test.failing('return the default value when key is null', (assert) => {
+  test('return the default value when key is null', (assert) => {
     const antl = new Antl('en-us')
     assert.equal(antl.get(null, 'translation missing'), 'translation missing')
   })
 
-  test.failing('return the default value when key is undefined', (assert) => {
+  test('return null when key is null and no default value is defined', (assert) => {
+    const antl = new Antl('en-us')
+    assert.isNull(antl.get(null))
+  })
+
+  test('return the default value when key is undefined', (assert) => {
     const antl = new Antl('en-us')
     assert.equal(antl.get(undefined, 'translation missing'), 'translation missing')
   })
 
-  test.failing('return the default value when key is not a string', (assert) => {
+  test('return null when key is undefined and no default value is defined', (assert) => {
+    const antl = new Antl('en-us')
+    assert.isNull(antl.get(undefined))
+  })
+
+  test('return the default value when key is not a string', (assert) => {
     const antl = new Antl('en-us')
     assert.equal(antl.get([], 'translation missing'), 'translation missing')
+  })
+
+  test('return null when key is not a string and no default value is defined', (assert) => {
+    const antl = new Antl('en-us')
+    assert.isNull(antl.get({}))
   })
 
   test('return a list of strings', (assert) => {

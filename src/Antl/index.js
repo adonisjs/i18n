@@ -124,6 +124,13 @@ class Antl {
    * @return {Mixed}
    */
   get (key, defaultValue = null) {
+    /**
+     * Make sure key is a string before attempting to split it
+     */
+    if (typeof (key) !== 'string') {
+      return defaultValue
+    }
+
     const [group, ...parts] = key.split('.')
     const messageKey = parts.join('.')
 
