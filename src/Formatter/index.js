@@ -48,7 +48,7 @@ class Formatter {
    * ```
    */
   formatNumber (value, options, fallback) {
-    if (!value) {
+    if (!value && value !== 0) {
       return fallback || null
     }
     const formattingOptions = Object.assign({}, options)
