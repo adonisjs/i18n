@@ -108,9 +108,19 @@ class Antl {
 
   /**
    * @see('Formatter.formatMessage')
+   *
+   * @throws {InvalidArgumentException} If translation is not found
    */
   formatMessage (key, ...args) {
-    return this._formatter.formatMessage(this.get(key), ...args)
+    const rawMessage = this.get(key)
+
+    if (!rawMessage) {
+      throw GE
+        .InvalidArgumentException
+        .invalidParameter(`Missing ${this._locale} translation for key '${key}'`)
+    }
+
+    return this._formatter.formatMessage(rawMessage, ...args)
   }
 
   /**
