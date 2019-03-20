@@ -45,6 +45,37 @@ test.group('Antl', () => {
     assert.equal(antl.formatRelative(today.getTime()), 'now')
   })
 
+  test('format message for a given locale', (assert) => {
+    const antl = new Antl('en-us', {
+      'en-us': {
+        'header': {
+          'hello': 'Hello {name}'
+        }
+      }
+    })
+
+    assert.equal(antl.formatMessage('header.hello', { name: 'Peter' }), 'Hello Peter')
+  })
+
+  test('format message throws exception when translation is missing', (assert) => {
+    const antl = new Antl('en-us', {
+      'en-us': {
+        'validations': {
+          'name.required': 'Name is required'
+        }
+      },
+      '*': {
+        'validations': {
+          'email.required': 'Email is required'
+        }
+      }
+    })
+
+    const fn = () => antl.formatMessage('validations.age.required')
+
+    assert.throw(fn, 'E_INVALID_PARAMETER: Missing en-us translation for key \'validations.age.required\'')
+  })
+
   test('get message for a key', (assert) => {
     const antl = new Antl('en-us', {
       'en-us': {
