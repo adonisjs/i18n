@@ -60,7 +60,7 @@
     "flat": "^4.1.0",
     "intl": "^1.2.5",
     "intl-format-cache": "^2.1.0",
-    "intl-messageformat": "^2.2.0",
+    "intl-messageformat": "^4.3.0",
     "intl-relativeformat": "^2.1.0",
     "lodash": "^4.17.11",
     "require-all": "^3.0.0"
