@@ -59,7 +59,7 @@
     "debug": "^4.0.1",
     "flat": "^4.1.0",
     "intl": "^1.2.5",
-    "intl-format-cache": "^2.1.0",
+    "intl-format-cache": "^4.0.0",
     "intl-messageformat": "^2.2.0",
     "intl-relativeformat": "^2.1.0",
     "lodash": "^4.17.11",
