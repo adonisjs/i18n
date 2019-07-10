@@ -13,7 +13,9 @@
     "test": "nyc node japaFile.js",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
     "commit": "git-cz",
-    "lint": "standard"
+    "lint": "standard",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "keywords": [
     "adonis",
@@ -63,6 +65,8 @@
     "intl-messageformat": "^5.0.1",
     "intl-relativeformat": "^2.1.0",
     "lodash": "^4.17.11",
-    "require-all": "^3.0.0"
-  }
+    "require-all": "^3.0.0",
+    "snyk": "^1.189.0"
+  },
+  "snyk": true
 }
