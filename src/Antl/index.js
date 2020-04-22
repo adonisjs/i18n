@@ -135,7 +135,6 @@ class Antl {
    */
   get (key, defaultValue = null) {
     const [group, ...parts] = key.split('.')
-    const messageKey = parts.join('.')
 
     /**
      * Look for the message inside the locale message
@@ -143,7 +142,7 @@ class Antl {
      *
      * @type {Array}
      */
-    const localeNode = [this._locale, group, messageKey]
+    const localeNode = [this._locale, group, ...parts]
 
     /**
      * The fallback node is used when value has not been found
@@ -152,7 +151,7 @@ class Antl {
      * @type {Array}
      */
     const fallbackKey = this._messages['*'] ? '*' : 'fallback'
-    const fallbackNode = [fallbackKey, group, messageKey]
+    const fallbackNode = [fallbackKey, group, ...parts]
 
     debug('getting message for %s key from store', localeNode.join('.'))
     debug('using fallback key as %s', fallbackNode.join('.'))
