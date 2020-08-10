@@ -59,7 +59,7 @@
   "dependencies": {
     "@adonisjs/generic-exceptions": "^2.0.1",
     "debug": "^4.0.1",
-    "flat": "^4.1.0",
+    "flat": "^5.0.2",
     "intl": "^1.2.5",
     "intl-format-cache": "^2.1.0",
     "intl-messageformat": "^5.0.1",
