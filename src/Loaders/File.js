@@ -89,7 +89,7 @@ class FileLoader {
       /**
        * Convert nested path to object access path
        */
-      const accessPath = file.replace(/.json$/, '').split('/').join('.')
+      const accessPath = file.replace(/.json$/, '').split('/').split('\\').join('.')
 
       /**
        * Read file as string
