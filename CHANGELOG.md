@@ -1,3 +1,15 @@
+# [2.1.0](https://github.com/adonisjs/adonis-antl/compare/v2.0.7...v2.1.0) (2021-03-27)
+
+
+### Bug Fixes
+
+* file loader split path for both unix and windows ([9a6627a](https://github.com/adonisjs/adonis-antl/commit/9a6627adcc84d70d85b3a63e7cbcdd7cdbc04f36))
+* file-loader.reload must re-read the files from disk ([b964094](https://github.com/adonisjs/adonis-antl/commit/b9640944abfbeb7af3d3549e4821aef36c4011d8)), closes [#87](https://github.com/adonisjs/adonis-antl/issues/87)
+* split file path by OS separator ([8cbd37f](https://github.com/adonisjs/adonis-antl/commit/8cbd37fb1b3c545377707f9df2552c4a9562b50a))
+* **formatter:** zero triggering fallback return ([7532631](https://github.com/adonisjs/adonis-antl/commit/753263117686776d2e0a702b4c896e330c1c5037))
+
+
+
 <a name="2.0.7"></a>
 ## [2.0.7](https://github.com/adonisjs/adonis-antl/compare/v2.0.6...v2.0.7) (2018-10-01)
 
