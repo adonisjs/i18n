@@ -10,7 +10,7 @@
 */
 
 const fs = require('fs')
-const { join } = require('path')
+const { join, sep } = require('path')
 const lodash = require('lodash')
 const read = require('fs-readdir-recursive')
 const debug = require('debug')('adonis:antl')
@@ -89,7 +89,7 @@ class FileLoader {
       /**
        * Convert nested path to object access path
        */
-      const accessPath = file.replace(/.json$/, '').split('/').split('\\').join('.')
+      const accessPath = file.replace(/.json$/, '').split(sep).join('.')
 
       /**
        * Read file as string
