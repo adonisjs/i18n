@@ -11,9 +11,7 @@
     "mrm": "mrm --preset=@adonisjs/mrm-preset",
     "test": "node japaFile.js",
     "commit": "git-cz",
-    "lint": "standard",
-    "snyk-protect": "snyk protect",
-    "prepublish": "npm run snyk-protect"
+    "lint": "standard"
   },
   "keywords": [
     "adonis",
@@ -35,8 +33,7 @@
     "mrm": "^2.6.1",
     "pkg-ok": "^2.2.0",
     "semver": "^7.3.5",
-    "standard": "^16.0.3",
-    "synk": "^0.0.2"
+    "standard": "^16.0.3"
   },
   "config": {
     "commitizen": {
