@@ -49,7 +49,7 @@ test.group('Facade', (group) => {
     const config = new Config()
     const facade = new Facade(config)
     const antl = () => facade.loader('foo')
-    assert.throw(antl, `E_RUNTIME_ERROR: Cannot use loader, since it's not booted. Make sure to call Antl.bootLoader('foo') first`)
+    assert.throw(antl, 'E_RUNTIME_ERROR: Cannot use loader, since it\'s not booted. Make sure to call Antl.bootLoader(\'foo\') first')
   })
 
   test('get formatted messages for a selected locale', async (assert) => {
@@ -60,7 +60,7 @@ test.group('Facade', (group) => {
       load () {
         return {
           'en-us': {
-            'billing': {
+            billing: {
               total: 'Total {total, number, usd}'
             }
           }

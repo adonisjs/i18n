@@ -48,8 +48,8 @@ test.group('Antl', () => {
   test('format message for a given locale', (assert) => {
     const antl = new Antl('en-us', {
       'en-us': {
-        'header': {
-          'hello': 'Hello {name}'
+        header: {
+          hello: 'Hello {name}'
         }
       }
     })
@@ -60,12 +60,12 @@ test.group('Antl', () => {
   test('format message throws exception when translation is missing', (assert) => {
     const antl = new Antl('en-us', {
       'en-us': {
-        'validations': {
+        validations: {
           'name.required': 'Name is required'
         }
       },
       '*': {
-        'validations': {
+        validations: {
           'email.required': 'Email is required'
         }
       }
@@ -79,7 +79,7 @@ test.group('Antl', () => {
   test('get message for a key', (assert) => {
     const antl = new Antl('en-us', {
       'en-us': {
-        'validations': {
+        validations: {
           'name.required': 'Name is required'
         }
       }
@@ -110,7 +110,7 @@ test.group('Antl', () => {
           'name.required': 'Name is required'
         }
       },
-      'fallback': {
+      fallback: {
         validations: {
           'email.required': 'Email is required'
         }
@@ -127,12 +127,12 @@ test.group('Antl', () => {
   test('return the default value when nothing has been found', (assert) => {
     const antl = new Antl('en-us', {
       'en-us': {
-        'validations': {
+        validations: {
           'name.required': 'Name is required'
         }
       },
       '*': {
-        'validations': {
+        validations: {
           'email.required': 'Email is required'
         }
       }
@@ -143,12 +143,12 @@ test.group('Antl', () => {
   test('return null when unable to find value and no default value is defined', (assert) => {
     const antl = new Antl('en-us', {
       'en-us': {
-        'validations': {
+        validations: {
           'name.required': 'Name is required'
         }
       },
       '*': {
-        'validations': {
+        validations: {
           'email.required': 'Email is required'
         }
       }
@@ -159,12 +159,12 @@ test.group('Antl', () => {
   test('return a list of strings', (assert) => {
     const messages = {
       'en-us': {
-        'validations': {
+        validations: {
           'name.required': 'Name is required'
         }
       },
       '*': {
-        'validations': {
+        validations: {
           'email.required': 'Email is required'
         }
       }
@@ -177,30 +177,30 @@ test.group('Antl', () => {
   test('return a list of strings for a given group', (assert) => {
     const messages = {
       'en-us': {
-        'validations': {
+        validations: {
           'name.required': 'Name is required'
         }
       },
       '*': {
-        'validations': {
+        validations: {
           'email.required': 'Email is required'
         }
       }
     }
 
     const antl = new Antl('en-us', messages)
-    assert.deepEqual(antl.list('validations'), messages['en-us']['validations'])
+    assert.deepEqual(antl.list('validations'), messages['en-us'].validations)
   })
 
   test('return flat list of messages', (assert) => {
     const messages = {
       'en-us': {
-        'validations': {
+        validations: {
           'name.required': 'Name is required'
         }
       },
       '*': {
-        'validations': {
+        validations: {
           'email.required': 'Email is required'
         }
       }
@@ -213,17 +213,17 @@ test.group('Antl', () => {
   test('return list of available locales', (assert) => {
     const messages = {
       'en-us': {
-        'validations': {
+        validations: {
           'name.required': 'Name is required'
         }
       },
       'en-gb': {
-        'validations': {
+        validations: {
           'name.required': 'Name is required'
         }
       },
       '*': {
-        'validations': {
+        validations: {
           'email.required': 'Email is required'
         }
       }

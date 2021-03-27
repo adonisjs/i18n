@@ -50,15 +50,15 @@ test.group('Database loader', () => {
     const messages = await loader.load()
     assert.deepEqual(messages, {
       'en-us': {
-        'messages': {
+        messages: {
           'cart.total': 'Your cart total is {total}',
-          'greeting': 'Hello'
+          greeting: 'Hello'
         }
       },
-      'fr': {
-        'messages': {
+      fr: {
+        messages: {
           'cart.total': 'Le total de votre panier est {total}',
-          'greeting': 'Bonjour'
+          greeting: 'Bonjour'
         }
       }
     })
