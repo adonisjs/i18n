@@ -27,6 +27,15 @@ test.group('Facade', (group) => {
     const facade = new Facade(config)
     await facade.bootLoader()
     assert.deepEqual(facade.loader()._messages, {
+      en: {
+        foo: {
+          bar: {
+            baz: {
+              hello: 'world'
+            }
+          }
+        }
+      },
       fallback: {
         index: {
           hello: 'world'

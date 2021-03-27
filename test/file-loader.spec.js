@@ -10,6 +10,8 @@
 */
 
 const test = require('japa')
+const fs = require('fs-extra')
+const { join } = require('path')
 const { Helpers } = require('@adonisjs/sink')
 const { file: FileLoader } = require('../src/Loaders')
 
@@ -19,9 +21,49 @@ test.group('File loader', () => {
     loader.setConfig({})
     const messages = loader.load()
     assert.deepEqual(messages, {
+      en: {
+        foo: {
+          bar: {
+            baz: {
+              hello: 'world'
+            }
+          }
+        }
+      },
       fallback: {
         index: { hello: 'world' }
       }
     })
+  })
+
+  test('calling reload must re-read the files from disk', async (assert) => {
+    const loader = new FileLoader(new Helpers(__dirname))
+    loader.setConfig({})
+    loader.load()
+
+    await fs.outputFile(join(__dirname, 'resources', 'locales', 'fallback', 'index.json'), JSON.stringify({
+      hello: 'universe'
+    }))
+
+    const messages = loader.reload()
+
+    assert.deepEqual(messages, {
+      en: {
+        foo: {
+          bar: {
+            baz: {
+              hello: 'world'
+            }
+          }
+        }
+      },
+      fallback: {
+        index: { hello: 'universe' }
+      }
+    })
+
+    await fs.outputFile(join(__dirname, 'resources', 'locales', 'fallback', 'index.json'), JSON.stringify({
+      hello: 'world'
+    }))
   })
 })

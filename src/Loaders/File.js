@@ -9,7 +9,10 @@
  * file that was distributed with this source code.
 */
 
-const requireAll = require('require-all')
+const fs = require('fs')
+const { join } = require('path')
+const lodash = require('lodash')
+const read = require('fs-readdir-recursive')
 const debug = require('debug')('adonis:antl')
 
 /**
@@ -75,10 +78,40 @@ class FileLoader {
   load () {
     debug('loading strings from file system %s', this._config.localesDir)
 
-    return requireAll({
-      dirname: this._config.localesDir,
-      filters: /(.*)\.json$/
+    const files = read(this._config.localesDir)
+    const state = {}
+
+    files.forEach((file) => {
+      if (!file.endsWith('.json')) {
+        return
+      }
+
+      /**
+       * Convert nested path to object access path
+       */
+      const accessPath = file.replace(/.json$/, '').split('/').join('.')
+
+      /**
+       * Read file as string
+       */
+      let contents = fs.readFileSync(join(this._config.localesDir, file), 'utf-8')
+
+      /**
+       * Parse contents as JSON or raise a meaningful exception
+       */
+      try {
+        contents = JSON.parse(contents)
+      } catch (error) {
+        throw new Error(`Invalid JSON file "${file}"`)
+      }
+
+      /**
+       * Update state
+       */
+      lodash.set(state, accessPath, contents)
     })
+
+    return state
   }
 }
 
