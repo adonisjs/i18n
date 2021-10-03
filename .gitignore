@@ -1,14 +1,8 @@
-coverage
 node_modules
-.DS_Store
-npm-debug.log
-test/database/dev.sqlite3
-.nyc_output
-.nyc_output/*
-yarn.lock
-shrinkwrap.yaml
-package-lock.json
+coverage
+test/__app
 .DS_STORE
+.nyc_output
 .idea
 .vscode/
 *.sublime-project
@@ -16,3 +10,4 @@ package-lock.json
 *.log
 build
 dist
+shrinkwrap.yaml
