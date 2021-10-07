@@ -1,6 +1,6 @@
 {
   "name": "@adonisjs/i18n",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Internationalization for AdonisJS apps",
   "main": "build/providers/I18nProvider.js",
   "files": [
