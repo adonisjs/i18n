@@ -13,15 +13,38 @@ import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
  *   not "null" or "undefined"
  */
 export default class DetectUserLocale {
-  public async handle({ request, i18n }: HttpContextContract, next: () => Promise<void>) {
+  /**
+   * Detect user language using "Accept-language" header or
+   * the "lang" query string parameter.
+   *
+   * The user language must be part of the "supportedLocales", otherwise
+   * this method should return null.
+   */
+  protected getUserLanguage(ctx: HttpContextContract) {
     const availableLocales = I18n.supportedLocales()
-    const language = request.language(availableLocales) || request.input('lang')
+    return ctx.request.language(availableLocales) || ctx.request.input('lang')
+  }
+
+  /**
+   * Handle method is called by AdonisJS automatically on every middleware
+   * class.
+   */
+  public async handle(ctx: HttpContextContract, next: () => Promise<void>) {
+    const language = this.getUserLanguage(ctx)
 
     /**
-     * Switch locale when the request locale is supported by the application
+     * Switch locale when we are able to detect the user language and it
+     * is supported by the application
      */
     if (language) {
-      i18n.switchLocale(language)
+      ctx.i18n.switchLocale(language)
+    }
+
+    /**
+     * Share i18n with view
+     */
+    if ('view' in ctx) {
+      ctx.view.share({ i18n: ctx.i18n })
     }
 
     await next()
