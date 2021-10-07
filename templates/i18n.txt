@@ -1,5 +1,5 @@
 /**
- * Config source: https://git.io/JeYHp
+ * Config source: https://git.io/Jw53K
  *
  * Feel free to let us know via PR, if you find something broken in this config
  * file.
@@ -11,15 +11,15 @@ import { I18nConfig } from '@ioc:Adonis/Addons/I18n'
 const i18nConfig: I18nConfig = {
   /*
   |--------------------------------------------------------------------------
-  | Messages format
+  | Translations format
   |--------------------------------------------------------------------------
   |
-  | The format in which the translation messages are written. By default
-  | only the ICU messages syntax is supported. However, you can register
-  | custom formatters too and please reference the documentation for that.
+  | The format in which the translation are written. By default only the
+  | ICU message syntax is supported. However, you can register custom
+  | formatters too and please reference the documentation for that.
   |
   */
-  messagesFormat: 'icu',
+  translationsFormat: 'icu',
 
   /*
   |--------------------------------------------------------------------------
