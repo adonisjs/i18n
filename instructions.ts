@@ -8,6 +8,7 @@
  */
 
 import { join } from 'path'
+import { existsSync, mkdirSync } from 'fs'
 import * as sinkStatic from '@adonisjs/sink'
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 
@@ -49,4 +50,10 @@ export default async function instructions(
   sink: typeof sinkStatic
 ) {
   makeMiddleware(projectRoot, app, sink)
+
+  if (!existsSync(app.resourcesPath('lang'))) {
+    mkdirSync(app.resourcesPath('lang'), { recursive: true })
+    const resourceDir = app.directoriesMap.get('resources') || 'resources'
+    sink.logger.action('create').succeeded(`./${resourceDir}/lang`)
+  }
 }
