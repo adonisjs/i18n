@@ -1,0 +1,29 @@
+import I18n from '@ioc:Adonis/Addons/I18n'
+import { HttpContextContract } from '@ioc:Adonis/Core/HttpContext'
+
+/**
+ * The middleware detects the user language using the "Accept-language" HTTP header
+ * or the "lang" query string parameter.
+ *
+ * Feel free to change the middleware implementation to what suits your needs. Just
+ * make sure
+ *
+ * - You always ensure the user selected language is supported by your app.
+ * - Only call "switchLocale" when the detected language is valid string value and
+ *   not "null" or "undefined"
+ */
+export default class DetectUserLocale {
+  public async handle({ request, i18n }: HttpContextContract, next: () => Promise<void>) {
+    const availableLocales = I18n.supportedLocales()
+    const language = request.language(availableLocales) || request.input('lang')
+
+    /**
+     * Switch locale when the request locale is supported by the application
+     */
+    if (language) {
+      i18n.switchLocale(language)
+    }
+
+    await next()
+  }
+}
