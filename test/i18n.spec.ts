@@ -8,61 +8,112 @@
  */
 
 import test from 'japa'
-import { Emitter } from '@adonisjs/core/build/standalone'
+import { join } from 'path'
 
 import { I18n } from '../src/I18n'
-import { IcuMessageFormatter } from '../src/Formatters/Message/Icu'
+import { setup, fs } from '../test-helpers'
+import { I18nManager } from '../src/I18nManager'
 
-test.group('I18n', () => {
-  test('format a message by its identifier', (assert) => {
-    const emitter = new Emitter()
-    const messageFormatter = new IcuMessageFormatter()
+test.group('I18n', (group) => {
+  group.afterEach(async () => fs.cleanup())
 
-    const messages = {
-      greeting: 'The price is {price, number, ::currency/INR}',
-    }
-    const fallbackMessages = {
-      greeting: 'The price is {price, number, ::currency/USD}',
-    }
+  test('format a message by its identifier', async (assert) => {
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
 
-    const i18n = new I18n('en-in', messageFormatter, emitter, messages, fallbackMessages)
-    assert.equal(i18n.formatMessage('greeting', { price: 100 }), 'The price is ₹100.00')
+    await fs.add(
+      'resources/lang/en/messages.json',
+      JSON.stringify({
+        greeting: 'The price is {price, number, ::currency/INR}',
+      })
+    )
+
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+      },
+    })
+
+    await i18nManager.loadTranslations()
+
+    const i18n = new I18n('en', emitter, logger, i18nManager)
+    assert.equal(i18n.formatMessage('messages.greeting', { price: 100 }), 'The price is ₹100.00')
   })
 
-  test('use fallback messages when actual message is missing', (assert) => {
-    const emitter = new Emitter()
-    const messageFormatter = new IcuMessageFormatter()
+  test('use fallback messages when actual message is missing', async (assert) => {
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
 
-    const messages = {}
-    const fallbackMessages = {
-      greeting: 'The price is {price, number, ::currency/USD}',
-    }
+    await fs.add(
+      'resources/lang/en/messages.json',
+      JSON.stringify({
+        greeting: 'The price is {price, number, ::currency/USD}',
+      })
+    )
 
-    const i18n = new I18n('en-in', messageFormatter, emitter, messages, fallbackMessages)
-    assert.equal(i18n.formatMessage('greeting', { price: 100 }), 'The price is $100.00')
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+      },
+    })
+
+    await i18nManager.loadTranslations()
+
+    const i18n = new I18n('fr', emitter, logger, i18nManager)
+    assert.equal(i18n.formatMessage('messages.greeting', { price: 100 }), 'The price is 100,00 $US')
   })
 
-  test('report missing translations via events', (assert, done) => {
+  test('report missing translations via events', async (assert, done) => {
     assert.plan(2)
 
-    const emitter = new Emitter()
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+
     emitter.on('i18n:missing:translation', (payload) => {
       assert.deepEqual(payload, {
-        locale: 'en-in',
-        identifier: 'greeting',
+        locale: 'fr',
+        identifier: 'messages.greeting',
         hasFallback: false,
       })
       done()
     })
 
-    const messageFormatter = new IcuMessageFormatter()
+    await fs.add(
+      'resources/lang/it/messages.json',
+      JSON.stringify({
+        greeting: 'The price is {price, number, ::currency/USD}',
+      })
+    )
 
-    const messages = {}
-    const fallbackMessages = {}
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+      },
+    })
 
-    const i18n = new I18n('en-in', messageFormatter, emitter, messages, fallbackMessages)
+    await i18nManager.loadTranslations()
+
+    const i18n = new I18n('fr', emitter, logger, i18nManager)
     assert.equal(
-      i18n.formatMessage('greeting', { price: 100 }),
+      i18n.formatMessage('messages.greeting', { price: 100 }),
       'translation missing: en-in, greeting'
     )
   })

@@ -19,8 +19,9 @@ export default class I18nProvider {
   public register() {
     this.application.container.singleton('Adonis/Addons/I18n', () => {
       const emitter = this.application.container.resolveBinding('Adonis/Core/Event')
+      const logger = this.application.container.resolveBinding('Adonis/Core/Logger')
       const config = this.application.container.resolveBinding('Adonis/Core/Config').get('i18n', {})
-      return new I18nManager(this.application, emitter, config)
+      return new I18nManager(this.application, emitter, logger, config)
     })
   }
 

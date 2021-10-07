@@ -35,7 +35,7 @@ export async function setup(config?: Partial<I18nConfig>, additionalProviders: s
   )
 
   const app = new Application(fs.basePath, 'web', {
-    providers: ['@adonisjs/core'].concat(additionalProviders),
+    providers: ['@adonisjs/core', '@adonisjs/view'].concat(additionalProviders),
   })
 
   await app.setup()

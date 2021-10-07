@@ -10,6 +10,7 @@
 /// <reference path="../../adonis-typings/index.ts" />
 
 import { Exception } from '@poppinss/utils'
+import { LoggerContract } from '@ioc:Adonis/Core/Logger'
 import { EmitterContract } from '@ioc:Adonis/Core/Event'
 import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 import {
@@ -19,12 +20,12 @@ import {
   I18nManagerContract,
   LoaderExtendCallback,
   FormatterExtendCallback,
-  MessageFormatterContract,
+  TranslationsFormatterContract,
 } from '@ioc:Adonis/Addons/I18n'
 
 import { I18n } from '../I18n'
 import { FsLoader } from '../Loaders/Fs'
-import { IcuMessageFormatter } from '../Formatters/Message/Icu'
+import { IcuFormatter } from '../Formatters/Message/Icu'
 
 export class I18nManager implements I18nManagerContract {
   /**
@@ -41,18 +42,19 @@ export class I18nManager implements I18nManagerContract {
    * Reference to the formatter used by the user application. We initialize
    * it lazily and then cache it.
    */
-  private formatter: MessageFormatterContract
+  private formatter: TranslationsFormatterContract
 
   /**
-   * Messages fetched using the registered loaders. We load them when "loadMessages"
-   * or "reloadMessages" is called.
+   * Translations fetched using the registered loaders. We load
+   * them when "loadTranslations" or "reloadTranslations"
+   * is called.
    */
-  private messages: { [lang: string]: Record<string, string> } = {}
+  private translations: { [lang: string]: Record<string, string> } = {}
 
   /**
-   * Find if messages has been loaded atleast once or not
+   * Find if translations has been loaded atleast once or not
    */
-  private loadedMessages: boolean = false
+  private loadedTranslations: boolean = false
 
   /**
    * Reference to the default locale defined inside the config file
@@ -61,13 +63,14 @@ export class I18nManager implements I18nManagerContract {
 
   /**
    * An array of locales the app supports by inspecting the
-   * translation messages
+   * translations
    */
-  private supportLocalesViaMessages: string[] = [this.defaultLocale]
+  private supporedtLocalesViaTranslations: string[] = [this.defaultLocale]
 
   constructor(
     public application: ApplicationContract,
     private emitter: EmitterContract,
+    private logger: LoggerContract,
     private config: I18nConfig
   ) {
     this.validateConfig()
@@ -90,8 +93,8 @@ export class I18nManager implements I18nManagerContract {
       throw new Exception('Missing "defaultLocale" value inside "config/i18n.ts" file')
     }
 
-    if (!this.config.messagesFormat) {
-      throw new Exception('Missing "messagesFormat" value inside "config/i18n.ts" file')
+    if (!this.config.translationsFormat) {
+      throw new Exception('Missing "translationsFormat" value inside "config/i18n.ts" file')
     }
   }
 
@@ -110,14 +113,14 @@ export class I18nManager implements I18nManagerContract {
    * Returns an instance of the Icu formatter
    */
   private createIcuFormatter() {
-    return new IcuMessageFormatter()
+    return new IcuFormatter()
   }
 
   /**
-   * Creates an instance of the messages formatter based upon whats
+   * Creates an instance of the translations formatter based upon whats
    * defined inside the user config
    */
-  private getMessagesFormatter(name: string): MessageFormatterContract {
+  private getTranslationsFormatter(name: string): TranslationsFormatterContract {
     switch (name) {
       case 'icu':
         return this.createIcuFormatter()
@@ -145,7 +148,7 @@ export class I18nManager implements I18nManagerContract {
   }
 
   /**
-   * Creates an instance of the messages loader based upon whats
+   * Creates an instance of the translations loader based upon whats
    * defined inside the user config
    */
   private getLoader(name: string, config: any): LoaderContract {
@@ -161,28 +164,44 @@ export class I18nManager implements I18nManagerContract {
    * An array of locales supported by the application
    */
   public supportedLocales() {
-    return this.config.supportedLocales || this.supportLocalesViaMessages
+    return this.config.supportedLocales || this.supporedtLocalesViaTranslations
   }
 
   /**
-   * Load messages using the configured loaders
+   * Load translations using the configured loaders
    */
-  public async loadMessages() {
-    if (!this.loadedMessages) {
-      await this.reloadMessages()
+  public async loadTranslations() {
+    if (!this.loadedTranslations) {
+      this.logger.trace('loading translations')
+      await this.reloadTranslations()
     }
   }
 
   /**
-   * Reload messages from the registered loaders
+   * Returns an object of all the loaded translations
    */
-  public async reloadMessages() {
+  public getTranslations() {
+    return this.translations
+  }
+
+  /**
+   * Returns an object of translations for a given locale
+   */
+  public getTranslationsFor(locale: string) {
+    return this.translations[locale] || {}
+  }
+
+  /**
+   * Reload translations from the registered loaders
+   */
+  public async reloadTranslations() {
     const translationsStack = await Promise.all(
       Object.keys(this.config.loaders)
         .filter((loader) => {
           return this.config.loaders[loader]?.enabled
         })
         .map((loader) => {
+          this.logger.trace('loading translations from "%s" loader', loader)
           return this.getLoader(loader, this.config.loaders[loader]).load()
         })
     )
@@ -190,15 +209,15 @@ export class I18nManager implements I18nManagerContract {
     /**
      * Set flag to true
      */
-    this.loadedMessages = true
+    this.loadedTranslations = true
 
     /**
-     * Empty the existing messages object
+     * Empty the existing translations object
      */
-    this.messages = {}
+    this.translations = {}
 
     /**
-     * Shallow merge messages from all the loaders
+     * Shallow merge translations from all the loaders
      */
     translationsStack.forEach((translations) => {
       if (!translations) {
@@ -206,31 +225,36 @@ export class I18nManager implements I18nManagerContract {
       }
 
       Object.keys(translations).forEach((lang) => {
-        if (!this.messages[lang]) {
-          this.messages[lang] = {}
+        if (!this.translations[lang]) {
+          this.translations[lang] = {}
           if (lang !== this.defaultLocale) {
-            this.supportLocalesViaMessages.push(lang)
+            this.supporedtLocalesViaTranslations.push(lang)
           }
         }
 
-        Object.assign(this.messages[lang], translations[lang])
+        Object.assign(this.translations[lang], translations[lang])
       })
     })
+  }
+
+  /**
+   * Returns an instance of the translations formatter for the
+   * active formatter
+   */
+  public getFormatter() {
+    if (!this.formatter) {
+      this.logger.trace('configuring formatter "%s"', this.config.translationsFormat)
+      this.formatter = this.getTranslationsFormatter(this.config.translationsFormat)
+    }
+
+    return this.formatter
   }
 
   /**
    * Returns an instance of I18n for a given locale
    */
   public locale(locale: string) {
-    this.formatter = this.formatter || this.getMessagesFormatter(this.config.messagesFormat)
-
-    return new I18n(
-      locale,
-      this.formatter,
-      this.emitter,
-      this.messages[locale] || {},
-      this.messages[this.defaultLocale] || {}
-    )
+    return new I18n(locale, this.emitter, this.logger, this)
   }
 
   /**
@@ -243,6 +267,8 @@ export class I18nManager implements I18nManagerContract {
     type: 'loader' | 'formatter',
     callback: FormatterExtendCallback | LoaderExtendCallback
   ): void {
+    this.logger.trace('extending i18n by adding "%s" %s', name, type)
+
     if (type === 'loader') {
       this.extendedLoaders.set(name, callback as LoaderExtendCallback)
     } else {

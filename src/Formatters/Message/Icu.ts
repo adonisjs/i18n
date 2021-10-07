@@ -14,7 +14,7 @@ import { Formats, IntlMessageFormat } from 'intl-messageformat'
 import {
   TimeFormatOptions,
   NumberFormatOptions,
-  MessageFormatterContract,
+  TranslationsFormatterContract,
 } from '@ioc:Adonis/Addons/I18n'
 
 /**
@@ -28,9 +28,9 @@ const IcuMessageFormatters = {
 }
 
 /**
- * ICU message formatter
+ * ICU translations formatter
  */
-export class IcuMessageFormatter implements MessageFormatterContract {
+export class IcuFormatter implements TranslationsFormatterContract {
   /**
    * Custom formats to be used inside the ICU messages
    */

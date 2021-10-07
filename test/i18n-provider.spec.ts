@@ -22,7 +22,7 @@ test.group('I18n Provider', (group) => {
     const app = await setup(
       {
         defaultLocale: 'en',
-        messagesFormat: 'icu',
+        translationsFormat: 'icu',
         loaders: {},
       },
       ['../../providers/I18nProvider']
@@ -49,12 +49,51 @@ test.group('I18n Provider', (group) => {
     const app = await setup(
       {
         defaultLocale: 'en',
-        messagesFormat: 'icu',
+        translationsFormat: 'icu',
         loaders: {},
       },
       ['../../providers/I18nProvider']
     )
 
     assert.instanceOf(app.container.use('Adonis/Core/HttpContext').create('/', {}).i18n, I18n)
+  })
+
+  test('register "t" translation helper', async (assert) => {
+    const app = await setup(
+      {
+        defaultLocale: 'en',
+        translationsFormat: 'icu',
+        loaders: {},
+      },
+      ['../../providers/I18nProvider']
+    )
+
+    const HttpContext = app.container.use('Adonis/Core/HttpContext').create('/', {})
+    const View = app.container.use('Adonis/Core/View')
+    const view = View.share({ i18n: HttpContext.i18n })
+
+    const value = await view.renderRaw(`{{ t('messages.greeting') }}`)
+    assert.equal(value, 'translation missing: en, messages.greeting')
+  })
+
+  test('raise exception from "t" helper when i18n is not shared with view', async (assert) => {
+    const app = await setup(
+      {
+        defaultLocale: 'en',
+        translationsFormat: 'icu',
+        loaders: {},
+      },
+      ['../../providers/I18nProvider']
+    )
+
+    const View = app.container.use('Adonis/Core/View')
+    try {
+      await View.renderRaw(`{{ t('messages.greeting') }}`)
+    } catch ({ message }) {
+      assert.equal(
+        message,
+        'Cannot locate "i18n" object. Make sure your are sharing it with the view inside the "DetectUserLocale" middleware'
+      )
+    }
   })
 })

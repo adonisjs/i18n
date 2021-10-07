@@ -62,10 +62,10 @@ declare module '@ioc:Adonis/Addons/I18n' {
   }
 
   /**
-   * Messages formatter formats a string as per the defined
+   * Translations formatter formats a string as per the defined
    * specification.
    */
-  export interface MessageFormatterContract {
+  export interface TranslationsFormatterContract {
     name: string
 
     /**
@@ -137,10 +137,10 @@ declare module '@ioc:Adonis/Addons/I18n' {
    */
   export type I18nConfig = {
     /**
-     * Messages format to use. Officially we support
+     * Translations format to use. Officially we support
      * ICU only
      */
-    messagesFormat: string
+    translationsFormat: string
 
     /**
      * Default locale for the application. This locale is
@@ -150,7 +150,7 @@ declare module '@ioc:Adonis/Addons/I18n' {
     defaultLocale: string
 
     /**
-     * If not defined, we will rely on the messages to find the
+     * If not defined, we will rely on the translations to find the
      * support locales
      */
     supportedLocales?: string[]
@@ -194,12 +194,12 @@ declare module '@ioc:Adonis/Addons/I18n' {
   export type LoaderExtendCallback = (manager: I18nManagerContract, config: any) => LoaderContract
 
   /**
-   * Shape for the messages formatter extend callback
+   * Shape for the translations formatter extend callback
    */
   export type FormatterExtendCallback = (
     manager: I18nManagerContract,
     config: I18nConfig
-  ) => MessageFormatterContract
+  ) => TranslationsFormatterContract
 
   /**
    * I18n manager shape
@@ -221,23 +221,38 @@ declare module '@ioc:Adonis/Addons/I18n' {
     locale(locale: string): I18nContract
 
     /**
-     * An array of locales for which the application has
-     * defined messages. These are user defined locales
-     * and not normalized "ISO 15897" strings
+     * An array of locales for which the application has defined
+     * translations. These are user defined locales and not
+     * normalized "ISO 15897" strings
      */
     supportedLocales(): string[]
 
     /**
-     * Loads messages using the registered loaders. The method
-     * returns in a noop after first call. Use "reloadMessages"
-     * to force reload
+     * Loads translations using the registered loaders. The method returns
+     * in a noop after first call. Use "reloadTranslations" to force
+     * reload
      */
-    loadMessages(): Promise<void>
+    loadTranslations(): Promise<void>
 
     /**
-     * Reloads messages using the registered loaders
+     * Reloads translations using the registered loaders
      */
-    reloadMessages(): Promise<void>
+    reloadTranslations(): Promise<void>
+
+    /**
+     * Returns all the translations
+     */
+    getTranslations(): Translations
+
+    /**
+     * Returns translations for a given locale
+     */
+    getTranslationsFor(locale: string): Record<string, string>
+
+    /**
+     * Returns reference to the application formatter
+     */
+    getFormatter(): TranslationsFormatterContract
 
     /**
      * Extend to add custom loaders and formatters

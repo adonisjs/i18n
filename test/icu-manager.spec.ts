@@ -20,10 +20,11 @@ test.group('I18nManager', (group) => {
   test('get i18n instance using manager', async (assert) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
 
-    const i18nManager = new I18nManager(app, emitter, {
+    const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
-      messagesFormat: 'icu',
+      translationsFormat: 'icu',
       loaders: {
         fs: {
           enabled: true,
@@ -32,13 +33,14 @@ test.group('I18nManager', (group) => {
       },
     })
 
-    await i18nManager.loadMessages()
+    await i18nManager.loadTranslations()
     assert.instanceOf(i18nManager.locale(i18nManager.defaultLocale), I18n)
   })
 
   test('format message using identifier', async (assert) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
 
     await fs.add(
       'resources/lang/en/messages.json',
@@ -47,9 +49,9 @@ test.group('I18nManager', (group) => {
       })
     )
 
-    const i18nManager = new I18nManager(app, emitter, {
+    const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
-      messagesFormat: 'icu',
+      translationsFormat: 'icu',
       loaders: {
         fs: {
           enabled: true,
@@ -58,7 +60,7 @@ test.group('I18nManager', (group) => {
       },
     })
 
-    await i18nManager.loadMessages()
+    await i18nManager.loadTranslations()
     assert.equal(
       i18nManager.locale(i18nManager.defaultLocale).formatMessage('messages.greeting', {}),
       'hello world'
@@ -68,6 +70,7 @@ test.group('I18nManager', (group) => {
   test('do not load messages when loader is disabled', async (assert) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
 
     await fs.add(
       'resources/lang/en/messages.json',
@@ -76,9 +79,9 @@ test.group('I18nManager', (group) => {
       })
     )
 
-    const i18nManager = new I18nManager(app, emitter, {
+    const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
-      messagesFormat: 'icu',
+      translationsFormat: 'icu',
       loaders: {
         fs: {
           enabled: false,
@@ -87,7 +90,7 @@ test.group('I18nManager', (group) => {
       },
     })
 
-    await i18nManager.loadMessages()
+    await i18nManager.loadTranslations()
     assert.equal(
       i18nManager.locale(i18nManager.defaultLocale).formatMessage('messages.greeting', {}),
       'translation missing: en, messages.greeting'
@@ -97,12 +100,13 @@ test.group('I18nManager', (group) => {
   test('reload messages', async (assert) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
 
     await fs.add('resources/lang/en/messages.json', JSON.stringify({}))
 
-    const i18nManager = new I18nManager(app, emitter, {
+    const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
-      messagesFormat: 'icu',
+      translationsFormat: 'icu',
       loaders: {
         fs: {
           enabled: true,
@@ -111,7 +115,7 @@ test.group('I18nManager', (group) => {
       },
     })
 
-    await i18nManager.loadMessages()
+    await i18nManager.loadTranslations()
     assert.equal(
       i18nManager.locale(i18nManager.defaultLocale).formatMessage('messages.greeting', {}),
       'translation missing: en, messages.greeting'
@@ -129,7 +133,7 @@ test.group('I18nManager', (group) => {
       })
     )
 
-    await i18nManager.reloadMessages()
+    await i18nManager.reloadTranslations()
     assert.equal(
       i18nManager.locale(i18nManager.defaultLocale).formatMessage('messages.greeting', {}),
       'hello world'
@@ -139,6 +143,8 @@ test.group('I18nManager', (group) => {
   test('add a custom loader', async (assert) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+
     await fs.add(
       'resources/lang/en/messages.json',
       JSON.stringify({
@@ -146,9 +152,9 @@ test.group('I18nManager', (group) => {
       })
     )
 
-    const i18nManager = new I18nManager(app, emitter, {
+    const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
-      messagesFormat: 'icu',
+      translationsFormat: 'icu',
       loaders: {
         fs: {
           enabled: true,
@@ -172,7 +178,7 @@ test.group('I18nManager', (group) => {
       }
     })
 
-    await i18nManager.loadMessages()
+    await i18nManager.loadTranslations()
     assert.equal(
       i18nManager.locale(i18nManager.defaultLocale).formatMessage('messages.greeting', {}),
       'hello world'
@@ -187,6 +193,8 @@ test.group('I18nManager', (group) => {
   test('add a custom formatter', async (assert) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+
     await fs.add(
       'resources/lang/en/messages.json',
       JSON.stringify({
@@ -194,9 +202,9 @@ test.group('I18nManager', (group) => {
       })
     )
 
-    const i18nManager = new I18nManager(app, emitter, {
+    const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
-      messagesFormat: 'simple',
+      translationsFormat: 'simple',
       loaders: {
         fs: {
           enabled: true,
@@ -214,7 +222,7 @@ test.group('I18nManager', (group) => {
       }
     })
 
-    await i18nManager.loadMessages()
+    await i18nManager.loadTranslations()
     assert.equal(
       i18nManager.locale(i18nManager.defaultLocale).formatMessage('messages.greeting', {}),
       'hello foo'
@@ -224,6 +232,8 @@ test.group('I18nManager', (group) => {
   test('raise error when formatter is missing', async (assert) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+
     await fs.add(
       'resources/lang/en/messages.json',
       JSON.stringify({
@@ -231,9 +241,9 @@ test.group('I18nManager', (group) => {
       })
     )
 
-    const i18nManager = new I18nManager(app, emitter, {
+    const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
-      messagesFormat: 'simple',
+      translationsFormat: 'simple',
       loaders: {
         fs: {
           enabled: true,
@@ -243,7 +253,7 @@ test.group('I18nManager', (group) => {
     })
 
     assert.throw(
-      () => i18nManager.locale('en'),
+      () => i18nManager.getFormatter(),
       'E_INVALID_INTL_FORMATTER: Invalid formatter "simple"'
     )
   })
@@ -253,6 +263,8 @@ test.group('I18nManager', (group) => {
 
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+
     await fs.add(
       'resources/lang/en/messages.json',
       JSON.stringify({
@@ -260,9 +272,9 @@ test.group('I18nManager', (group) => {
       })
     )
 
-    const i18nManager = new I18nManager(app, emitter, {
+    const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
-      messagesFormat: 'simple',
+      translationsFormat: 'simple',
       loaders: {
         memory: {
           enabled: true,
@@ -271,7 +283,7 @@ test.group('I18nManager', (group) => {
     })
 
     try {
-      await i18nManager.loadMessages()
+      await i18nManager.loadTranslations()
     } catch ({ message }) {
       assert.equal(message, 'E_INVALID_INTL_LOADER: Invalid loader "memory"')
     }
@@ -280,6 +292,7 @@ test.group('I18nManager', (group) => {
   test('return supported languages', async (assert) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
 
     await fs.add(
       'resources/lang/en/messages.json',
@@ -288,9 +301,9 @@ test.group('I18nManager', (group) => {
       })
     )
 
-    const i18nManager = new I18nManager(app, emitter, {
+    const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
-      messagesFormat: 'icu',
+      translationsFormat: 'icu',
       loaders: {
         fs: {
           enabled: true,
@@ -299,13 +312,14 @@ test.group('I18nManager', (group) => {
       },
     })
 
-    await i18nManager.loadMessages()
+    await i18nManager.loadTranslations()
     assert.deepEqual(i18nManager.supportedLocales(), ['en'])
   })
 
   test('return supported languages when multiple loaders are configured', async (assert) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
 
     await fs.add(
       'resources/lang/en/messages.json',
@@ -314,9 +328,9 @@ test.group('I18nManager', (group) => {
       })
     )
 
-    const i18nManager = new I18nManager(app, emitter, {
+    const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
-      messagesFormat: 'icu',
+      translationsFormat: 'icu',
       loaders: {
         fs: {
           enabled: true,
@@ -343,13 +357,14 @@ test.group('I18nManager', (group) => {
       }
     })
 
-    await i18nManager.loadMessages()
+    await i18nManager.loadTranslations()
     assert.deepEqual(i18nManager.supportedLocales(), ['en', 'fr'])
   })
 
   test('return supported configured via config', async (assert) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
 
     await fs.add(
       'resources/lang/en/messages.json',
@@ -358,9 +373,9 @@ test.group('I18nManager', (group) => {
       })
     )
 
-    const i18nManager = new I18nManager(app, emitter, {
+    const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
-      messagesFormat: 'icu',
+      translationsFormat: 'icu',
       supportedLocales: ['en', 'it', 'fr'],
       loaders: {
         fs: {
@@ -370,7 +385,7 @@ test.group('I18nManager', (group) => {
       },
     })
 
-    await i18nManager.loadMessages()
+    await i18nManager.loadTranslations()
     assert.deepEqual(i18nManager.supportedLocales(), ['en', 'it', 'fr'])
   })
 })

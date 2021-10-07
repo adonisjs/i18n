@@ -8,11 +8,11 @@
  */
 
 import test from 'japa'
-import { IcuMessageFormatter } from '../src/Formatters/Message/Icu'
+import { IcuFormatter } from '../src/Formatters/Message/Icu'
 
 test.group('ICU message formatter', () => {
   test('format a string value', (assert) => {
-    const formatter = new IcuMessageFormatter()
+    const formatter = new IcuFormatter()
     assert.equal(
       formatter.format('The price is: {price, number, ::currency/INR}', 'en-in', { price: 145 }),
       'The price is: ₹145.00'
@@ -20,8 +20,8 @@ test.group('ICU message formatter', () => {
   })
 
   test('format a string value using a custom format', (assert) => {
-    const formatter = new IcuMessageFormatter()
-    IcuMessageFormatter.addFormat('number', 'litres', {
+    const formatter = new IcuFormatter()
+    IcuFormatter.addFormat('number', 'litres', {
       style: 'unit',
       unit: 'liter',
       unitDisplay: 'long',
@@ -32,6 +32,6 @@ test.group('ICU message formatter', () => {
       'The quantity is 145 litres'
     )
 
-    IcuMessageFormatter['customFormats'] = {}
+    IcuFormatter['customFormats'] = {}
   })
 })
