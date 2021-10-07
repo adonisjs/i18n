@@ -6,7 +6,11 @@
   "files": [
     "build/adonis-typings",
     "build/providers",
-    "build/src"
+    "build/templates",
+    "build/src",
+    "build/instructions.js",
+    "build/instructions.d.ts",
+    "build/instructions.md"
   ],
   "types": "build/adonis-typings/index.d.ts",
   "scripts": {

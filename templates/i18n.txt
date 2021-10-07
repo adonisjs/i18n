@@ -55,9 +55,9 @@ const i18nConfig: I18nConfig = {
   loaders: {
     fs: {
       enabled: true,
-      location: Application.resourcePath('lang'),
-    }
-  }
+      location: Application.resourcesPath('lang'),
+    },
+  },
 }
 
 export default i18nConfig
