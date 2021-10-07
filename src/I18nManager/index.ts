@@ -55,15 +55,15 @@ export class I18nManager implements I18nManagerContract {
   private loadedMessages: boolean = false
 
   /**
-   * An array of locales the app supports by inspecting the
-   * translation messages
-   */
-  private supportLocalesViaMessages: string[] = []
-
-  /**
    * Reference to the default locale defined inside the config file
    */
   public defaultLocale = this.config.defaultLocale
+
+  /**
+   * An array of locales the app supports by inspecting the
+   * translation messages
+   */
+  private supportLocalesViaMessages: string[] = [this.defaultLocale]
 
   constructor(
     public application: ApplicationContract,
@@ -208,7 +208,9 @@ export class I18nManager implements I18nManagerContract {
       Object.keys(translations).forEach((lang) => {
         if (!this.messages[lang]) {
           this.messages[lang] = {}
-          this.supportLocalesViaMessages.push(lang)
+          if (lang !== this.defaultLocale) {
+            this.supportLocalesViaMessages.push(lang)
+          }
         }
 
         Object.assign(this.messages[lang], translations[lang])

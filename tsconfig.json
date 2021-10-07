@@ -1,8 +1,6 @@
 {
   "extends": "./node_modules/@adonisjs/mrm-preset/_tsconfig",
   "compilerOptions": {
-    "target": "ES2021",
-    "module": "node12",
     "skipLibCheck": true,
     "types": ["@types/node", "@adonisjs/core"]
   }
