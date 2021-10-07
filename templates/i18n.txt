@@ -1,0 +1,63 @@
+/**
+ * Config source: https://git.io/JeYHp
+ *
+ * Feel free to let us know via PR, if you find something broken in this config
+ * file.
+ */
+
+import Application from '@ioc:Adonis/Core/Application'
+import { I18nConfig } from '@ioc:Adonis/Addons/I18n'
+
+const i18nConfig: I18nConfig = {
+  /*
+  |--------------------------------------------------------------------------
+  | Messages format
+  |--------------------------------------------------------------------------
+  |
+  | The format in which the translation messages are written. By default
+  | only the ICU messages syntax is supported. However, you can register
+  | custom formatters too and please reference the documentation for that.
+  |
+  */
+  messagesFormat: 'icu',
+
+  /*
+  |--------------------------------------------------------------------------
+  | Default locale
+  |--------------------------------------------------------------------------
+  |
+  | The default locale represents the language for which all the translations
+  | are always available.
+  |
+  | Having a default locale allows you to incrementally add translations for
+  | other languages. If a specific language does not have a translation,
+  | then the default locale translation will be used.
+  |
+  | Also, we switch to default locale for HTTP requests where the user language
+  | is not supported by the your app
+  |
+  */
+  defaultLocale: 'en',
+
+  /*
+  |--------------------------------------------------------------------------
+  | Loaders
+  |--------------------------------------------------------------------------
+  |
+  | Loaders from which to load the translations. You can configure multiple
+  | loaders as well and AdonisJS will merge the translations from all the
+  | loaders to have a unified collection of messages.
+  |
+  | By default, only the "fs" loader is supported. However, you can add custom
+  | loaders too and please reference the documentation for that.
+  |
+  */
+  loaders: {
+    fs: {
+      enabled: true,
+      location: Application.resourcePath('lang'),
+    }
+  }
+}
+
+export default i18nConfig

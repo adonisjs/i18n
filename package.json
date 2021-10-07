@@ -14,8 +14,9 @@
     "pretest": "npm run lint",
     "test": "node japaFile.js",
     "clean": "del build",
+    "copyfiles": "copyfiles \"templates/**/*.txt\" \"instructions.md\" build",
     "compile": "npm run lint && npm run clean && tsc",
-    "build": "npm run compile",
+    "build": "npm run compile && npm run copyfiles",
     "prepublishOnly": "npm run build",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write .",
@@ -44,10 +45,12 @@
     "@adonisjs/core": "^5.3.4",
     "@adonisjs/mrm-preset": "^4.1.2",
     "@adonisjs/require-ts": "^2.0.8",
+    "@adonisjs/sink": "^5.1.6",
     "@poppinss/dev-utils": "^1.1.5",
     "@types/luxon": "^2.0.4",
     "@types/node": "^16.10.2",
     "commitizen": "^4.2.4",
+    "copyfiles": "^2.4.1",
     "cz-conventional-changelog": "^3.3.0",
     "del-cli": "^4.0.1",
     "eslint": "^7.32.0",
@@ -82,6 +85,19 @@
   },
   "directories": {
     "test": "test"
+  },
+  "adonisjs": {
+    "instructions": "./build/instructions.js",
+    "instructionsMd": "./build/instructions.md",
+    "templates": {
+      "config": [
+        "i18n.txt"
+      ]
+    },
+    "types": "@adonisjs/i18n",
+    "providers": [
+      "@adonisjs/i18n"
+    ]
   },
   "publishConfig": {
     "tag": "latest",
