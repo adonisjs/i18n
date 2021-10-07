@@ -17,7 +17,7 @@ export default class I18nProvider {
    * Register I18n as a binding to the container
    */
   public register() {
-    this.application.container.bind('Adonis/Addons/I18n', () => {
+    this.application.container.singleton('Adonis/Addons/I18n', () => {
       const emitter = this.application.container.resolveBinding('Adonis/Core/Event')
       const config = this.application.container.resolveBinding('Adonis/Core/Config').get('i18n', {})
       return new I18nManager(this.application, emitter, config)
@@ -25,7 +25,8 @@ export default class I18nProvider {
   }
 
   /**
-   * Register i18n instance to the HTTP context
+   * Register i18n instance to the HTTP context and create the "t"
+   * helper
    */
   public boot() {
     this.application.container.withBindings(
@@ -34,5 +35,17 @@ export default class I18nProvider {
         Context.getter('i18n', () => I18n.locale(I18n.defaultLocale), true)
       }
     )
+
+    this.application.container.withBindings(['Adonis/Core/View'], (View) => {
+      View.global('t', function (...args: any[]) {
+        if (!this.i18n) {
+          throw new Error(
+            'Cannot locate "i18n" object. Make sure your are sharing it with the view inside the "DetectUserLocale" middleware'
+          )
+        }
+
+        return this.i18n.formatMessage(...args)
+      })
+    })
   }
 }
