@@ -46,7 +46,7 @@
   },
   "homepage": "https://github.com/adonisjs/antl#readme",
   "devDependencies": {
-    "@adonisjs/core": "^5.3.4",
+    "@adonisjs/core": "^5.4.0",
     "@adonisjs/mrm-preset": "^4.1.2",
     "@adonisjs/require-ts": "^2.0.8",
     "@adonisjs/sink": "^5.1.6",
@@ -88,7 +88,7 @@
     "yaml": "^1.10.2"
   },
   "peerDependencies": {
-    "@adonisjs/core": "^5.3.0"
+    "@adonisjs/core": "^5.4.0"
   },
   "directories": {
     "test": "test"
