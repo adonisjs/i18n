@@ -25,6 +25,7 @@ import {
 
 import { I18n } from '../I18n'
 import { FsLoader } from '../Loaders/Fs'
+import { language } from '../Negotiator'
 import { IcuFormatter } from '../Formatters/Message/Icu'
 
 export class I18nManager implements I18nManagerContract {
@@ -248,6 +249,15 @@ export class I18nManager implements I18nManagerContract {
     }
 
     return this.formatter
+  }
+
+  /**
+   * Negotiates the user language against the supported
+   * locales and returns the best match or null if there
+   * is no match.
+   */
+  public getSupportedLocale(userLanguage: string | string[]): string | null {
+    return language(userLanguage, this.supportedLocales())
   }
 
   /**

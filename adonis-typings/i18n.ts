@@ -221,6 +221,13 @@ declare module '@ioc:Adonis/Addons/I18n' {
     locale(locale: string): I18nContract
 
     /**
+     * Negotiates the user language against the supported
+     * locales and returns the best match or null if there
+     * is no match.
+     */
+    getSupportedLocale(userLanguage: string | string[]): string | null
+
+    /**
      * An array of locales for which the application has defined
      * translations. These are user defined locales and not
      * normalized "ISO 15897" strings
