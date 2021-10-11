@@ -71,7 +71,7 @@ declare module '@ioc:Adonis/Addons/I18n' {
     /**
      * Formats a message for the current locale
      */
-    format(message: string, locale: string, data: Record<string, any>): string
+    format(message: string, locale: string, data?: Record<string, any>): string
   }
 
   /**

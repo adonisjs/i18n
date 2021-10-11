@@ -71,9 +71,9 @@ export class IcuFormatter implements TranslationsFormatterContract {
   /**
    * Formats an ICU message string
    */
-  public format(message: string, locale: string, data: Record<string, any>): string {
+  public format(message: string, locale: string, data?: Record<string, any>): string {
     return new IntlMessageFormat(message, locale, this.constructor['customFormats'], {
       formatters: IcuMessageFormatters,
-    }).format(data)
+    }).format(data || {})
   }
 }
