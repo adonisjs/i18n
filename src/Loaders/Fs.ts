@@ -53,7 +53,7 @@ export class FsLoader implements LoaderContract {
   ) {
     const [lang, ...nestedPath] = filePath
       .replace(new RegExp(`${extname(filePath)}$`), '')
-      .split('/')
+      .split(/\/|\\/g)
 
     /**
      * Initialize/use the language node
