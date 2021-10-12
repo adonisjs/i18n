@@ -24,6 +24,7 @@ import {
 } from '@ioc:Adonis/Addons/I18n'
 
 import { I18n } from '../I18n'
+import { prettyPrint } from '../Helpers'
 import { FsLoader } from '../Loaders/Fs'
 import { language } from '../Negotiator'
 import { IcuFormatter } from '../Formatters/Message/Icu'
@@ -61,6 +62,11 @@ export class I18nManager implements I18nManagerContract {
    * Reference to the default locale defined inside the config file
    */
   public defaultLocale = this.config.defaultLocale
+
+  /**
+   * Pretty prints the missing translation message on the console
+   */
+  public prettyPrint = prettyPrint
 
   /**
    * An array of locales the app supports by inspecting the

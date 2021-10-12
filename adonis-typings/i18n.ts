@@ -12,6 +12,15 @@ declare module '@ioc:Adonis/Addons/I18n' {
   import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 
   /**
+   * Data object for missing translation event
+   */
+  export type MissingTranslationEventData = {
+    locale: string
+    identifier: string
+    hasFallback: boolean
+  }
+
+  /**
    * Wildcard callback for the validator messages
    */
   export type ValidatorWildcardCallback = (
@@ -289,6 +298,11 @@ declare module '@ioc:Adonis/Addons/I18n' {
      * Returns reference to the application formatter
      */
     getFormatter(): TranslationsFormatterContract
+
+    /**
+     * Pretty prints the missing translation message on the console
+     */
+    prettyPrint: (data: MissingTranslationEventData) => void
 
     /**
      * Extend to add custom loaders and formatters

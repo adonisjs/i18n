@@ -8,11 +8,8 @@
  */
 
 declare module '@ioc:Adonis/Core/Event' {
+  import { MissingTranslationEventData } from '@ioc:Adonis/Addons/I18n'
   export interface EventsList {
-    'i18n:missing:translation': {
-      locale: string
-      identifier: string
-      hasFallback: boolean
-    }
+    'i18n:missing:translation': MissingTranslationEventData
   }
 }
