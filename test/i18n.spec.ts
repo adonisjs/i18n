@@ -33,6 +33,7 @@ test.group('I18n', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
+      reportMissingValidationMessages: false,
       loaders: {
         fs: {
           enabled: true,
@@ -62,6 +63,7 @@ test.group('I18n', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
+      reportMissingValidationMessages: false,
       loaders: {
         fs: {
           enabled: true,
@@ -102,6 +104,7 @@ test.group('I18n', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
+      reportMissingValidationMessages: false,
       loaders: {
         fs: {
           enabled: true,
@@ -139,6 +142,7 @@ test.group('I18n', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
+      reportMissingValidationMessages: false,
       loaders: {
         fs: {
           enabled: true,
@@ -183,6 +187,7 @@ test.group('I18n', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
+      reportMissingValidationMessages: false,
       loaders: {
         fs: {
           enabled: true,
