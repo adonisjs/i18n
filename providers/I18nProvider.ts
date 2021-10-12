@@ -7,8 +7,11 @@
  * file that was distributed with this source code.
  */
 
-import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 import { I18nManager } from '../src/I18nManager'
+import { viewBindings } from '../src/Bindings/View'
+import { contextBindings } from '../src/Bindings/Context'
+import { validatorBindings } from '../src/Bindings/Validator'
+import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 
 export default class I18nProvider {
   constructor(protected application: ApplicationContract) {}
@@ -30,23 +33,36 @@ export default class I18nProvider {
    * helper
    */
   public boot() {
-    this.application.container.withBindings(
-      ['Adonis/Core/HttpContext', 'Adonis/Addons/I18n'],
-      (Context, I18n) => {
-        Context.getter('i18n', () => I18n.locale(I18n.defaultLocale), true)
-      }
-    )
+    const I18n = this.application.container.resolveBinding('Adonis/Addons/I18n')
 
-    this.application.container.withBindings(['Adonis/Core/View'], (View) => {
-      View.global('t', function (...args: any[]) {
-        if (!this.i18n) {
-          throw new Error(
-            'Cannot locate "i18n" object. Make sure your are sharing it with the view inside the "DetectUserLocale" middleware'
-          )
-        }
-
-        return this.i18n.formatMessage(...args)
-      })
+    /**
+     * Share I18n instance with the HTTP context
+     */
+    this.application.container.withBindings(['Adonis/Core/HttpContext'], (Context) => {
+      contextBindings(Context, I18n)
     })
+
+    /**
+     * Add required globals to the template engine
+     */
+    this.application.container.withBindings(['Adonis/Core/View'], (View) => {
+      viewBindings(View, I18n)
+    })
+
+    /**
+     * Hook into validator to provide default validation messages
+     */
+    this.application.container.withBindings(['Adonis/Core/Validator'], ({ validator }) => {
+      validatorBindings(validator, I18n)
+    })
+  }
+
+  /**
+   * Hook into start lifecycle to load all translation
+   * messages
+   */
+  public async start() {
+    const I18n = this.application.container.resolveBinding('Adonis/Addons/I18n')
+    await I18n.loadTranslations()
   }
 }

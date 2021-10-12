@@ -13,6 +13,7 @@ import { join } from 'path'
 import { I18n } from '../src/I18n'
 import { setup, fs } from '../test-helpers'
 import { I18nManager } from '../src/I18nManager'
+import { validatorBindings } from '../src/Bindings/Validator'
 
 test.group('I18n', (group) => {
   group.afterEach(async () => fs.cleanup())
@@ -116,5 +117,92 @@ test.group('I18n', (group) => {
       i18n.formatMessage('messages.greeting', { price: 100 }),
       'translation missing: en-in, greeting'
     )
+  })
+
+  test('provide validation messages', async (assert) => {
+    assert.plan(1)
+
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+    const { validator, schema } = app.container.resolveBinding('Adonis/Core/Validator')
+
+    await fs.add(
+      'resources/lang/en/validator.json',
+      JSON.stringify({
+        shared: {
+          required: '{ field } is required',
+        },
+      })
+    )
+
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+      },
+    })
+
+    await i18nManager.loadTranslations()
+    validatorBindings(validator, i18nManager)
+
+    try {
+      await validator.validate({
+        schema: schema.create({
+          username: schema.string(),
+        }),
+        data: {},
+      })
+    } catch (error) {
+      assert.deepEqual(error.messages, { username: ['username is required'] })
+    }
+  })
+
+  test('give priority to field + rule messages', async (assert) => {
+    assert.plan(1)
+
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+    const { validator, schema } = app.container.resolveBinding('Adonis/Core/Validator')
+
+    await fs.add(
+      'resources/lang/en/validator.json',
+      JSON.stringify({
+        shared: {
+          'required': '{ field } is required',
+          'username.required': 'username is required to signup',
+        },
+      })
+    )
+
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+      },
+    })
+
+    await i18nManager.loadTranslations()
+    validatorBindings(validator, i18nManager)
+
+    try {
+      await validator.validate({
+        schema: schema.create({
+          username: schema.string(),
+        }),
+        data: {},
+      })
+    } catch (error) {
+      assert.deepEqual(error.messages, { username: ['username is required to signup'] })
+    }
   })
 })

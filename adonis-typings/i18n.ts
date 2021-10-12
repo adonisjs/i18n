@@ -12,6 +12,16 @@ declare module '@ioc:Adonis/Addons/I18n' {
   import { ApplicationContract } from '@ioc:Adonis/Core/Application'
 
   /**
+   * Wildcard callback for the validator messages
+   */
+  export type ValidatorWildcardCallback = (
+    field: string,
+    rule: string,
+    arrayExpressionPointer?: string,
+    args?: any
+  ) => string
+
+  /**
    * Number formatting options
    */
   export type NumberFormatOptions = Intl.NumberFormatOptions & {
@@ -176,16 +186,24 @@ declare module '@ioc:Adonis/Addons/I18n' {
     switchLocale(locale: string): void
 
     /**
+     * Returns a wildcard function to format validation
+     * failure messages
+     */
+    validatorMessages(messagesPrefix?: string): {
+      '*': ValidatorWildcardCallback
+    }
+
+    /**
      * Format a message using its identifier. The message from the
      * fallback language is used when the message from current
      * locale is missing.
      */
-    formatMessage(identifier: string, data: Record<string, any>): string
+    formatMessage(identifier: string, data?: Record<string, any>): string
 
     /**
      * Format a raw message
      */
-    formatRawMessage(message: string, data: Record<string, any>): string
+    formatRawMessage(message: string, data?: Record<string, any>): string
   }
 
   /**
