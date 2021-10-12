@@ -73,7 +73,7 @@ export class I18n extends Formatter implements I18nContract {
      * Otherwise we only notify then the fallback message
      * exists.
      */
-    if (emitAlways || !message) {
+    if (emitAlways || message) {
       this.emitter.emit('i18n:missing:translation', {
         locale: this.locale,
         identifier,
@@ -132,7 +132,10 @@ export class I18n extends Formatter implements I18nContract {
         /**
          * Find if there is a message for the validation rule
          */
-        const ruleMessage = this.getMessage(`${messagesPrefix}.${rule}`, false)
+        const ruleMessage = this.getMessage(
+          `${messagesPrefix}.${rule}`,
+          this.i18nManager.config.reportMissingValidationMessages
+        )
         if (ruleMessage) {
           return this.formatRawMessage(ruleMessage, data)
         }

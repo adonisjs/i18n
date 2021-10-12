@@ -61,7 +61,7 @@ export default class I18nProvider {
    * Hook into start lifecycle to load all translation
    * messages
    */
-  public async start() {
+  public async ready() {
     const I18n = this.application.container.resolveBinding('Adonis/Addons/I18n')
     await I18n.loadTranslations()
   }

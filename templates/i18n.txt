@@ -41,6 +41,21 @@ const i18nConfig: I18nConfig = {
 
   /*
   |--------------------------------------------------------------------------
+  | Report missing validation messages
+  |--------------------------------------------------------------------------
+  |
+  | Set the following value to true if you want us to notify you about
+  | the missing translations everytime.
+  |
+  | Even when the following value is set to false, we will notify when
+  | the fallback language has a translation but the current user
+  | language is missing it.
+  |
+  */
+  reportMissingValidationMessages: true,
+
+  /*
+  |--------------------------------------------------------------------------
   | Loaders
   |--------------------------------------------------------------------------
   |

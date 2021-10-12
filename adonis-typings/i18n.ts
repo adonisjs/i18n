@@ -166,6 +166,12 @@ declare module '@ioc:Adonis/Addons/I18n' {
     supportedLocales?: string[]
 
     /**
+     * Set it to true when the translations for validation
+     * messages are missing
+     */
+    reportMissingValidationMessages: boolean
+
+    /**
      * Configured loaders
      */
     loaders: {
@@ -223,6 +229,11 @@ declare module '@ioc:Adonis/Addons/I18n' {
    * I18n manager shape
    */
   export interface I18nManagerContract {
+    /**
+     * Reference to the config
+     */
+    config: I18nConfig
+
     /**
      * Reference to the AdonisJS application
      */

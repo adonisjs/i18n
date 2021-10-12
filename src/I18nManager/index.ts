@@ -72,7 +72,7 @@ export class I18nManager implements I18nManagerContract {
     public application: ApplicationContract,
     private emitter: EmitterContract,
     private logger: LoggerContract,
-    private config: I18nConfig
+    public config: I18nConfig
   ) {
     this.validateConfig()
   }
