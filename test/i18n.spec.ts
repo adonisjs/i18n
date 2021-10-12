@@ -210,4 +210,100 @@ test.group('I18n', (group) => {
       assert.deepEqual(error.messages, { username: ['username is required to signup'] })
     }
   })
+
+  test('report missing validation translation', async (assert) => {
+    assert.plan(2)
+
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+    const { validator, schema } = app.container.resolveBinding('Adonis/Core/Validator')
+
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      reportMissingValidationMessages: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+      },
+    })
+
+    await i18nManager.loadTranslations()
+    validatorBindings(validator, i18nManager)
+
+    emitter.on('i18n:missing:translation', (payload) => {
+      assert.deepEqual(payload, {
+        locale: 'en',
+        identifier: 'validator.shared.required',
+        hasFallback: false,
+      })
+    })
+
+    try {
+      await validator.validate({
+        schema: schema.create({
+          username: schema.string(),
+        }),
+        data: {},
+      })
+    } catch (error) {
+      assert.deepEqual(error.messages, { username: ['required validation failed on username'] })
+    }
+  })
+
+  test('report missing translation when there is a fallback', async (assert) => {
+    assert.plan(2)
+
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+    const { validator, schema } = app.container.resolveBinding('Adonis/Core/Validator')
+
+    await fs.add(
+      'resources/lang/en/validator.json',
+      JSON.stringify({
+        shared: {
+          'required': '{ field } is required',
+          'username.required': 'username is required to signup',
+        },
+      })
+    )
+
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      reportMissingValidationMessages: false,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+      },
+    })
+
+    await i18nManager.loadTranslations()
+    validator.messages(() => i18nManager.locale('it').validatorMessages())
+
+    emitter.on('i18n:missing:translation', (payload) => {
+      assert.deepEqual(payload, {
+        locale: 'it',
+        identifier: 'validator.shared.username.required',
+        hasFallback: true,
+      })
+    })
+
+    try {
+      await validator.validate({
+        schema: schema.create({
+          username: schema.string(),
+        }),
+        data: {},
+      })
+    } catch (error) {
+      assert.deepEqual(error.messages, { username: ['username is required to signup'] })
+    }
+  })
 })
