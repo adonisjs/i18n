@@ -33,7 +33,7 @@ test.group('I18n', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -63,7 +63,7 @@ test.group('I18n', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -104,7 +104,7 @@ test.group('I18n', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -142,7 +142,7 @@ test.group('I18n', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -187,7 +187,7 @@ test.group('I18n', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -222,7 +222,7 @@ test.group('I18n', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: true,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -275,7 +275,7 @@ test.group('I18n', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,

@@ -56,46 +56,62 @@ export class I18n extends Formatter implements I18nContract {
   }
 
   /**
+   * Emits the missing translation message
+   */
+  private notifyForMissingTranslation(identifier: string, hasFallback: boolean) {
+    this.emitter.emit('i18n:missing:translation', {
+      locale: this.locale,
+      identifier,
+      hasFallback,
+    })
+  }
+
+  /**
    * Returns the message for a given identifier
    */
-  private getMessage(
-    identifier: string,
-    useFallbackMessage: boolean = true,
-    emitAlways: boolean = true
-  ): string | null {
+  private getMessage(identifier: string): { message: string; isFallback: boolean } | null {
     let message = this.localeTranslations[identifier]
 
     /**
      * Return the translation (if exists)
      */
     if (message) {
-      return message
+      return { message, isFallback: false }
     }
 
     /**
      * Look for translation inside the fallback messages
      */
     message = this.fallbackTranslations[identifier]
-
-    /**
-     * If emit always is true, then we will notify about the
-     * missing translation even when a fallback is not
-     * available
-     *
-     * Otherwise we only notify when the fallback message exists.
-     * So basically, in this situation we are notifying the user
-     * that the default language has this translation, whereas
-     * the main language doesn't.
-     */
-    if (emitAlways || message) {
-      this.emitter.emit('i18n:missing:translation', {
-        locale: this.locale,
-        identifier,
-        hasFallback: !!message,
-      })
+    if (message) {
+      return { message, isFallback: true }
     }
 
-    return useFallbackMessage ? message || null : null
+    return null
+  }
+
+  /**
+   * Formats the validator message (if exists) otherwise returns null
+   */
+  private formatValidatorMessage(
+    identifier: string,
+    data: Record<string, string>,
+    forceNotify = false
+  ): string | null {
+    const message = this.getMessage(identifier)
+
+    /**
+     * Notify when forceNotify is enabled or message has a fallback
+     */
+    if (forceNotify || (message && message.isFallback)) {
+      this.notifyForMissingTranslation(identifier, message?.isFallback || false)
+    }
+
+    if (!message) {
+      return null
+    }
+
+    return this.formatRawMessage(message.message, data)
   }
 
   /**
@@ -118,15 +134,17 @@ export class I18n extends Formatter implements I18nContract {
     return {
       '*': (field, rule, arrayExpressionPointer, options) => {
         this.lazyLoadMessages()
-
-        const fieldRuleMessage = this.getMessage(`${messagesPrefix}.${field}.${rule}`, false, false)
         const data = { field, rule, options }
 
         /**
-         * The first priority is give to the field + rule message
+         * The first priority is give to the field + rule message.
          */
+        const fieldRuleMessage = this.formatValidatorMessage(
+          `${messagesPrefix}.${field}.${rule}`,
+          data
+        )
         if (fieldRuleMessage) {
-          return this.formatRawMessage(fieldRuleMessage, data)
+          return fieldRuleMessage
         }
 
         /**
@@ -134,26 +152,21 @@ export class I18n extends Formatter implements I18nContract {
          * is given to the array expression pointer
          */
         if (arrayExpressionPointer) {
-          const arrayExpressionPointerMessage = this.getMessage(
+          const arrayRuleMessage = this.formatValidatorMessage(
             `${messagesPrefix}.${arrayExpressionPointer}.${rule}`,
-            false,
-            false
+            data
           )
-          if (arrayExpressionPointerMessage) {
-            return this.formatRawMessage(arrayExpressionPointerMessage, data)
+          if (arrayRuleMessage) {
+            return arrayRuleMessage
           }
         }
 
         /**
          * Find if there is a message for the validation rule
          */
-        const ruleMessage = this.getMessage(
-          `${messagesPrefix}.${rule}`,
-          true,
-          this.i18nManager.config.reportMissingValidationMessages
-        )
+        const ruleMessage = this.formatValidatorMessage(`${messagesPrefix}.${rule}`, data, true)
         if (ruleMessage) {
-          return this.formatRawMessage(ruleMessage, data)
+          return ruleMessage
         }
 
         /**
@@ -176,6 +189,13 @@ export class I18n extends Formatter implements I18nContract {
     const message = this.getMessage(identifier)
 
     /**
+     * Notify about the message translation
+     */
+    if (!message || message.isFallback) {
+      this.notifyForMissingTranslation(identifier, message?.isFallback || false)
+    }
+
+    /**
      * Return translation missing string when there is no fallback
      * as well
      */
@@ -183,7 +203,7 @@ export class I18n extends Formatter implements I18nContract {
       return fallbackMessage || `translation missing: ${this.locale}, ${identifier}`
     }
 
-    return this.formatRawMessage(message, data)
+    return this.formatRawMessage(message.message, data)
   }
 
   /**

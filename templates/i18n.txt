@@ -53,18 +53,16 @@ const i18nConfig: I18nConfig = {
 
   /*
   |--------------------------------------------------------------------------
-  | Report missing validation messages
+  | Provide validator messages
   |--------------------------------------------------------------------------
   |
-  | Set the following value to true if you want us to notify you about
-  | the missing translations everytime.
+  | Set the following option to "true" if you want to use "i18n" for defining
+  | the validation messages.
   |
-  | Even when the following value is set to false, we will notify when
-  | the fallback language has a translation but the current user
-  | language is missing it.
+  | The validation messages will be loaded from the "validator.shared" prefix.
   |
   */
-  reportMissingValidationMessages: true,
+  provideValidatorMessages: true,
 
   /*
   |--------------------------------------------------------------------------

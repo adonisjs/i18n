@@ -52,9 +52,11 @@ export default class I18nProvider {
     /**
      * Hook into validator to provide default validation messages
      */
-    this.application.container.withBindings(['Adonis/Core/Validator'], ({ validator }) => {
-      validatorBindings(validator, I18n)
-    })
+    if (I18n.config.provideValidatorMessages === true) {
+      this.application.container.withBindings(['Adonis/Core/Validator'], ({ validator }) => {
+        validatorBindings(validator, I18n)
+      })
+    }
   }
 
   /**

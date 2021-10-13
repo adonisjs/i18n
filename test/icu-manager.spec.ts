@@ -25,7 +25,7 @@ test.group('I18nManager', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -53,7 +53,7 @@ test.group('I18nManager', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -84,7 +84,7 @@ test.group('I18nManager', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: false,
@@ -110,7 +110,7 @@ test.group('I18nManager', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -159,7 +159,7 @@ test.group('I18nManager', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -210,7 +210,7 @@ test.group('I18nManager', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'simple',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -250,7 +250,7 @@ test.group('I18nManager', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'simple',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -282,7 +282,7 @@ test.group('I18nManager', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'simple',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         memory: {
           enabled: true,
@@ -312,7 +312,7 @@ test.group('I18nManager', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -340,7 +340,7 @@ test.group('I18nManager', (group) => {
     const i18nManager = new I18nManager(app, emitter, logger, {
       defaultLocale: 'en',
       translationsFormat: 'icu',
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,
@@ -387,7 +387,7 @@ test.group('I18nManager', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       supportedLocales: ['en', 'it', 'fr'],
-      reportMissingValidationMessages: false,
+      provideValidatorMessages: true,
       loaders: {
         fs: {
           enabled: true,

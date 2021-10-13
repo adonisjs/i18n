@@ -175,10 +175,10 @@ declare module '@ioc:Adonis/Addons/I18n' {
     supportedLocales?: string[]
 
     /**
-     * Set it to true when the translations for validation
-     * messages are missing
+     * Set this to true when you want to use i18n for defining
+     * validator messages.
      */
-    reportMissingValidationMessages: boolean
+    provideValidatorMessages: boolean
 
     /**
      * Configured loaders
