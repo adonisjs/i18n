@@ -15,7 +15,7 @@ import { MissingTranslationEventData } from '@ioc:Adonis/Addons/I18n'
  * Pretty prints the missing translation message on the console
  */
 export function prettyPrint(data: MissingTranslationEventData) {
-  const Colors = require('@poppinss/colors')
+  const { Colors } = require('@poppinss/colors')
   const colors = new Colors()
 
   const name = `[ ${colors.yellow('i18n')} ] `
