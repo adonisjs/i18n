@@ -104,7 +104,7 @@
     },
     "metaFiles": [
       {
-        "pattern": "resources/lang/**/*.json",
+        "pattern": "resources/lang/**/*.(json|yaml)",
         "reloadServer": true
       }
     ],
