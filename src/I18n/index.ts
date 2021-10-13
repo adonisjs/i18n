@@ -58,20 +58,34 @@ export class I18n extends Formatter implements I18nContract {
   /**
    * Returns the message for a given identifier
    */
-  private getMessage(identifier: string, emitAlways = true): string | null {
+  private getMessage(
+    identifier: string,
+    useFallbackMessage: boolean = true,
+    emitAlways: boolean = true
+  ): string | null {
     let message = this.localeTranslations[identifier]
+
+    /**
+     * Return the translation (if exists)
+     */
     if (message) {
       return message
     }
 
+    /**
+     * Look for translation inside the fallback messages
+     */
     message = this.fallbackTranslations[identifier]
 
     /**
      * If emit always is true, then we will notify about the
-     * missing translation.
+     * missing translation even when a fallback is not
+     * available
      *
-     * Otherwise we only notify then the fallback message
-     * exists.
+     * Otherwise we only notify when the fallback message exists.
+     * So basically, in this situation we are notifying the user
+     * that the default language has this translation, whereas
+     * the main language doesn't.
      */
     if (emitAlways || message) {
       this.emitter.emit('i18n:missing:translation', {
@@ -81,7 +95,7 @@ export class I18n extends Formatter implements I18nContract {
       })
     }
 
-    return message || null
+    return useFallbackMessage ? message || null : null
   }
 
   /**
@@ -105,7 +119,7 @@ export class I18n extends Formatter implements I18nContract {
       '*': (field, rule, arrayExpressionPointer, options) => {
         this.lazyLoadMessages()
 
-        const fieldRuleMessage = this.getMessage(`${messagesPrefix}.${field}.${rule}`, false)
+        const fieldRuleMessage = this.getMessage(`${messagesPrefix}.${field}.${rule}`, false, false)
         const data = { field, rule, options }
 
         /**
@@ -122,6 +136,7 @@ export class I18n extends Formatter implements I18nContract {
         if (arrayExpressionPointer) {
           const arrayExpressionPointerMessage = this.getMessage(
             `${messagesPrefix}.${arrayExpressionPointer}.${rule}`,
+            false,
             false
           )
           if (arrayExpressionPointerMessage) {
@@ -134,6 +149,7 @@ export class I18n extends Formatter implements I18nContract {
          */
         const ruleMessage = this.getMessage(
           `${messagesPrefix}.${rule}`,
+          true,
           this.i18nManager.config.reportMissingValidationMessages
         )
         if (ruleMessage) {
@@ -151,7 +167,11 @@ export class I18n extends Formatter implements I18nContract {
   /**
    * Formats a message using the messages formatter
    */
-  public formatMessage(identifier: string, data?: Record<string, any>): string {
+  public formatMessage(
+    identifier: string,
+    data?: Record<string, any>,
+    fallbackMessage?: string
+  ): string {
     this.lazyLoadMessages()
     const message = this.getMessage(identifier)
 
@@ -160,7 +180,7 @@ export class I18n extends Formatter implements I18nContract {
      * as well
      */
     if (!message) {
-      return `translation missing: ${this.locale}, ${identifier}`
+      return fallbackMessage || `translation missing: ${this.locale}, ${identifier}`
     }
 
     return this.formatRawMessage(message, data)
