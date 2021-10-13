@@ -101,14 +101,21 @@ export class I18n extends Formatter implements I18nContract {
     const message = this.getMessage(identifier)
 
     /**
-     * Notify when forceNotify is enabled or message has a fallback
+     * Return early when there is no message available
      */
-    if (forceNotify || (message && message.isFallback)) {
-      this.notifyForMissingTranslation(identifier, message?.isFallback || false)
+    if (!message) {
+      if (forceNotify) {
+        this.notifyForMissingTranslation(identifier, false)
+      }
+      return null
     }
 
-    if (!message) {
-      return null
+    /**
+     * Notify when a fallback is available but the main language
+     * message is missing
+     */
+    if (message.isFallback) {
+      this.notifyForMissingTranslation(identifier, message?.isFallback || false)
     }
 
     return this.formatRawMessage(message.message, data)

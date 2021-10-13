@@ -121,6 +121,10 @@ test.group('I18n', (group) => {
       'translation missing: en-in, greeting'
     )
   })
+})
+
+test.group('I18n | validatorBindings', (group) => {
+  group.afterEach(async () => fs.cleanup())
 
   test('provide validation messages', async (assert) => {
     assert.plan(1)
@@ -149,6 +153,10 @@ test.group('I18n', (group) => {
           location: join(fs.basePath, 'resources/lang'),
         },
       },
+    })
+
+    emitter.on('i18n:missing:translation', () => {
+      throw new Error('Never expected to reach here')
     })
 
     await i18nManager.loadTranslations()
@@ -196,6 +204,10 @@ test.group('I18n', (group) => {
       },
     })
 
+    emitter.on('i18n:missing:translation', () => {
+      throw new Error('Never expected to reach here')
+    })
+
     await i18nManager.loadTranslations()
     validatorBindings(validator, i18nManager)
 
@@ -211,7 +223,7 @@ test.group('I18n', (group) => {
     }
   })
 
-  test('report missing validation translation', async (assert) => {
+  test('report missing validation translation for just the rule', async (assert) => {
     assert.plan(2)
 
     const app = await setup()
@@ -254,7 +266,7 @@ test.group('I18n', (group) => {
     }
   })
 
-  test('report missing translation when there is a fallback', async (assert) => {
+  test('report missing translation for the exact key that has a fallback', async (assert) => {
     assert.plan(2)
 
     const app = await setup()
