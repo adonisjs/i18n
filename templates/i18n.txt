@@ -41,6 +41,18 @@ const i18nConfig: I18nConfig = {
 
   /*
   |--------------------------------------------------------------------------
+  | Supported locales
+  |--------------------------------------------------------------------------
+  |
+  | Optionally define an array of locales that your application supports. If
+  | not defined, we will derive this value from the translations stored
+  | inside the `resources/lang` directory.
+  |
+  */
+  // supportedLocales: [],
+
+  /*
+  |--------------------------------------------------------------------------
   | Report missing validation messages
   |--------------------------------------------------------------------------
   |
