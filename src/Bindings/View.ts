@@ -29,4 +29,18 @@ export function viewBindings(View: ViewContract, I18n: I18nManagerContract) {
   View.global('t', function (...args: any[]) {
     return this.i18n.formatMessage(...args)
   })
+
+  /**
+   * Returns default locale
+   */
+  View.global('getDefaultLocale', function () {
+    return I18n.defaultLocale
+  })
+
+  /**
+   * Returns supported locales array
+   */
+  View.global('getSupportedLocales', function () {
+    return I18n.supportedLocales
+  })
 }
