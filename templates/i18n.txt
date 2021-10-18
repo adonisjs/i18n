@@ -53,6 +53,19 @@ const i18nConfig: I18nConfig = {
 
   /*
   |--------------------------------------------------------------------------
+  | Fallback locales
+  |--------------------------------------------------------------------------
+  |
+  | Here you can configure per language fallbacks. For example, you can set
+  | "es" as the fallback locale for the Catalan language.
+  |
+  | If not configured, all languages will fallback to the defaultLocale
+  |
+  */
+  // fallbackLocales: {},
+
+  /*
+  |--------------------------------------------------------------------------
   | Provide validator messages
   |--------------------------------------------------------------------------
   |

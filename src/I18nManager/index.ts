@@ -69,10 +69,13 @@ export class I18nManager implements I18nManagerContract {
   public prettyPrint = prettyPrint
 
   /**
-   * An array of locales the app supports by inspecting the
-   * translations
+   * An array of supported locales inferred from the fallback locales
+   * object + the translations directories.
+   *
+   * The array is only used when the config doesn't have an explicit
+   * value.
    */
-  private supporedtLocalesViaTranslations: string[] = [this.defaultLocale]
+  private inferredLocales: string[] = []
 
   constructor(
     public application: ApplicationContract,
@@ -114,6 +117,19 @@ export class I18nManager implements I18nManagerContract {
     }
 
     return this.extendedFormatters.get(name)!(this, this.config)
+  }
+
+  /**
+   * Conditionally pushes to the inferred locales avoiding duplicates.
+   *
+   * Yes, we can use a set. However, we are trying to avoid converting the
+   * set to an array during "getSupportedLocales" call. Since that method
+   * is used more often than we push to an array.
+   */
+  private pushToInferredLocales(locale: string) {
+    if (!this.inferredLocales.includes(locale)) {
+      this.inferredLocales.push(locale)
+    }
   }
 
   /**
@@ -171,7 +187,7 @@ export class I18nManager implements I18nManagerContract {
    * An array of locales supported by the application
    */
   public supportedLocales() {
-    return this.config.supportedLocales || this.supporedtLocalesViaTranslations
+    return this.config.supportedLocales || this.inferredLocales
   }
 
   /**
@@ -224,6 +240,15 @@ export class I18nManager implements I18nManagerContract {
     this.translations = {}
 
     /**
+     * Reset to initialize state
+     */
+    if (!this.config.supportedLocales) {
+      this.inferredLocales = [this.defaultLocale].concat(
+        this.config.fallbackLocales ? Object.keys(this.config.fallbackLocales) : []
+      )
+    }
+
+    /**
      * Shallow merge translations from all the loaders
      */
     translationsStack.forEach((translations) => {
@@ -232,11 +257,18 @@ export class I18nManager implements I18nManagerContract {
       }
 
       Object.keys(translations).forEach((lang) => {
+        /**
+         * Collect inferred locales when not defined explicitly
+         */
+        if (!this.config.supportedLocales) {
+          this.pushToInferredLocales(lang)
+        }
+
+        /**
+         * Initialize language with an empty object
+         */
         if (!this.translations[lang]) {
           this.translations[lang] = {}
-          if (lang !== this.defaultLocale) {
-            this.supporedtLocalesViaTranslations.push(lang)
-          }
         }
 
         Object.assign(this.translations[lang], translations[lang])

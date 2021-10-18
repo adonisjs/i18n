@@ -399,4 +399,64 @@ test.group('I18nManager', (group) => {
     await i18nManager.loadTranslations()
     assert.deepEqual(i18nManager.supportedLocales(), ['en', 'it', 'fr'])
   })
+
+  test('reset supported languages when reloadTranslations changes languages', async (assert) => {
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+
+    await fs.add(
+      'resources/lang/en/messages.json',
+      JSON.stringify({
+        greeting: 'hello world',
+      })
+    )
+
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+        memory: {
+          enabled: true,
+        },
+      },
+    })
+
+    i18nManager.extend('memory', 'loader', () => {
+      return {
+        async load() {
+          return {
+            en: {
+              'messages.foo': 'hello foo',
+            },
+            fr: {
+              'messages.foo': 'Bonjour foo',
+            },
+          }
+        },
+      }
+    })
+
+    await i18nManager.loadTranslations()
+
+    i18nManager.extend('memory', 'loader', () => {
+      return {
+        async load() {
+          return {
+            en: {
+              'messages.foo': 'hello foo',
+            },
+          }
+        },
+      }
+    })
+
+    await i18nManager.reloadTranslations()
+    assert.deepEqual(i18nManager.supportedLocales(), ['en'])
+  })
 })
