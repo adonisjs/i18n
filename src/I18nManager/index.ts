@@ -267,6 +267,15 @@ export class I18nManager implements I18nManagerContract {
   }
 
   /**
+   * Returns the fallback locale for a given locale. Returns the default
+   * locale when no fallback is defined
+   */
+  public getFallbackLocale(locale: string): string {
+    const fallbacks = this.config.fallbackLocales
+    return fallbacks ? fallbacks[locale] || this.defaultLocale : this.defaultLocale
+  }
+
+  /**
    * Returns an instance of I18n for a given locale
    */
   public locale(locale: string) {

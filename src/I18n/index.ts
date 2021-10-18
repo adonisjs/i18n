@@ -33,6 +33,13 @@ export class I18n extends Formatter implements I18nContract {
    */
   private fallbackTranslations: Record<string, string>
 
+  /**
+   * The fallback locale for the current instance.
+   */
+  public get fallbackLocale() {
+    return this.i18nManager.getFallbackLocale(this.locale)
+  }
+
   constructor(
     public locale: string,
     private emitter: EmitterContract,
@@ -43,15 +50,22 @@ export class I18n extends Formatter implements I18nContract {
   }
 
   /**
+   * Load translations from the i18nManager. Note, this method doesn't load
+   * translations from the configured loaders. It just asks the i18nManager
+   * to return cached translations for the selected locale.
+   */
+  private loadTranslations() {
+    this.localeTranslations = this.i18nManager.getTranslationsFor(this.locale)
+    this.fallbackTranslations = this.i18nManager.getTranslationsFor(this.fallbackLocale)
+  }
+
+  /**
    * Lazy load messages. Doing this as i18n class usually results in switchLocale
    * during real world use cases
    */
   private lazyLoadMessages() {
     if (!this.localeTranslations && !this.fallbackTranslations) {
-      this.localeTranslations = this.i18nManager.getTranslationsFor(this.locale)
-      this.fallbackTranslations = this.i18nManager.getTranslationsFor(
-        this.i18nManager.defaultLocale
-      )
+      this.loadTranslations()
     }
   }
 
@@ -127,8 +141,7 @@ export class I18n extends Formatter implements I18nContract {
   public switchLocale(locale: string) {
     this.locale = locale
     this.logger.debug('switching locale to "%s"', this.locale)
-    this.localeTranslations = this.i18nManager.getTranslationsFor(this.locale)
-    this.fallbackTranslations = this.i18nManager.getTranslationsFor(this.i18nManager.defaultLocale)
+    this.loadTranslations()
   }
 
   /**

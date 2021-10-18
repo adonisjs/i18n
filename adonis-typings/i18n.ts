@@ -175,6 +175,11 @@ declare module '@ioc:Adonis/Addons/I18n' {
     supportedLocales?: string[]
 
     /**
+     * A custom object of locales and their fallbacks
+     */
+    fallbackLocales?: Record<string, string>
+
+    /**
      * Set this to true when you want to use i18n for defining
      * validator messages.
      */
@@ -195,6 +200,11 @@ declare module '@ioc:Adonis/Addons/I18n' {
    * in time
    */
   export interface I18nContract extends FormatterContract {
+    /**
+     * The fallback locale for the current instance.
+     */
+    readonly fallbackLocale: string
+
     /**
      * Switch locale for the specific instance
      */
@@ -264,6 +274,12 @@ declare module '@ioc:Adonis/Addons/I18n' {
      * is no match.
      */
     getSupportedLocale(userLanguage: string | string[]): string | null
+
+    /**
+     * Returns the fallback locale for a given locale. Returns the default
+     * locale when no fallback is defined
+     */
+    getFallbackLocale(locale: string): string
 
     /**
      * An array of locales for which the application has defined
