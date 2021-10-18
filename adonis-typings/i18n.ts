@@ -111,7 +111,7 @@ declare module '@ioc:Adonis/Addons/I18n' {
     /**
      * Formats a numeric value to a currency display value
      */
-    formatCurrency(value: string | number, options: CurrencyFormatOptions): string
+    formatCurrency(value: string | number | bigint, options: CurrencyFormatOptions): string
 
     /**
      * Formats date, luxon date, ISO date/time string or a timestamp to

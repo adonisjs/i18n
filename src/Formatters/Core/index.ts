@@ -79,7 +79,7 @@ export class Formatter implements FormatterContract {
   /**
    * Formats a numeric value to a currency display value
    */
-  public formatCurrency(value: string | number, options: CurrencyFormatOptions): string {
+  public formatCurrency(value: string | number | bigint, options: CurrencyFormatOptions): string {
     const currencyOptions = { style: 'currency' as const, ...options }
     return this.formatNumber(value, currencyOptions)
   }
