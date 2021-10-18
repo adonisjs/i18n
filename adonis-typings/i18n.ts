@@ -85,7 +85,7 @@ declare module '@ioc:Adonis/Addons/I18n' {
    * specification.
    */
   export interface TranslationsFormatterContract {
-    name: string
+    readonly name: string
 
     /**
      * Formats a message for the current locale

@@ -39,7 +39,7 @@ export class IcuFormatter implements TranslationsFormatterContract {
   /**
    * Formatter syntax name
    */
-  public name: string = 'icu'
+  public readonly name: string = 'icu'
 
   /**
    * Define a custom format for message
