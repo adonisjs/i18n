@@ -7,8 +7,8 @@
  * file that was distributed with this source code.
  */
 
-import { ViewContract } from '@ioc:Adonis/Core/View'
-import { I18nManagerContract } from '@ioc:Adonis/Addons/I18n'
+import type { ViewContract } from '@ioc:Adonis/Core/View'
+import type { I18nManagerContract } from '@ioc:Adonis/Addons/I18n'
 
 /**
  * Registers the "t" helper and the i18n instance for the default

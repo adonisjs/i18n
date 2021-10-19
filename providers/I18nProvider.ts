@@ -57,6 +57,16 @@ export default class I18nProvider {
         validatorBindings(validator, I18n)
       })
     }
+
+    /**
+     * Register repl binding when in repl environment
+     */
+    if (this.application.environment === 'repl') {
+      this.application.container.withBindings(['Adonis/Addons/Repl'], (Repl) => {
+        const { replBindings } = require('../src/Bindings/Repl')
+        replBindings(this.application, Repl)
+      })
+    }
   }
 
   /**

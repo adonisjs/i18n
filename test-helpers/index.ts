@@ -8,12 +8,17 @@
  */
 
 import { join } from 'path'
-import { I18nConfig } from '@ioc:Adonis/Addons/I18n'
 import { Filesystem } from '@poppinss/dev-utils'
+import { I18nConfig } from '@ioc:Adonis/Addons/I18n'
 import { Application } from '@adonisjs/core/build/standalone'
+
 export const fs = new Filesystem(join(__dirname, 'app'))
 
-export async function setup(config?: Partial<I18nConfig>, additionalProviders: string[] = []) {
+export async function setup(
+  config?: Partial<I18nConfig>,
+  additionalProviders: string[] = [],
+  environment: 'web' | 'repl' | 'test' = 'test'
+) {
   await fs.add('.env', '')
   await fs.add(
     'config/app.ts',
@@ -34,7 +39,7 @@ export async function setup(config?: Partial<I18nConfig>, additionalProviders: s
   `
   )
 
-  const app = new Application(fs.basePath, 'web', {
+  const app = new Application(fs.basePath, environment, {
     providers: ['@adonisjs/core', '@adonisjs/view'].concat(additionalProviders),
   })
 

@@ -96,4 +96,19 @@ test.group('I18n Provider', (group) => {
       )
     }
   })
+
+  test('register repl bindings in repl environment', async (assert) => {
+    const app = await setup(
+      {
+        defaultLocale: 'en',
+        translationsFormat: 'icu',
+        loaders: {},
+      },
+      ['@adonisjs/repl', '../../providers/I18nProvider'],
+      'repl'
+    )
+
+    const Repl = app.container.use('Adonis/Addons/Repl')
+    assert.property(Repl['customMethods'], 'loadI18n')
+  })
 })

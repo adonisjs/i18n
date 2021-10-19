@@ -7,8 +7,8 @@
  * file that was distributed with this source code.
  */
 
-import { I18nManagerContract } from '@ioc:Adonis/Addons/I18n'
-import { HttpContextConstructorContract } from '@ioc:Adonis/Core/HttpContext'
+import type { I18nManagerContract } from '@ioc:Adonis/Addons/I18n'
+import type { HttpContextConstructorContract } from '@ioc:Adonis/Core/HttpContext'
 
 /**
  * Shares the i18n with the HTTP context as a getter
