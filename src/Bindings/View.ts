@@ -41,6 +41,6 @@ export function viewBindings(View: ViewContract, I18n: I18nManagerContract) {
    * Returns supported locales array
    */
   View.global('getSupportedLocales', function () {
-    return I18n.supportedLocales
+    return I18n.supportedLocales()
   })
 }
