@@ -9,4 +9,4 @@ Server.middleware.register([
 ])
 ```
 
-[Click here](https://docs.adonisjs.com/i18n#detect-user-locale) to read the documentation for detecting user locale.
+[Click here](https://docs.adonisjs.com/guides/i18n#detecting-user-locale) to read the documentation for detecting user locale.
