@@ -23,7 +23,7 @@
       Website
     </a>
     <span> | </span>
-    <a href="https://docs.adonisjs.com/i18n">
+    <a href="https://docs.adonisjs.com/guides/i18n">
       Guides
     </a>
     <span> | </span>
