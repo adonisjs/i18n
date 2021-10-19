@@ -219,6 +219,18 @@ declare module '@ioc:Adonis/Addons/I18n' {
     }
 
     /**
+     * Returns a boolean identifying if the message for a given
+     * identifier exists or not
+     */
+    hasMessage(identifier: string): boolean
+
+    /**
+     * Returns a boolean identifying if a fallback message for a given
+     * identifier exists or not
+     */
+    hasFallbackMessage(identifier: string): boolean
+
+    /**
      * Format a message using its identifier. The message from the
      * fallback language is used when the message from current
      * locale is missing.

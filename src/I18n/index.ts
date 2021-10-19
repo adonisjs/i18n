@@ -60,10 +60,10 @@ export class I18n extends Formatter implements I18nContract {
   }
 
   /**
-   * Lazy load messages. Doing this as i18n class usually results in switchLocale
+   * Lazy load translations. Doing this as i18n class usually results in switchLocale
    * during real world use cases
    */
-  private lazyLoadMessages() {
+  private lazyLoadTranslations() {
     if (!this.localeTranslations && !this.fallbackTranslations) {
       this.loadTranslations()
     }
@@ -136,6 +136,24 @@ export class I18n extends Formatter implements I18nContract {
   }
 
   /**
+   * Returns a boolean identifying if the message for a given
+   * identifier exists or not
+   */
+  public hasMessage(identifier: string): boolean {
+    this.lazyLoadTranslations()
+    return this.localeTranslations[identifier] !== undefined
+  }
+
+  /**
+   * Returns a boolean identifying if a fallback message for a given
+   * identifier exists or not
+   */
+  public hasFallbackMessage(identifier: string): boolean {
+    this.lazyLoadTranslations()
+    return this.fallbackTranslations[identifier] !== undefined
+  }
+
+  /**
    * Switch locale for the current instance
    */
   public switchLocale(locale: string) {
@@ -153,7 +171,7 @@ export class I18n extends Formatter implements I18nContract {
   } {
     return {
       '*': (field, rule, arrayExpressionPointer, options) => {
-        this.lazyLoadMessages()
+        this.lazyLoadTranslations()
         const data = { field, rule, options }
 
         /**
@@ -205,7 +223,7 @@ export class I18n extends Formatter implements I18nContract {
     data?: Record<string, any>,
     fallbackMessage?: string
   ): string {
-    this.lazyLoadMessages()
+    this.lazyLoadTranslations()
     const message = this.getMessage(identifier)
 
     /**

@@ -401,4 +401,66 @@ test.group('I18n | validatorBindings', (group) => {
       assert.deepEqual(error.messages, { username: ['username is required to signup'] })
     }
   })
+
+  test('find if a message exists', async (assert) => {
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+
+    await fs.add(
+      'resources/lang/en/messages.json',
+      JSON.stringify({
+        greeting: '',
+      })
+    )
+
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+      },
+    })
+
+    await i18nManager.loadTranslations()
+
+    const i18n = new I18n('en', emitter, logger, i18nManager)
+    assert.isTrue(i18n.hasMessage('messages.greeting'))
+    assert.isFalse(i18n.hasMessage('messages.title'))
+  })
+
+  test('find if a fallback message exists', async (assert) => {
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+
+    await fs.add(
+      'resources/lang/en/messages.json',
+      JSON.stringify({
+        greeting: '',
+      })
+    )
+
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+      },
+    })
+
+    await i18nManager.loadTranslations()
+
+    const i18n = new I18n('fr', emitter, logger, i18nManager)
+    assert.isFalse(i18n.hasMessage('messages.greeting'))
+    assert.isTrue(i18n.hasFallbackMessage('messages.greeting'))
+  })
 })
