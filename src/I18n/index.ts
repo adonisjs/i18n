@@ -172,7 +172,7 @@ export class I18n extends Formatter implements I18nContract {
     return {
       '*': (field, rule, arrayExpressionPointer, options) => {
         this.lazyLoadTranslations()
-        const data = { field, rule, options }
+        const data = { field, rule, ...options }
 
         /**
          * The first priority is give to the field + rule message.

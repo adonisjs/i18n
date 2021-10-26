@@ -19,25 +19,6 @@ test.group('ICU message formatter', () => {
     )
   })
 
-  test('format a message for validator', (assert) => {
-    const data = {
-      field: 'name',
-      rule: 'MaxLength',
-      options: {
-        maxLength: 255,
-      },
-    }
-    const formatter = new IcuFormatter()
-    assert.equal(
-      formatter.format(
-        'This value is too long. It should have { maxLength } characters or less.',
-        'en-in',
-        data
-      ),
-      'This value is too long. It should have 255 characters or less.'
-    )
-  })
-
   test('format a string value using a custom format', (assert) => {
     const formatter = new IcuFormatter()
     IcuFormatter.addFormat('number', 'litres', {
