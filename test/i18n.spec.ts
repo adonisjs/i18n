@@ -463,4 +463,54 @@ test.group('I18n | validatorBindings', (group) => {
     assert.isFalse(i18n.hasMessage('messages.greeting'))
     assert.isTrue(i18n.hasFallbackMessage('messages.greeting'))
   })
+
+  test('provide validation messages', async (assert) => {
+    assert.plan(1)
+
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+    const { validator, schema, rules } = app.container.resolveBinding('Adonis/Core/Validator')
+
+    await fs.add(
+      'resources/lang/en/validator.json',
+      JSON.stringify({
+        shared: {
+          minLength: 'Field must be { minLength } chars long',
+        },
+      })
+    )
+
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+      },
+    })
+
+    emitter.on('i18n:missing:translation', () => {
+      throw new Error('Never expected to reach here')
+    })
+
+    await i18nManager.loadTranslations()
+    validatorBindings(validator, i18nManager)
+
+    try {
+      await validator.validate({
+        schema: schema.create({
+          username: schema.string({}, [rules.minLength(5)]),
+        }),
+        data: {
+          username: 'a',
+        },
+      })
+    } catch (error) {
+      assert.deepEqual(error.messages, { username: ['Field must be 5 chars long'] })
+    }
+  })
 })
