@@ -46,7 +46,7 @@
   },
   "homepage": "https://github.com/adonisjs/antl#readme",
   "devDependencies": {
-    "@adonisjs/core": "^5.4.0",
+    "@adonisjs/core": "^5.4.2",
     "@adonisjs/mrm-preset": "^4.1.2",
     "@adonisjs/repl": "^3.1.6",
     "@adonisjs/require-ts": "^2.0.8",
