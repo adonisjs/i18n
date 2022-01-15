@@ -35,7 +35,7 @@ test.group('Formatter', () => {
      * Luxon date
      */
     const luxonDate = DateTime.local()
-    assert.equal(formatter.formatDate(luxonDate), luxonDate.toFormat('d/MM/yyyy'))
+    assert.equal(formatter.formatDate(luxonDate), luxonDate.toFormat('d/M/yyyy'))
 
     /**
      * ISO String
@@ -48,7 +48,7 @@ test.group('Formatter', () => {
     const jsDate = new Date()
     assert.equal(
       formatter.formatDate(jsDate),
-      `${jsDate.getDate()}/${jsDate.getMonth() + 1}/${jsDate.getFullYear()}`
+      DateTime.fromJSDate(jsDate).toFormat('d/M/yyyy', { locale: 'en-in' })
     )
 
     /**
