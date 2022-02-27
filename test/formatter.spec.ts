@@ -7,12 +7,12 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 import { DateTime } from 'luxon'
 import { Formatter } from '../src/Formatters/Core'
 
 test.group('Formatter', () => {
-  test('format a number', (assert) => {
+  test('format a number', ({ assert }) => {
     const formatter = new Formatter('en-in')
     assert.equal(
       formatter.formatNumber('10', { style: 'unit', unit: 'liter', unitDisplay: 'long' }),
@@ -20,7 +20,7 @@ test.group('Formatter', () => {
     )
   })
 
-  test('format currency', (assert) => {
+  test('format currency', ({ assert }) => {
     const formatter = new Formatter('en-in')
     assert.equal(
       formatter.formatCurrency('10', { currency: 'INR', currencyDisplay: 'name' }),
@@ -28,7 +28,7 @@ test.group('Formatter', () => {
     )
   })
 
-  test('format date', (assert) => {
+  test('format date', ({ assert }) => {
     const formatter = new Formatter('en-in')
 
     /**
@@ -61,7 +61,7 @@ test.group('Formatter', () => {
     )
   })
 
-  test('format time', (assert) => {
+  test('format time', ({ assert }) => {
     const formatter = new Formatter('en-in')
 
     /**
@@ -97,7 +97,7 @@ test.group('Formatter', () => {
     )
   })
 
-  test('format a time diff relatively', (assert) => {
+  test('format a time diff relatively', ({ assert }) => {
     const formatter = new Formatter('en-in')
 
     assert.equal(formatter.formatRelativeTime(100, 'hours'), 'in 100 hours')
@@ -108,7 +108,7 @@ test.group('Formatter', () => {
     assert.equal(formatter.formatRelativeTime(-(1000 * 3 * 3600), 'auto'), '3 hours ago')
   })
 
-  test('format a value to its plural form', (assert) => {
+  test('format a value to its plural form', ({ assert }) => {
     const formatter = new Formatter('en-in')
     assert.equal(formatter.formatPlural(3, { type: 'ordinal' }), 'few')
   })

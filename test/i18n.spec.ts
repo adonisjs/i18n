@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 import { join } from 'path'
 
 import { I18n } from '../src/I18n'
@@ -16,9 +16,9 @@ import { I18nManager } from '../src/I18nManager'
 import { validatorBindings } from '../src/Bindings/Validator'
 
 test.group('I18n', (group) => {
-  group.afterEach(async () => fs.cleanup())
+  group.each.teardown(async () => fs.cleanup())
 
-  test('format a message by its identifier', async (assert) => {
+  test('format a message by its identifier', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -48,7 +48,7 @@ test.group('I18n', (group) => {
     assert.equal(i18n.formatMessage('messages.greeting', { price: 100 }), 'The price is ₹100.00')
   })
 
-  test('use fallback messages when actual message is missing', async (assert) => {
+  test('use fallback messages when actual message is missing', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -78,7 +78,7 @@ test.group('I18n', (group) => {
     assert.equal(i18n.formatMessage('messages.greeting', { price: 100 }), 'The price is 100,00 $US')
   })
 
-  test('report missing translations via events', async (assert, done) => {
+  test('report missing translations via events', async ({ assert }, done) => {
     assert.plan(2)
 
     const app = await setup()
@@ -120,9 +120,9 @@ test.group('I18n', (group) => {
       i18n.formatMessage('messages.greeting', { price: 100 }),
       'translation missing: en-in, greeting'
     )
-  })
+  }).waitForDone()
 
-  test('use fallback locale defined inside the config', async (assert) => {
+  test('use fallback locale defined inside the config', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -162,7 +162,7 @@ test.group('I18n', (group) => {
     assert.equal(i18n.formatMessage('messages.greeting', { price: 100 }), 'El precio es 100,00 USD')
   })
 
-  test('switch locale and fallback locale during switchLocale call', async (assert) => {
+  test('switch locale and fallback locale during switchLocale call', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -207,9 +207,9 @@ test.group('I18n', (group) => {
 })
 
 test.group('I18n | validatorBindings', (group) => {
-  group.afterEach(async () => fs.cleanup())
+  group.each.teardown(async () => fs.cleanup())
 
-  test('provide validation messages', async (assert) => {
+  test('provide validation messages', async ({ assert }) => {
     assert.plan(1)
 
     const app = await setup()
@@ -257,7 +257,7 @@ test.group('I18n | validatorBindings', (group) => {
     }
   })
 
-  test('give priority to field + rule messages', async (assert) => {
+  test('give priority to field + rule messages', async ({ assert }) => {
     assert.plan(1)
 
     const app = await setup()
@@ -306,7 +306,7 @@ test.group('I18n | validatorBindings', (group) => {
     }
   })
 
-  test('report missing validation translation for just the rule', async (assert) => {
+  test('report missing validation translation for just the rule', async ({ assert }) => {
     assert.plan(2)
 
     const app = await setup()
@@ -349,7 +349,7 @@ test.group('I18n | validatorBindings', (group) => {
     }
   })
 
-  test('report missing translation for the exact key that has a fallback', async (assert) => {
+  test('report missing translation for the exact key that has a fallback', async ({ assert }) => {
     assert.plan(2)
 
     const app = await setup()
@@ -402,7 +402,7 @@ test.group('I18n | validatorBindings', (group) => {
     }
   })
 
-  test('find if a message exists', async (assert) => {
+  test('find if a message exists', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -433,7 +433,7 @@ test.group('I18n | validatorBindings', (group) => {
     assert.isFalse(i18n.hasMessage('messages.title'))
   })
 
-  test('find if a fallback message exists', async (assert) => {
+  test('find if a fallback message exists', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -464,7 +464,7 @@ test.group('I18n | validatorBindings', (group) => {
     assert.isTrue(i18n.hasFallbackMessage('messages.greeting'))
   })
 
-  test('provide validation messages', async (assert) => {
+  test('provide validation messages', async ({ assert }) => {
     assert.plan(1)
 
     const app = await setup()

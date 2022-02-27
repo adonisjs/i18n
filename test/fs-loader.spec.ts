@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 import { join } from 'path'
 import { Filesystem } from '@poppinss/dev-utils'
 import { FsLoader } from '../src/Loaders/Fs'
@@ -15,9 +15,9 @@ import { FsLoader } from '../src/Loaders/Fs'
 const fs = new Filesystem(join(__dirname, '__app'))
 
 test.group('Fs loader | JSON', (group) => {
-  group.afterEach(async () => fs.cleanup())
+  group.each.teardown(async () => fs.cleanup())
 
-  test('load all .json files from the config location', async (assert) => {
+  test('load all .json files from the config location', async ({ assert }) => {
     const fsLoader = new FsLoader({
       location: join(fs.basePath, 'resources/lang'),
     })
@@ -53,7 +53,7 @@ test.group('Fs loader | JSON', (group) => {
     })
   })
 
-  test('flatten the nested messages', async (assert) => {
+  test('flatten the nested messages', async ({ assert }) => {
     const fsLoader = new FsLoader({
       location: join(fs.basePath, 'resources/lang'),
     })
@@ -77,7 +77,7 @@ test.group('Fs loader | JSON', (group) => {
     })
   })
 
-  test('load messages from language files', async (assert) => {
+  test('load messages from language files', async ({ assert }) => {
     const fsLoader = new FsLoader({
       location: join(fs.basePath, 'resources/lang'),
     })
@@ -107,7 +107,7 @@ test.group('Fs loader | JSON', (group) => {
     })
   })
 
-  test('do not raise exception when the lang dir is missing', async (assert) => {
+  test('do not raise exception when the lang dir is missing', async ({ assert }) => {
     const fsLoader = new FsLoader({
       location: join(fs.basePath, 'resources/lang'),
     })
@@ -116,7 +116,7 @@ test.group('Fs loader | JSON', (group) => {
     assert.deepEqual(messages, {})
   })
 
-  test('raise error when file contents is not valid json', async (assert) => {
+  test('raise error when file contents is not valid json', async ({ assert }) => {
     assert.plan(1)
 
     const fsLoader = new FsLoader({
@@ -134,9 +134,9 @@ test.group('Fs loader | JSON', (group) => {
 })
 
 test.group('Fs loader | YAML', (group) => {
-  group.afterEach(async () => fs.cleanup())
+  group.each.teardown(async () => fs.cleanup())
 
-  test('load all .yaml files from the config location', async (assert) => {
+  test('load all .yaml files from the config location', async ({ assert }) => {
     const fsLoader = new FsLoader({
       location: join(fs.basePath, 'resources/lang'),
     })
@@ -172,7 +172,7 @@ test.group('Fs loader | YAML', (group) => {
     })
   })
 
-  test('flatten the nested messages', async (assert) => {
+  test('flatten the nested messages', async ({ assert }) => {
     const fsLoader = new FsLoader({
       location: join(fs.basePath, 'resources/lang'),
     })
@@ -195,7 +195,7 @@ test.group('Fs loader | YAML', (group) => {
     })
   })
 
-  test('load messages from language files', async (assert) => {
+  test('load messages from language files', async ({ assert }) => {
     const fsLoader = new FsLoader({
       location: join(fs.basePath, 'resources/lang'),
     })
@@ -225,7 +225,7 @@ test.group('Fs loader | YAML', (group) => {
     })
   })
 
-  test('do not raise exception when the lang dir is missing', async (assert) => {
+  test('do not raise exception when the lang dir is missing', async ({ assert }) => {
     const fsLoader = new FsLoader({
       location: join(fs.basePath, 'resources/lang'),
     })
@@ -234,7 +234,7 @@ test.group('Fs loader | YAML', (group) => {
     assert.deepEqual(messages, {})
   })
 
-  test('raise error when file contents is not valid yaml', async (assert) => {
+  test('raise error when file contents is not valid yaml', async ({ assert }) => {
     assert.plan(1)
 
     const fsLoader = new FsLoader({

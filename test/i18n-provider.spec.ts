@@ -7,18 +7,18 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 
 import { I18n } from '../src/I18n'
 import { fs, setup } from '../test-helpers'
 import { I18nManager } from '../src/I18nManager'
 
 test.group('I18n Provider', (group) => {
-  group.afterEach(async () => {
+  group.each.teardown(async () => {
     await fs.cleanup()
   })
 
-  test('register i18n provider', async (assert) => {
+  test('register i18n provider', async ({ assert }) => {
     const app = await setup(
       {
         defaultLocale: 'en',
@@ -35,7 +35,7 @@ test.group('I18n Provider', (group) => {
     )
   })
 
-  test('raise error when config is missing', async (assert) => {
+  test('raise error when config is missing', async ({ assert }) => {
     assert.plan(1)
 
     try {
@@ -45,7 +45,7 @@ test.group('I18n Provider', (group) => {
     }
   })
 
-  test('define context i18n getter', async (assert) => {
+  test('define context i18n getter', async ({ assert }) => {
     const app = await setup(
       {
         defaultLocale: 'en',
@@ -58,7 +58,7 @@ test.group('I18n Provider', (group) => {
     assert.instanceOf(app.container.use('Adonis/Core/HttpContext').create('/', {}).i18n, I18n)
   })
 
-  test('register "t" translation helper', async (assert) => {
+  test('register "t" translation helper', async ({ assert }) => {
     const app = await setup(
       {
         defaultLocale: 'en',
@@ -76,7 +76,7 @@ test.group('I18n Provider', (group) => {
     assert.equal(value, 'translation missing: en, messages.greeting')
   })
 
-  test('raise exception from "t" helper when i18n is not shared with view', async (assert) => {
+  test('raise exception from "t" helper when i18n is not shared with view', async ({ assert }) => {
     const app = await setup(
       {
         defaultLocale: 'en',
@@ -97,7 +97,7 @@ test.group('I18n Provider', (group) => {
     }
   })
 
-  test('register repl bindings in repl environment', async (assert) => {
+  test('register repl bindings in repl environment', async ({ assert }) => {
     const app = await setup(
       {
         defaultLocale: 'en',
