@@ -7,19 +7,19 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 import { language } from '../src/Negotiator'
 
 test.group('Negotiator | language', () => {
-  test('negotiate for matching language', (assert) => {
+  test('negotiate for matching language', ({ assert }) => {
     assert.equal(language(['en_US', 'en'], ['en', 'en_UK', 'en_US']), 'en_US')
   })
 
-  test('negotiate for closest one when no match found', (assert) => {
+  test('negotiate for closest one when no match found', ({ assert }) => {
     assert.equal(language(['en_US', 'en'], ['en', 'en_UK']), 'en')
   })
 
-  test('return null when no match found', (assert) => {
+  test('return null when no match found', ({ assert }) => {
     assert.equal(language(['fr', 'it'], ['en', 'en_UK']), null)
   })
 })

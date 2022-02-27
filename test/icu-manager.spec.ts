@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 import { join } from 'path'
 
 import { I18n } from '../src/I18n'
@@ -15,9 +15,9 @@ import { fs, setup } from '../test-helpers'
 import { I18nManager } from '../src/I18nManager'
 
 test.group('I18nManager', (group) => {
-  group.afterEach(async () => fs.cleanup())
+  group.each.teardown(async () => fs.cleanup())
 
-  test('get i18n instance using manager', async (assert) => {
+  test('get i18n instance using manager', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -38,7 +38,7 @@ test.group('I18nManager', (group) => {
     assert.instanceOf(i18nManager.locale(i18nManager.defaultLocale), I18n)
   })
 
-  test('format message using identifier', async (assert) => {
+  test('format message using identifier', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -69,7 +69,7 @@ test.group('I18nManager', (group) => {
     )
   })
 
-  test('do not load messages when loader is disabled', async (assert) => {
+  test('do not load messages when loader is disabled', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -100,7 +100,7 @@ test.group('I18nManager', (group) => {
     )
   })
 
-  test('reload messages', async (assert) => {
+  test('reload messages', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -144,7 +144,7 @@ test.group('I18nManager', (group) => {
     )
   })
 
-  test('add a custom loader', async (assert) => {
+  test('add a custom loader', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -195,7 +195,7 @@ test.group('I18nManager', (group) => {
     )
   })
 
-  test('add a custom formatter', async (assert) => {
+  test('add a custom formatter', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -235,7 +235,7 @@ test.group('I18nManager', (group) => {
     )
   })
 
-  test('raise error when formatter is missing', async (assert) => {
+  test('raise error when formatter is missing', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -259,13 +259,13 @@ test.group('I18nManager', (group) => {
       },
     })
 
-    assert.throw(
+    assert.throws(
       () => i18nManager.getFormatter(),
       'E_INVALID_INTL_FORMATTER: Invalid formatter "simple"'
     )
   })
 
-  test('raise error when loader is missing', async (assert) => {
+  test('raise error when loader is missing', async ({ assert }) => {
     assert.plan(1)
 
     const app = await setup()
@@ -297,7 +297,7 @@ test.group('I18nManager', (group) => {
     }
   })
 
-  test('return supported languages', async (assert) => {
+  test('return supported languages', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -325,7 +325,7 @@ test.group('I18nManager', (group) => {
     assert.deepEqual(i18nManager.supportedLocales(), ['en'])
   })
 
-  test('return supported languages when multiple loaders are configured', async (assert) => {
+  test('return supported languages when multiple loaders are configured', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -371,7 +371,7 @@ test.group('I18nManager', (group) => {
     assert.deepEqual(i18nManager.supportedLocales(), ['en', 'fr'])
   })
 
-  test('return supported configured via config', async (assert) => {
+  test('return supported configured via config', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')
@@ -400,7 +400,9 @@ test.group('I18nManager', (group) => {
     assert.deepEqual(i18nManager.supportedLocales(), ['en', 'it', 'fr'])
   })
 
-  test('reset supported languages when reloadTranslations changes languages', async (assert) => {
+  test('reset supported languages when reloadTranslations changes languages', async ({
+    assert,
+  }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
     const logger = app.container.resolveBinding('Adonis/Core/Logger')

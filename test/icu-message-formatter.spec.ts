@@ -7,11 +7,11 @@
  * file that was distributed with this source code.
  */
 
-import test from 'japa'
+import { test } from '@japa/runner'
 import { IcuFormatter } from '../src/Formatters/Message/Icu'
 
 test.group('ICU message formatter', () => {
-  test('format a string value', (assert) => {
+  test('format a string value', ({ assert }) => {
     const formatter = new IcuFormatter()
     assert.equal(
       formatter.format('The price is: {price, number, ::currency/INR}', 'en-in', { price: 145 }),
@@ -19,7 +19,7 @@ test.group('ICU message formatter', () => {
     )
   })
 
-  test('format a string value using a custom format', (assert) => {
+  test('format a string value using a custom format', ({ assert }) => {
     const formatter = new IcuFormatter()
     IcuFormatter.addFormat('number', 'litres', {
       style: 'unit',
