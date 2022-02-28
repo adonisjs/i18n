@@ -2,6 +2,11 @@
   "extends": "./node_modules/@adonisjs/mrm-preset/_tsconfig",
   "compilerOptions": {
     "skipLibCheck": true,
-    "types": ["@types/node", "@adonisjs/core", "@adonisjs/view", "@adonisjs/repl"]
+    "types": [
+      "@types/node",
+      "@adonisjs/core",
+      "@adonisjs/view",
+      "@adonisjs/repl"
+    ]
   }
 }
