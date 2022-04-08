@@ -7,8 +7,8 @@
  * file that was distributed with this source code.
  */
 
-import { test } from '@japa/runner'
 import { join } from 'path'
+import { test } from '@japa/runner'
 import { Filesystem } from '@poppinss/dev-utils'
 import { FsLoader } from '../src/Loaders/Fs'
 
@@ -252,7 +252,14 @@ test.group('Fs loader | YAML', (group) => {
     try {
       await fsLoader.load()
     } catch (error) {
-      assert.equal(error.message, 'Implicit map keys need to be followed by map values')
+      assert.equal(
+        error.message.trim(),
+        `Implicit map keys need to be followed by map values at line 3, column 7:
+
+      foo:
+      1
+      ^`
+      )
     }
   })
 })
