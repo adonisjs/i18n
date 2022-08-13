@@ -238,6 +238,12 @@ declare module '@ioc:Adonis/Addons/I18n' {
     formatMessage(identifier: string, data?: Record<string, any>, fallbackMessage?: string): string
 
     /**
+     * Shorthand method for formatUsage
+     * @alias formatUsage
+     */
+    t(identifier: string, data?: Record<string, any>, fallbackMessage?: string): string
+
+    /**
      * Format a raw message
      */
     formatRawMessage(message: string, data?: Record<string, any>): string
