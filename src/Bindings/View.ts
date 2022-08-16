@@ -27,7 +27,7 @@ export function viewBindings(View: ViewContract, I18n: I18nManagerContract) {
    * The "t" helper to translate messages within the template
    */
   View.global('t', function (...args: any[]) {
-    return this.i18n.formatMessage(...args)
+    return this.i18n.t(...args)
   })
 
   /**

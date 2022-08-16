@@ -245,6 +245,14 @@ export class I18n extends Formatter implements I18nContract {
   }
 
   /**
+   * Shorthand method for formatUsage
+   * @alias formatUsage
+   */
+  public t(identifier: string, data?: Record<string, any>, fallbackMessage?: string): string {
+    return this.formatMessage(identifier, data, fallbackMessage)
+  }
+
+  /**
    * Formats a message using the messages formatter
    */
   public formatRawMessage(message: string, data?: Record<string, any>): string {

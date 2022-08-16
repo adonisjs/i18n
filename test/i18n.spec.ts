@@ -48,6 +48,36 @@ test.group('I18n', (group) => {
     assert.equal(i18n.formatMessage('messages.greeting', { price: 100 }), 'The price is ₹100.00')
   })
 
+  test('format a message by its identifier using short method i18n.t()', async ({ assert }) => {
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+
+    await fs.add(
+      'resources/lang/en/messages.json',
+      JSON.stringify({
+        greeting: 'The price is {price, number, ::currency/INR}',
+      })
+    )
+
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+      },
+    })
+
+    await i18nManager.loadTranslations()
+
+    const i18n = new I18n('en', emitter, logger, i18nManager)
+    assert.equal(i18n.t('messages.greeting', { price: 100 }), 'The price is ₹100.00')
+  })
+
   test('use fallback messages when actual message is missing', async ({ assert }) => {
     const app = await setup()
     const emitter = app.container.resolveBinding('Adonis/Core/Event')
