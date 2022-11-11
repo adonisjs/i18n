@@ -34,6 +34,7 @@ test.group('I18n', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
+      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -64,6 +65,7 @@ test.group('I18n', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
+      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -105,6 +107,7 @@ test.group('I18n', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
+      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -148,6 +151,7 @@ test.group('I18n', (group) => {
       },
       translationsFormat: 'icu',
       provideValidatorMessages: true,
+      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -188,6 +192,7 @@ test.group('I18n', (group) => {
       },
       translationsFormat: 'icu',
       provideValidatorMessages: true,
+      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -230,6 +235,7 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
+      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -279,6 +285,7 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
+      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -318,6 +325,7 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
+      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -371,6 +379,7 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
+      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -418,6 +427,7 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
+      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -449,6 +459,7 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
+      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -485,6 +496,7 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
+      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,

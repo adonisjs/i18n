@@ -228,17 +228,16 @@ export class I18n extends Formatter implements I18nContract {
     this.lazyLoadTranslations()
     const message = this.getMessage(identifier)
 
-    
     /**
      * Notify about the message translation
      */
     if (!message || message.isFallback) {
       this.notifyForMissingTranslation(identifier, message?.isFallback || false)
     }
-    
+
     /**
      * Return identifier when message is missing, and config is set to return key as fallback
-    */
+     */
     if (!message && this.config.returnKeyAsFallback) {
       return identifier
     }
