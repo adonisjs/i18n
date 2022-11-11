@@ -12,6 +12,7 @@
 import { LoggerContract } from '@ioc:Adonis/Core/Logger'
 import { EmitterContract } from '@ioc:Adonis/Core/Event'
 import {
+  I18nConfig,
   I18nContract,
   I18nManagerContract,
   ValidatorWildcardCallback,
@@ -44,7 +45,8 @@ export class I18n extends Formatter implements I18nContract {
     public locale: string,
     private emitter: EmitterContract,
     private logger: LoggerContract,
-    private i18nManager: I18nManagerContract
+    private i18nManager: I18nManagerContract,
+    public config: I18nConfig
   ) {
     super(locale)
   }
@@ -226,11 +228,19 @@ export class I18n extends Formatter implements I18nContract {
     this.lazyLoadTranslations()
     const message = this.getMessage(identifier)
 
+    
     /**
      * Notify about the message translation
      */
     if (!message || message.isFallback) {
       this.notifyForMissingTranslation(identifier, message?.isFallback || false)
+    }
+    
+    /**
+     * Return identifier when message is missing, and config is set to return key as fallback
+    */
+    if (!message && this.config.returnKeyAsFallback) {
+      return identifier
     }
 
     /**
