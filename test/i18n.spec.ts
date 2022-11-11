@@ -14,6 +14,7 @@ import { I18n } from '../src/I18n'
 import { setup, fs } from '../test-helpers'
 import { I18nManager } from '../src/I18nManager'
 import { validatorBindings } from '../src/Bindings/Validator'
+import { config } from 'process'
 
 test.group('I18n', (group) => {
   group.each.teardown(async () => fs.cleanup())
@@ -34,7 +35,6 @@ test.group('I18n', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -45,7 +45,20 @@ test.group('I18n', (group) => {
 
     await i18nManager.loadTranslations()
 
-    const i18n = new I18n('en', emitter, logger, i18nManager)
+    const i18n = new I18n('en', emitter, logger, i18nManager, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+        memory: {
+          enabled: true,
+        },
+      },
+    })
     assert.equal(i18n.formatMessage('messages.greeting', { price: 100 }), 'The price is ₹100.00')
   })
 
@@ -65,7 +78,6 @@ test.group('I18n', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -76,7 +88,20 @@ test.group('I18n', (group) => {
 
     await i18nManager.loadTranslations()
 
-    const i18n = new I18n('fr', emitter, logger, i18nManager)
+    const i18n = new I18n('fr', emitter, logger, i18nManager, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+        memory: {
+          enabled: true,
+        },
+      },
+    })
     assert.equal(i18n.formatMessage('messages.greeting', { price: 100 }), 'The price is 100,00 $US')
   })
 
@@ -107,7 +132,6 @@ test.group('I18n', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -118,7 +142,20 @@ test.group('I18n', (group) => {
 
     await i18nManager.loadTranslations()
 
-    const i18n = new I18n('fr', emitter, logger, i18nManager)
+    const i18n = new I18n('fr', emitter, logger, i18nManager, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+        memory: {
+          enabled: true,
+        },
+      },
+    })
     assert.equal(
       i18n.formatMessage('messages.greeting', { price: 100 }),
       'translation missing: en-in, greeting'
@@ -151,7 +188,6 @@ test.group('I18n', (group) => {
       },
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -162,7 +198,20 @@ test.group('I18n', (group) => {
 
     await i18nManager.loadTranslations()
 
-    const i18n = new I18n('ca', emitter, logger, i18nManager)
+    const i18n = new I18n('ca', emitter, logger, i18nManager, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+        memory: {
+          enabled: true,
+        },
+      },
+    })
     assert.equal(i18n.formatMessage('messages.greeting', { price: 100 }), 'El precio es 100,00 USD')
   })
 
@@ -192,7 +241,6 @@ test.group('I18n', (group) => {
       },
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -201,7 +249,20 @@ test.group('I18n', (group) => {
       },
     })
 
-    const i18n = new I18n('en', emitter, logger, i18nManager)
+    const i18n = new I18n('en', emitter, logger, i18nManager, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+        memory: {
+          enabled: true,
+        },
+      },
+    })
     assert.equal(i18n.locale, 'en')
     assert.equal(i18n.fallbackLocale, 'en')
 
@@ -235,7 +296,6 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -285,7 +345,6 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -325,7 +384,6 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -379,7 +437,6 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -427,7 +484,6 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -438,7 +494,20 @@ test.group('I18n | validatorBindings', (group) => {
 
     await i18nManager.loadTranslations()
 
-    const i18n = new I18n('en', emitter, logger, i18nManager)
+    const i18n = new I18n('en', emitter, logger, i18nManager, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+        memory: {
+          enabled: true,
+        },
+      },
+    })
     assert.isTrue(i18n.hasMessage('messages.greeting'))
     assert.isFalse(i18n.hasMessage('messages.title'))
   })
@@ -459,7 +528,6 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -470,7 +538,20 @@ test.group('I18n | validatorBindings', (group) => {
 
     await i18nManager.loadTranslations()
 
-    const i18n = new I18n('fr', emitter, logger, i18nManager)
+    const i18n = new I18n('fr', emitter, logger, i18nManager, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+        memory: {
+          enabled: true,
+        },
+      },
+    })
     assert.isFalse(i18n.hasMessage('messages.greeting'))
     assert.isTrue(i18n.hasFallbackMessage('messages.greeting'))
   })
@@ -496,7 +577,6 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      returnKeyAsFallback: false,
       loaders: {
         fs: {
           enabled: true,
@@ -524,5 +604,48 @@ test.group('I18n | validatorBindings', (group) => {
     } catch (error) {
       assert.deepEqual(error.messages, { username: ['Field must be 5 chars long'] })
     }
+  })
+
+  test('provide identifier as fallback if returnKeyAsFallback is set to true', async ({
+    assert,
+  }) => {
+    assert.plan(1)
+
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      returnKeyAsFallback: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+      },
+    })
+
+    const i18n = new I18n('en', emitter, logger, i18nManager, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      returnKeyAsFallback: true,
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+        memory: {
+          enabled: true,
+        },
+      },
+    })
+
+    await i18nManager.loadTranslations()
+
+    assert.equal(i18n.formatMessage('missing.key'), 'missing.key')
   })
 })

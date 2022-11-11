@@ -238,7 +238,7 @@ export class I18n extends Formatter implements I18nContract {
     /**
      * Return identifier when message is missing, and config is set to return key as fallback
      */
-    if (!message && this.config.returnKeyAsFallback) {
+    if (this.config?.returnKeyAsFallback && !message) {
       return identifier
     }
 
