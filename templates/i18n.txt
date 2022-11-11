@@ -66,6 +66,18 @@ const i18nConfig: I18nConfig = {
 
   /*
   |--------------------------------------------------------------------------
+  | Provide identifier as fallback
+  |--------------------------------------------------------------------------
+  |
+  | Set the following option to "true" if you want to use the identifier
+  | as a default fallback.
+  |
+  |
+  */
+  returnKeyAsFallback: false,
+
+  /*
+  |--------------------------------------------------------------------------
   | Provide validator messages
   |--------------------------------------------------------------------------
   |
