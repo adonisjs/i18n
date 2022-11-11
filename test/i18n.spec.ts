@@ -14,7 +14,6 @@ import { I18n } from '../src/I18n'
 import { setup, fs } from '../test-helpers'
 import { I18nManager } from '../src/I18nManager'
 import { validatorBindings } from '../src/Bindings/Validator'
-import { config } from 'process'
 
 test.group('I18n', (group) => {
   group.each.teardown(async () => fs.cleanup())
