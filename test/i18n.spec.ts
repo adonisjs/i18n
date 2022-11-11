@@ -527,7 +527,9 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      returnKeyAsFallback: true,
+      fallBackIfNoIdentifier: (identifier, locale) => {
+        return { identifier, locale }
+      },
       loaders: {
         fs: {
           enabled: true,
@@ -540,6 +542,6 @@ test.group('I18n | validatorBindings', (group) => {
 
     await i18nManager.loadTranslations()
 
-    assert.equal(i18n.formatMessage('missing.key'), 'missing.key')
+    assert.deepEqual(i18n.formatMessage('missing.key'), { identifier: 'missing.key', locale: 'en' })
   })
 })

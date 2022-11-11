@@ -188,7 +188,7 @@ declare module '@ioc:Adonis/Addons/I18n' {
     /**
      * Set this to true when you want to return the translation key as a fallback.
      */
-    returnKeyAsFallback?: boolean
+    fallBackIfNoIdentifier?: (identifier: string, locale: string) => any
 
     /**
      * Configured loaders
