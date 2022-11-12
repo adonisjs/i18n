@@ -14,6 +14,7 @@ import { I18n } from '../src/I18n'
 import { setup, fs } from '../test-helpers'
 import { I18nManager } from '../src/I18nManager'
 import { validatorBindings } from '../src/Bindings/Validator'
+import { json } from 'mrm-core'
 
 test.group('I18n', (group) => {
   group.each.teardown(async () => fs.cleanup())
@@ -528,7 +529,7 @@ test.group('I18n | validatorBindings', (group) => {
       translationsFormat: 'icu',
       provideValidatorMessages: true,
       fallBackIfNoIdentifier: (identifier, locale) => {
-        return { identifier, locale }
+        return JSON.stringify({ identifier, locale })
       },
       loaders: {
         fs: {
@@ -542,6 +543,9 @@ test.group('I18n | validatorBindings', (group) => {
 
     await i18nManager.loadTranslations()
 
-    assert.deepEqual(i18n.formatMessage('missing.key'), { identifier: 'missing.key', locale: 'en' })
+    assert.deepEqual(
+      i18n.formatMessage('missing.key'),
+      JSON.stringify({ identifier: 'missing.key', locale: 'en' })
+    )
   })
 })
