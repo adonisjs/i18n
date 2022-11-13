@@ -189,7 +189,7 @@ declare module '@ioc:Adonis/Addons/I18n' {
      * Add this function if you want to have control over what is returned
      * when an identifier is missing.
      */
-    fallBackIfNoIdentifier?: (identifier: string, locale: string) => string
+    fallback?: (identifier: string, locale: string) => string
 
     /**
      * Configured loaders

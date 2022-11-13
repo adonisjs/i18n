@@ -14,7 +14,6 @@ import { I18n } from '../src/I18n'
 import { setup, fs } from '../test-helpers'
 import { I18nManager } from '../src/I18nManager'
 import { validatorBindings } from '../src/Bindings/Validator'
-import { json } from 'mrm-core'
 
 test.group('I18n', (group) => {
   group.each.teardown(async () => fs.cleanup())
@@ -528,7 +527,7 @@ test.group('I18n | validatorBindings', (group) => {
       defaultLocale: 'en',
       translationsFormat: 'icu',
       provideValidatorMessages: true,
-      fallBackIfNoIdentifier: (identifier, locale) => {
+      fallback: (identifier, locale) => {
         return JSON.stringify({ identifier, locale })
       },
       loaders: {
