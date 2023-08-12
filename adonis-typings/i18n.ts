@@ -186,6 +186,12 @@ declare module '@ioc:Adonis/Addons/I18n' {
     provideValidatorMessages: boolean
 
     /**
+     * Add this function if you want to have control over what is returned
+     * when an identifier is missing.
+     */
+    fallback?: (identifier: string, locale: string) => string
+
+    /**
      * Configured loaders
      */
     loaders: {

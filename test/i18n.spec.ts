@@ -543,4 +543,38 @@ test.group('I18n | validatorBindings', (group) => {
       assert.deepEqual(error.messages, { username: ['Field must be 5 chars long'] })
     }
   })
+
+  test('provide identifier as fallback if returnKeyAsFallback is set to true', async ({
+    assert,
+  }) => {
+    assert.plan(1)
+
+    const app = await setup()
+    const emitter = app.container.resolveBinding('Adonis/Core/Event')
+    const logger = app.container.resolveBinding('Adonis/Core/Logger')
+
+    const i18nManager = new I18nManager(app, emitter, logger, {
+      defaultLocale: 'en',
+      translationsFormat: 'icu',
+      provideValidatorMessages: true,
+      fallback: (identifier, locale) => {
+        return JSON.stringify({ identifier, locale })
+      },
+      loaders: {
+        fs: {
+          enabled: true,
+          location: join(fs.basePath, 'resources/lang'),
+        },
+      },
+    })
+
+    const i18n = new I18n('en', emitter, logger, i18nManager)
+
+    await i18nManager.loadTranslations()
+
+    assert.deepEqual(
+      i18n.formatMessage('missing.key'),
+      JSON.stringify({ identifier: 'missing.key', locale: 'en' })
+    )
+  })
 })

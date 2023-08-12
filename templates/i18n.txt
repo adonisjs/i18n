@@ -66,6 +66,20 @@ const i18nConfig: I18nConfig = {
 
   /*
   |--------------------------------------------------------------------------
+  | Fallback function if no identifier is found
+  |--------------------------------------------------------------------------
+  |
+  | The following function will be set as a fallback function if the 
+  | translation is not found.
+  |
+  |
+  */
+  // fallback(identifier, locale) => {
+  //   return identifier
+  // },
+
+  /*
+  |--------------------------------------------------------------------------
   | Provide validator messages
   |--------------------------------------------------------------------------
   |
