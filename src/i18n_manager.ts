@@ -18,6 +18,7 @@ import type {
   MissingTranslationEventPayload,
 } from './types/main.js'
 
+import debug from './debug.js'
 import { I18n } from './i18n.js'
 import { FsLoader } from './loaders/fs_loader.js'
 import { IcuFormatter } from './formatters/icu_messages_formatter.js'
@@ -163,6 +164,8 @@ export class I18nManager {
    * Reload translations from the registered loaders
    */
   async reloadTranslations() {
+    debug('loading translations')
+
     const translationsStack = await Promise.all(
       Object.keys(this.#config.loaders)
         .filter((loader) => {
@@ -289,6 +292,8 @@ export class I18nManager {
     type: 'loader' | 'formatter',
     callback: ManagerLoaderFactory | ManagerFormatterFactory
   ): void {
+    debug('adding custom %s', type)
+
     if (type === 'loader') {
       this.#loaders[name] = callback as ManagerLoaderFactory
     } else {

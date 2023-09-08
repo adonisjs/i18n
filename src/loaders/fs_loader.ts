@@ -12,6 +12,8 @@ import { fileURLToPath } from 'node:url'
 import { join, extname } from 'node:path'
 import { readFile } from 'node:fs/promises'
 import { flatten, fsReadAll } from '@poppinss/utils'
+
+import debug from '../debug.js'
 import type { FsLoaderOptions, Translations, TranslationsLoaderContract } from '../types/main.js'
 
 /**
@@ -93,6 +95,8 @@ export class FsLoader implements TranslationsLoaderContract {
    * Processes the message inside a JSON file
    */
   async #processJSONFile(filePath: string, messagesBag: Record<string, any>) {
+    debug('loading translations from "%s"', filePath)
+
     const contents = await readFile(join(this.#storageBasePath, filePath), 'utf-8')
     const messages = this.#parseJSON(filePath, contents)
     this.#processFileTranslations(filePath, messages, messagesBag)
@@ -127,6 +131,8 @@ export class FsLoader implements TranslationsLoaderContract {
    * Processes the message inside a YAML file
    */
   async #processYamlFile(filePath: string, messagesBag: Record<string, any>) {
+    debug('loading translations from "%s"', filePath)
+
     const contents = await readFile(join(this.#storageBasePath, filePath), 'utf-8')
     const messages = this.#parseYaml(filePath, contents)
     this.#processFileTranslations(filePath, messages, messagesBag)

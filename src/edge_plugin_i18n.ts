@@ -9,6 +9,7 @@
 
 import type { PluginFn } from 'edge.js/types'
 
+import debug from './debug.js'
 import type { I18n } from './i18n.js'
 import type { I18nManager } from './i18n_manager.js'
 
@@ -17,6 +18,8 @@ import type { I18nManager } from './i18n_manager.js'
  * flash messages
  */
 export const edgePluginI18n: (i18n: I18nManager) => PluginFn<undefined> = (i18n) => {
+  debug('registering edge helpers')
+
   return (edge) => {
     /**
      * Reference to i18n for the default locale. HTTP requests

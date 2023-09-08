@@ -9,6 +9,7 @@
 
 import type { Emitter } from '@adonisjs/core/events'
 
+import debug from './debug.js'
 import type { I18nManager } from './i18n_manager.js'
 import { Formatter } from './formatters/values_formatter.js'
 import type { MissingTranslationEventPayload } from './types/main.js'
@@ -116,6 +117,8 @@ export class I18n extends Formatter {
    * Switch locale for the current instance
    */
   switchLocale(locale: string) {
+    debug('switching locale from "%s" to "%s"', this.locale, locale)
+
     super.switchLocale(locale)
     this.localeTranslations = this.#i18nManager.getTranslationsFor(this.locale)
     this.fallbackTranslations = this.#i18nManager.getTranslationsFor(this.fallbackLocale)
