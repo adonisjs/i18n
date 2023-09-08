@@ -6,6 +6,7 @@
   "type": "module",
   "files": [
     "build/providers",
+    "build/services",
     "build/src",
     "build/stubs",
     "build/index.d.ts",

@@ -6,14 +6,14 @@ to: {{ app.middlewarePath(entity.path, middlewareFileName) }}
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
 
-import { I18n } from '@adonisjs/i8n'
-import i18n from '@adonisjs/i8n/services/main'
+import { I18n } from '@adonisjs/i18n'
+import i18n from '@adonisjs/i18n/services/main'
 
 /**
  * The "{{ middlewareName }}" middleware uses i18n service to share
  * a request specific i18n object with the HTTP Context
  */
-export class {{ middlewareName }} {
+export default class {{ middlewareName }} {
   /**
    * This method reads the user language from the "Accept-Language"
    * header and returns the best matching locale by checking it
@@ -64,7 +64,7 @@ export class {{ middlewareName }} {
  * Notify TypeScript about i18n property
  */
 declare module '@adonisjs/core/http' {
-  interface HttpContext {
+  export interface HttpContext {
     i18n: I18n
   }
 }
