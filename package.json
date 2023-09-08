@@ -1,6 +1,6 @@
 {
   "name": "@adonisjs/i18n",
-  "version": "2.0.0-1",
+  "version": "2.0.0-2",
   "description": "Internationalization for AdonisJS apps",
   "main": "build/index.js",
   "type": "module",
