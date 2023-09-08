@@ -12,6 +12,7 @@ import type { Emitter } from '@adonisjs/core/events'
 import type { I18nManager } from './i18n_manager.js'
 import { Formatter } from './formatters/values_formatter.js'
 import type { MissingTranslationEventPayload } from './types/main.js'
+import { I18nMessagesProvider } from './i18n_messages_provider.js'
 
 /**
  * I18n exposes the APIs to format values and translate messages
@@ -41,6 +42,13 @@ export class I18n extends Formatter {
     return this.#i18nManager.getFallbackLocaleFor(this.locale)
   }
 
+  /**
+   * Creates a messages provider for VineJS
+   */
+  createMessagesProvider(prefix: string = 'validator.shared') {
+    return new I18nMessagesProvider(prefix, this)
+  }
+
   constructor(
     locale: string,
     emitter: Emitter<{ 'i18n:missing:translation': MissingTranslationEventPayload } & any>,
@@ -67,7 +75,7 @@ export class I18n extends Formatter {
   /**
    * Returns the message for a given identifier
    */
-  #getMessage(identifier: string): { message: string; isFallback: boolean } | null {
+  resolveIdentifier(identifier: string): { message: string; isFallback: boolean } | null {
     let message = this.localeTranslations[identifier]
 
     /**
@@ -117,7 +125,7 @@ export class I18n extends Formatter {
    * Formats a message using the messages formatter
    */
   formatMessage(identifier: string, data?: Record<string, any>, fallbackMessage?: string): string {
-    const message = this.#getMessage(identifier)
+    const message = this.resolveIdentifier(identifier)
 
     if (!message) {
       this.#notifyForMissingTranslation(identifier, false)

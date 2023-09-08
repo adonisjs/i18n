@@ -16,6 +16,7 @@ import { I18n } from '../src/i18n.js'
 import { I18nManager } from '../src/i18n_manager.js'
 import { defineConfig } from '../src/define_config.js'
 import type { MissingTranslationEventPayload } from '../src/types/main.js'
+import vine from '@vinejs/vine'
 
 const app = new AppFactory().create(new URL('./', import.meta.url), () => {})
 const emitter = new Emitter<{ 'i18n:missing:translation': MissingTranslationEventPayload }>(app)
@@ -175,5 +176,123 @@ test.group('I18n', () => {
 
     assert.isFalse(i18n.hasMessage('messages.greeting'))
     assert.isTrue(i18n.hasFallbackMessage('messages.greeting'))
+  })
+})
+
+test.group('I18n | validator messages provider', () => {
+  test('provide validation message', async ({ fs, assert }) => {
+    assert.plan(1)
+
+    await fs.createJson('resources/lang/en/validator.json', {
+      shared: {
+        messages: {
+          'title.required': 'Post title is required',
+          'required': 'The {field} is needed',
+        },
+      },
+    })
+
+    const i18nManager = new I18nManager(
+      emitter,
+      defineConfig({
+        loaders: {
+          fs: {
+            enabled: true,
+            location: join(fs.basePath, 'resources/lang'),
+          },
+        },
+      })
+    )
+
+    await i18nManager.loadTranslations()
+    const i18n = new I18n('en', emitter, i18nManager)
+
+    const schema = vine.object({
+      title: vine.string(),
+      description: vine.string(),
+      tags: vine.enum(['programming']),
+    })
+
+    try {
+      await vine.validate({
+        schema,
+        data: { tags: '' },
+        messagesProvider: i18n.createMessagesProvider(),
+      })
+    } catch (error) {
+      assert.deepEqual(error.messages, [
+        {
+          field: 'title',
+          message: 'Post title is required',
+          rule: 'required',
+        },
+        {
+          field: 'description',
+          message: 'The description is needed',
+          rule: 'required',
+        },
+        {
+          field: 'tags',
+          message: 'The selected tags is invalid',
+          rule: 'enum',
+          meta: {
+            choices: ['programming'],
+          },
+        },
+      ])
+    }
+  })
+
+  test('provide field translations', async ({ fs, assert }) => {
+    assert.plan(1)
+
+    await fs.createJson('resources/lang/en/validator.json', {
+      shared: {
+        fields: {
+          title: 'Post title',
+          description: 'Post description',
+        },
+        messages: {
+          required: 'The {field} is needed',
+        },
+      },
+    })
+
+    const i18nManager = new I18nManager(
+      emitter,
+      defineConfig({
+        loaders: {
+          fs: {
+            enabled: true,
+            location: join(fs.basePath, 'resources/lang'),
+          },
+        },
+      })
+    )
+
+    await i18nManager.loadTranslations()
+    const i18n = new I18n('en', emitter, i18nManager)
+
+    const schema = vine.object({
+      title: vine.string(),
+      description: vine.string(),
+    })
+
+    try {
+      await vine.validate({ schema, data: {}, messagesProvider: i18n.createMessagesProvider() })
+    } catch (error) {
+      assert.deepEqual(error.messages, [
+        {
+          field: 'title',
+          message: 'The Post title is needed',
+          rule: 'required',
+        },
+        {
+          field: 'description',
+          message: 'The Post description is needed',
+          rule: 'required',
+        },
+      ])
+    }
   })
 })
