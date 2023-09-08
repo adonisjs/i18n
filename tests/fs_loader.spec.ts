@@ -231,7 +231,10 @@ test.group('Fs loader | YAML', () => {
     try {
       await fsLoader.load()
     } catch (error) {
-      assert.equal(error.stack.split('\n')[1].trim(), 'at anonymous (en/validator/shared.yaml)')
+      assert.oneOf(error.stack.split('\n')[1].trim(), [
+        'at anonymous (en/validator/shared.yaml)',
+        'at anonymous (en\\validator\\shared.yaml)',
+      ])
       assert.equal(
         error.message.trim(),
         `Implicit map keys need to be followed by map values at line 3, column 7:
