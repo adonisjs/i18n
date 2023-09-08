@@ -21,8 +21,8 @@ In order to ensure that the AdonisJS community is welcoming to all, please revie
 ## License
 AdonisJS i18n is open-sourced software licensed under the [MIT license](LICENSE.md).
 
-[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/adonisjs/i18n/test.yml?style=for-the-badge
-[gh-workflow-url]: https://github.com/adonisjs/i18n/actions/workflows/test.yml "Github action"
+[gh-workflow-image]: https://img.shields.io/github/actions/workflow/status/adonisjs/i18n/checks.yml?style=for-the-badge
+[gh-workflow-url]: https://github.com/adonisjs/i18n/actions/workflows/checks.yml "Github action"
 
 [npm-image]: https://img.shields.io/npm/v/@adonisjs/i18n/latest.svg?style=for-the-badge&logo=npm
 [npm-url]: https://www.npmjs.com/package/@adonisjs/i18n/v/latest "npm"
