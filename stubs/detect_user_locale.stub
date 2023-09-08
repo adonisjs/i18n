@@ -3,17 +3,26 @@
 ---
 to: {{ app.middlewarePath(entity.path, middlewareFileName) }}
 ---
-import type { HttpContext } from '@adonisjs/core/http'
-import type { NextFn } from '@adonisjs/core/types/http'
-
-import { I18n } from '@adonisjs/i18n'
+import type { I18n } from '@adonisjs/i18n'
 import i18n from '@adonisjs/i18n/services/main'
+import type { NextFn } from '@adonisjs/core/types/http'
+import { type HttpContext, RequestValidator } from '@adonisjs/core/http'
 
 /**
  * The "{{ middlewareName }}" middleware uses i18n service to share
  * a request specific i18n object with the HTTP Context
  */
 export default class {{ middlewareName }} {
+  /**
+   * Using i18n for validation messages. Applicable to only
+   * "request.validateUsing" method calls
+   */
+  static {
+    RequestValidator.messagesProvider = (ctx) => {
+      return ctx.i18n.createMessagesProvider()
+    }
+  }
+
   /**
    * This method reads the user language from the "Accept-Language"
    * header and returns the best matching locale by checking it
