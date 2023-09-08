@@ -105,7 +105,10 @@ test.group('Fs loader | JSON', () => {
     try {
       await fsLoader.load()
     } catch (error) {
-      assert.equal(error.stack.split('\n')[1].trim(), 'at anonymous (en/validator/shared.json)')
+      assert.oneOf(error.stack.split('\n')[1].trim(), [
+        'at anonymous (en/validator/shared.json)',
+        'at anonymous (en\\validator\\shared.json)',
+      ])
       assert.oneOf(error.message, [
         'Expected double-quoted property name in JSON at position 10',
         'Unexpected token } in JSON at position 10',
