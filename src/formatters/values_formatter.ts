@@ -191,4 +191,18 @@ export class Formatter {
   formatPlural(value: string | number, options?: Intl.PluralRulesOptions): string {
     return formatters.plural(this.locale, options).select(Number(value))
   }
+
+  /**
+   * Format an array of strings to a sentence.
+   */
+  formatList(list: Iterable<string>, options?: Intl.ListFormatOptions) {
+    return formatters.list(this.locale, options).format(list)
+  }
+
+  /**
+   * Format region, currency, language codes to their display names
+   */
+  formatDisplayNames(code: string, options: Intl.DisplayNamesOptions) {
+    return formatters.displayNames(this.locale, options).of(code)
+  }
 }

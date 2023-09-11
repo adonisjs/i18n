@@ -158,4 +158,18 @@ test.group('Formatter', () => {
     const formatter = new Formatter('en-in')
     assert.equal(formatter.formatPlural(3, { type: 'ordinal' }), 'few')
   })
+
+  test('format a list', ({ assert }) => {
+    const formatter = new Formatter('en-in')
+    assert.equal(
+      formatter.formatList(['Me', 'myself', 'I'], { type: 'conjunction' }),
+      'Me, myself and I'
+    )
+  })
+
+  test('format display names', ({ assert }) => {
+    const formatter = new Formatter('en-in')
+    assert.equal(formatter.formatDisplayNames('INR', { type: 'currency' }), 'Indian Rupee')
+    assert.equal(formatter.formatDisplayNames('en-US', { type: 'language' }), 'American English')
+  })
 })
