@@ -190,8 +190,8 @@ export class I18nManager {
   }
 
   /**
-   * Inspects the "accept-language" HTTP header and returns the
-   * most appropriate language based upon the supported languages
+   * Returns the most appropriate supported locale based upon the user
+   * languages
    */
   getSupportedLocaleFor(userLanguage: string | string[]): string | null {
     /**
@@ -215,18 +215,35 @@ export class I18nManager {
    */
   getFallbackLocaleFor(locale: string): string {
     /**
-     * Return default locale when no fallbacks are
-     * configured
+     * Use explicitly defined fallback locale
      */
-    if (!this.#config.fallbackLocales) {
-      return this.defaultLocale
+    if (this.#config.fallbackLocales && this.#config.fallbackLocales[locale]) {
+      return this.#config.fallbackLocales[locale]
     }
 
     /**
-     * Return fallback locale for the input local (when configured).
-     * Otherwise use default locale.
+     * Find closest matching locale in the supported list
      */
-    return this.#config.fallbackLocales[locale] || this.defaultLocale
+    const closestMatchingLanguages = new Negotiator({
+      headers: {
+        'accept-language': locale,
+      },
+    }).languages(this.supportedLocales())
+
+    /**
+     * Loop over the list and return the first best match except
+     * the input locale
+     */
+    for (let matchingLocale of closestMatchingLanguages) {
+      if (matchingLocale !== locale) {
+        return matchingLocale
+      }
+    }
+
+    /**
+     * Return default locale when there is no best match
+     */
+    return this.defaultLocale
   }
 
   /**

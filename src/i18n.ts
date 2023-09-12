@@ -39,9 +39,7 @@ export class I18n extends Formatter {
   /**
    * The fallback locale for the current instance.
    */
-  get fallbackLocale() {
-    return this.#i18nManager.getFallbackLocaleFor(this.locale)
-  }
+  fallbackLocale: string
 
   /**
    * Creates a messages provider for VineJS
@@ -56,10 +54,14 @@ export class I18n extends Formatter {
     i18nManager: I18nManager
   ) {
     super(locale)
+
     this.#emitter = emitter
     this.#i18nManager = i18nManager
+    this.fallbackLocale = this.#i18nManager.getFallbackLocaleFor(locale)
     this.localeTranslations = this.#i18nManager.getTranslationsFor(this.locale)
     this.fallbackTranslations = this.#i18nManager.getTranslationsFor(this.fallbackLocale)
+
+    debug('creating i18n for locale "%s" with fallback locale "%s"', locale, this.fallbackLocale)
   }
 
   /**
@@ -120,6 +122,7 @@ export class I18n extends Formatter {
     debug('switching locale from "%s" to "%s"', this.locale, locale)
 
     super.switchLocale(locale)
+    this.fallbackLocale = this.#i18nManager.getFallbackLocaleFor(this.locale)
     this.localeTranslations = this.#i18nManager.getTranslationsFor(this.locale)
     this.fallbackTranslations = this.#i18nManager.getTranslationsFor(this.fallbackLocale)
   }

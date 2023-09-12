@@ -284,4 +284,18 @@ test.group('I18nManager', () => {
     assert.equal(i18nManager.getSupportedLocaleFor(['en-UK', 'fr']), 'fr')
     assert.equal(i18nManager.getSupportedLocaleFor(['en-UK;q=0.9', 'fr;q=0.7']), 'en')
   })
+
+  test('find the best supported fallback locale', async ({ fs, assert }) => {
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'it',
+      formatter: () => new IcuFormatter(),
+      supportedLocales: ['en', 'en-UK', 'en-US', 'fr', 'it', 'ca'],
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
+
+    i18nManager.loadTranslations()
+    assert.equal(i18nManager.getFallbackLocaleFor('en-UK'), 'en')
+    assert.equal(i18nManager.getFallbackLocaleFor('en-US'), 'en')
+    assert.equal(i18nManager.getFallbackLocaleFor('fr'), 'it')
+  })
 })
