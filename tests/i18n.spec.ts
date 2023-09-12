@@ -73,6 +73,35 @@ test.group('I18n', () => {
     assert.equal(i18n.formatMessage('messages.greeting', { price: 100 }), 'The price is 100,00 $US')
   })
 
+  test('define fallback message for missing translation', async ({ fs, assert }) => {
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
+
+    await i18nManager.loadTranslations()
+    const i18n = new I18n('fr', emitter, i18nManager)
+
+    const message = i18n.formatMessage('messages.greeting', {}, '')
+    assert.equal(message, '')
+  })
+
+  test('define fallback using global hook', async ({ fs, assert }) => {
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      fallback: () => '',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
+
+    await i18nManager.loadTranslations()
+    const i18n = new I18n('fr', emitter, i18nManager)
+
+    const message = i18n.formatMessage('messages.greeting')
+    assert.equal(message, '')
+  })
+
   test('report missing translations via events', async ({ fs, assert }) => {
     await fs.createJson('resources/lang/en/messages.json', {
       greeting: 'The price is {price, number, ::currency/INR}',

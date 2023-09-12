@@ -32,7 +32,7 @@ export default class {{ middlewareName }} {
    */
   protected getRequestLocale(ctx: HttpContext) {
     const userLanguages = ctx.request.languages()
-    return i18n.getSupportedLocaleFor(userLanguages)
+    return i18nManager.getSupportedLocaleFor(userLanguages)
   }
 
   async handle(ctx: HttpContext, next: NextFn) {
@@ -44,7 +44,7 @@ export default class {{ middlewareName }} {
     /**
      * Assigning i18n property to the HTTP context
      */
-    ctx.i18n = i18nManager.locale(language || i18n.defaultLocale)
+    ctx.i18n = i18nManager.locale(language || i18nManager.defaultLocale)
 
     /**
      * Binding I18n class to the request specific instance of it.

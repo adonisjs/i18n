@@ -139,22 +139,29 @@ export class I18n extends Formatter {
       this.#notifyForMissingTranslation(identifier, true)
     }
 
-    /**
-     * Return a fallback message when identifier has no
-     * message.
-     */
-    if (!message) {
-      return (
-        fallbackMessage ||
-        this.#i18nManager.getFallbackMessage(identifier, this.locale) ||
-        `translation missing: ${this.locale}, ${identifier}`
-      )
+    if (message) {
+      return this.formatRawMessage(message.message, data)
     }
 
     /**
-     * Format message
+     * Return the inline fallback message (when defined)
      */
-    return this.formatRawMessage(message.message, data)
+    if (fallbackMessage !== undefined) {
+      return fallbackMessage
+    }
+
+    /**
+     * Return the global fallback message (when defined)
+     */
+    const globalFallbackMessage = this.#i18nManager.getFallbackMessage(identifier, this.locale)
+    if (globalFallbackMessage !== undefined) {
+      return globalFallbackMessage
+    }
+
+    /**
+     * Otherwise return error message string
+     */
+    return `translation missing: ${this.locale}, ${identifier}`
   }
 
   /**
