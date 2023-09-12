@@ -7,16 +7,26 @@
  * file that was distributed with this source code.
  */
 
-import { I18nConfig } from './types/main.js'
+import { RuntimeException } from '@poppinss/utils'
+
+import loadersList from './loaders/main.js'
+import formattersList from './formatters/main.js'
+import type { I18nConfig, I18nServiceConfig } from './types/main.js'
 
 /**
  * Define i18n config
  */
-export function defineConfig(config: Partial<I18nConfig>): I18nConfig {
+export function defineConfig(config: Partial<I18nServiceConfig>): I18nConfig {
+  if (!config.formatter) {
+    throw new RuntimeException('Cannot configure i18n manager. Missing property "formatter"')
+  }
+
   return {
     defaultLocale: 'en',
-    translationsFormat: 'icu',
-    loaders: {},
     ...config,
-  }
+    formatter: (i18Config) => formattersList.create(config.formatter!, i18Config),
+    loaders: (config.loaders || []).map((loaderConfig) => {
+      return (i18nConfig) => loadersList.create(loaderConfig.driver, loaderConfig, i18nConfig)
+    }),
+  } satisfies I18nConfig
 }

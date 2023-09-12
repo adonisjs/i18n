@@ -14,26 +14,20 @@ import { AppFactory } from '@adonisjs/core/factories/app'
 
 import { I18n } from '../src/i18n.js'
 import { I18nManager } from '../src/i18n_manager.js'
-import { defineConfig } from '../src/define_config.js'
 import { FsLoader } from '../src/loaders/fs_loader.js'
 import type { MissingTranslationEventPayload } from '../src/types/main.js'
+import { IcuFormatter } from '../src/formatters/icu_messages_formatter.js'
 
 const app = new AppFactory().create(new URL('./', import.meta.url), () => {})
 const emitter = new Emitter<{ 'i18n:missing:translation': MissingTranslationEventPayload }>(app)
 
 test.group('I18nManager', () => {
   test('get i18n instance using manager', async ({ fs, assert }) => {
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     assert.instanceOf(i18nManager.locale(i18nManager.defaultLocale), I18n)
@@ -44,17 +38,11 @@ test.group('I18nManager', () => {
       greeting: 'hello world',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     assert.deepEqual(i18nManager.getTranslations(), {
@@ -75,24 +63,13 @@ test.group('I18nManager', () => {
       hello: 'bonjour',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-          customFs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/admin'),
-          },
-        },
-      })
-    )
-
-    i18nManager.extend('customFs', 'loader', (config) => {
-      return new FsLoader(config.loaders.customFs as any)
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [
+        () => new FsLoader({ location: join(fs.basePath, 'resources/lang') }),
+        () => new FsLoader({ location: join(fs.basePath, 'resources/admin') }),
+      ],
     })
 
     await i18nManager.loadTranslations()
@@ -112,39 +89,27 @@ test.group('I18nManager', () => {
       greeting: 'hello world',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     const i18n = i18nManager.locale(i18nManager.defaultLocale)
     assert.equal(i18n.formatMessage('messages.greeting', {}), 'hello world')
   })
 
-  test('do not load messages when loader is disabled', async ({ fs, assert }) => {
+  test('work fine when no loaders are registered', async ({ fs, assert }) => {
     await fs.createJson('resources/lang/en/messages.json', {
       greeting: 'hello world',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: false,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [],
+    })
 
     await i18nManager.loadTranslations()
     const i18n = i18nManager.locale(i18nManager.defaultLocale)
@@ -157,17 +122,11 @@ test.group('I18nManager', () => {
   test('reload messages', async ({ fs, assert }) => {
     await fs.createJson('resources/lang/en/messages.json', {})
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     const i18n = i18nManager.locale(i18nManager.defaultLocale)
@@ -186,27 +145,20 @@ test.group('I18nManager', () => {
   })
 
   test('add a custom loader', async ({ assert }) => {
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          memory: {
-            enabled: true,
+    class MemoryLoader {
+      async load() {
+        return {
+          en: {
+            'messages.foo': 'hello foo',
           },
-        },
-      })
-    )
-
-    i18nManager.extend('memory', 'loader', () => {
-      return {
-        async load() {
-          return {
-            en: {
-              'messages.foo': 'hello foo',
-            },
-          }
-        },
+        }
       }
+    }
+
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new MemoryLoader()],
     })
 
     await i18nManager.loadTranslations()
@@ -215,38 +167,27 @@ test.group('I18nManager', () => {
   })
 
   test('add a custom formatter', async ({ assert }) => {
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        translationsFormat: 'simple',
-        loaders: {
-          memory: {
-            enabled: true,
+    class MemoryLoader {
+      async load() {
+        return {
+          en: {
+            'messages.greeting': 'hello foo',
           },
-        },
-      })
-    )
-
-    i18nManager.extend('memory', 'loader', () => {
-      return {
-        name: 'memory',
-        async load() {
-          return {
-            en: {
-              'messages.greeting': 'hello foo',
-            },
-          }
-        },
+        }
       }
-    })
+    }
 
-    i18nManager.extend('simple', 'formatter', () => {
-      return {
-        name: 'simple',
-        format(message) {
-          return message.replace('world', 'foo')
-        },
-      }
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => {
+        return {
+          name: 'simple',
+          format(message) {
+            return message.replace('world', 'foo')
+          },
+        }
+      },
+      loaders: [() => new MemoryLoader()],
     })
 
     await i18nManager.loadTranslations()
@@ -254,54 +195,16 @@ test.group('I18nManager', () => {
     assert.equal(i18n.formatMessage('messages.greeting', {}), 'hello foo')
   })
 
-  test('raise error when formatter is missing', async ({ assert }) => {
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        translationsFormat: 'simple',
-        loaders: {
-          memory: {
-            enabled: true,
-          },
-        },
-      })
-    )
-
-    assert.throws(() => i18nManager.getFormatter(), 'Invalid i18n formatter "simple"')
-  })
-
-  test('raise error when loader is missing', async ({ assert }) => {
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        translationsFormat: 'simple',
-        loaders: {
-          memory: {
-            enabled: true,
-          },
-        },
-      })
-    )
-
-    await assert.rejects(() => i18nManager.loadTranslations(), 'Invalid i18n loader "memory"')
-  })
-
   test('infer supported languages from translations', async ({ fs, assert }) => {
     await fs.createJson('resources/lang/en/messages.json', {
       greeting: 'hello world',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     assert.deepEqual(i18nManager.supportedLocales(), ['en'])
@@ -312,20 +215,14 @@ test.group('I18nManager', () => {
       greeting: 'hello world',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-        fallbackLocales: {
-          es: 'en',
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      fallbackLocales: {
+        es: 'en',
+      },
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     assert.deepEqual(i18nManager.supportedLocales(), ['en', 'es'])
@@ -336,21 +233,15 @@ test.group('I18nManager', () => {
       greeting: 'hello world',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-        supportedLocales: ['en', 'fr'],
-        fallbackLocales: {
-          es: 'en',
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      supportedLocales: ['en', 'fr'],
+      fallbackLocales: {
+        es: 'en',
+      },
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     assert.deepEqual(i18nManager.supportedLocales(), ['en', 'fr'])
@@ -364,21 +255,15 @@ test.group('I18nManager', () => {
       greeting: 'hello world',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-        supportedLocales: ['en', 'es', 'fr'],
-        fallbackLocales: {
-          es: 'fr',
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+      supportedLocales: ['en', 'es', 'fr'],
+      fallbackLocales: {
+        es: 'fr',
+      },
+    })
 
     await i18nManager.loadTranslations()
     const i18n = i18nManager.locale('es')
@@ -387,18 +272,12 @@ test.group('I18nManager', () => {
   })
 
   test('find best supported language based upon user languages', async ({ fs, assert }) => {
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        supportedLocales: ['en', 'fr', 'it', 'ca'],
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      supportedLocales: ['en', 'fr', 'it', 'ca'],
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     i18nManager.loadTranslations()
     assert.equal(i18nManager.getSupportedLocaleFor(['en-UK']), 'en')

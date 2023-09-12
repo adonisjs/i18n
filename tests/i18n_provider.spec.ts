@@ -31,12 +31,13 @@ test.group('I18n Provider', () => {
       .merge({
         config: {
           i18n: defineConfig({
-            loaders: {
-              fs: {
-                enabled: true,
+            formatter: 'icu',
+            loaders: [
+              {
+                driver: 'fs',
                 location: join(fs.basePath, 'resources/lang'),
               },
-            },
+            ],
           }),
         },
         rcFileContents: {
@@ -60,12 +61,13 @@ test.group('I18n Provider', () => {
       .merge({
         config: {
           i18n: defineConfig({
-            loaders: {
-              fs: {
-                enabled: true,
+            formatter: 'icu',
+            loaders: [
+              {
+                driver: 'fs',
                 location: join(fs.basePath, 'resources/lang'),
               },
-            },
+            ],
           }),
         },
         rcFileContents: {

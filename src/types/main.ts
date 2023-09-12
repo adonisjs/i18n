@@ -7,11 +7,8 @@
  * file that was distributed with this source code.
  */
 
-/**
- * Factory functions to add custom loader and formatters
- */
-export type ManagerLoaderFactory = (config: I18nConfig) => TranslationsLoaderContract
-export type ManagerFormatterFactory = (config: I18nConfig) => TranslationsFormatterContract
+import type { FsLoader } from '../loaders/fs_loader.js'
+import type { IcuFormatter } from '../formatters/icu_messages_formatter.js'
 
 /**
  * Options for formatting a numeric value. We override loose
@@ -88,16 +85,24 @@ export type FsLoaderOptions = {
 }
 
 /**
- * Config for the package
+ * Collection of loaders
  */
-export interface I18nConfig {
-  /**
-   * Translations format to use.
-   *
-   * Currently only the "icu" formatter is supported
-   */
-  translationsFormat: string
+export interface TranslationsLoadersList {
+  fs: (config: FsLoaderOptions, i18nConfig: I18nConfig) => FsLoader
+}
 
+/**
+ * Collection of formatters
+ */
+export interface TranslationsFormattersList {
+  icu: (i18nConfig: I18nConfig) => IcuFormatter
+}
+
+/**
+ * Base config shared between i18n config and i18n service
+ * config
+ */
+type BaseI18nConfig = {
   /**
    * Default locale for the application. This locale is
    * used when request locale is not supported by the
@@ -122,15 +127,32 @@ export interface I18nConfig {
    * when an identifier is missing.
    */
   fallback?: (identifier: string, locale: string) => string
+}
+
+/**
+ * Config for the package
+ */
+export interface I18nConfig extends BaseI18nConfig {
+  /**
+   * Translations format to use
+   */
+  formatter: (i18nConfig: I18nConfig) => TranslationsFormatterContract
 
   /**
    * Configured loaders for loading translations
    */
+  loaders: ((i18nConfig: I18nConfig) => TranslationsLoaderContract)[]
+}
+
+/**
+ * The service config auto resolves the formatter and loaders
+ * lazily using their unique names
+ */
+export interface I18nServiceConfig extends BaseI18nConfig {
+  formatter: keyof TranslationsFormattersList
   loaders: {
-    fs?: {
-      enabled: boolean
-    } & FsLoaderOptions
-  } & Record<string, { enabled: boolean } & Record<any, any>>
+    [K in keyof TranslationsLoadersList]: Parameters<TranslationsLoadersList[K]>[0] & { driver: K }
+  }[keyof TranslationsLoadersList][]
 }
 
 /**

@@ -8,20 +8,15 @@
  */
 
 import Negotiator from 'negotiator'
-import { RuntimeException } from '@poppinss/utils'
 import type { Emitter } from '@adonisjs/core/events'
 import type {
   I18nConfig,
-  ManagerLoaderFactory,
-  ManagerFormatterFactory,
   TranslationsFormatterContract,
   MissingTranslationEventPayload,
 } from './types/main.js'
 
 import debug from './debug.js'
 import { I18n } from './i18n.js'
-import { FsLoader } from './loaders/fs_loader.js'
-import { IcuFormatter } from './formatters/icu_messages_formatter.js'
 
 export class I18nManager {
   /**
@@ -35,27 +30,9 @@ export class I18nManager {
   #emitter: Emitter<{ 'i18n:missing:translation': MissingTranslationEventPayload } & any>
 
   /**
-   * List of translation formatters. Custom formatters can be
-   * added using the "extend" method
-   */
-  #formatters: { [name: string]: ManagerFormatterFactory } = {
-    icu: () => new IcuFormatter(),
-  }
-
-  /**
    * Reference to the formatter in use
    */
   #formatter?: TranslationsFormatterContract
-
-  /**
-   * List of translation loadrs. Custom loaders can be added using
-   * the "extend" method.
-   */
-  #loaders: { [name: string]: ManagerLoaderFactory } = {
-    fs: (config) => {
-      return new FsLoader(config.loaders.fs!)
-    },
-  }
 
   /**
    * An array of supported locales inferred from the fallback locales
@@ -137,11 +114,7 @@ export class I18nManager {
      * formatters after an instance of manager has been created
      */
     if (!this.#formatter) {
-      const formatterFactory = this.#formatters[this.#config.translationsFormat]
-      if (!formatterFactory) {
-        throw new RuntimeException(`Invalid i18n formatter "${this.#config.translationsFormat}"`)
-      }
-
+      const formatterFactory = this.#config.formatter
       this.#formatter = formatterFactory(this.#config)
     }
 
@@ -167,18 +140,9 @@ export class I18nManager {
     debug('loading translations')
 
     const translationsStack = await Promise.all(
-      Object.keys(this.#config.loaders)
-        .filter((loader) => {
-          return this.#config.loaders[loader]?.enabled
-        })
-        .map((loader) => {
-          const loaderFactory = this.#loaders[loader]
-          if (!loaderFactory) {
-            throw new RuntimeException(`Invalid i18n loader "${loader}"`)
-          }
-
-          return loaderFactory(this.#config).load()
-        })
+      this.#config.loaders.map((loaderFactory) => {
+        return loaderFactory(this.#config).load()
+      })
     )
 
     /**
@@ -280,24 +244,5 @@ export class I18nManager {
    */
   getFallbackMessage(identifier: string, locale: string): string | undefined {
     return this.#config.fallback?.(identifier, locale)
-  }
-
-  /**
-   * Extend by adding custom formatters and loaders
-   */
-  extend(name: string, type: 'loader', callback: ManagerLoaderFactory): void
-  extend(name: string, type: 'formatter', callback: ManagerFormatterFactory): void
-  extend(
-    name: string,
-    type: 'loader' | 'formatter',
-    callback: ManagerLoaderFactory | ManagerFormatterFactory
-  ): void {
-    debug('adding custom %s', type)
-
-    if (type === 'loader') {
-      this.#loaders[name] = callback as ManagerLoaderFactory
-    } else {
-      this.#formatters[name] = callback as ManagerFormatterFactory
-    }
   }
 }

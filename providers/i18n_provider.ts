@@ -31,6 +31,9 @@ export default class I18nProvider {
     }
   }
 
+  /**
+   * Register i18n manager to the container
+   */
   register() {
     this.app.container.singleton('i18n', async (resolver) => {
       const { I18nManager } = await import('../src/i18n_manager.js')
@@ -40,14 +43,18 @@ export default class I18nProvider {
     })
   }
 
+  /**
+   * Load translations, register edge helpers and
+   * define repl bindings
+   */
   async boot() {
     /**
      * Loading translation on boot. There is no simple way to defer
      * loading of translations and hence we have to do it at
      * boot time.
      */
-    const i18n = await this.app.container.make('i18n')
-    await i18n.loadTranslations()
+    const i18nManager = await this.app.container.make('i18n')
+    await i18nManager.loadTranslations()
 
     /**
      * Registering edge plugin
@@ -55,7 +62,7 @@ export default class I18nProvider {
     const edge = await this.getEdge()
     if (edge) {
       const { edgePluginI18n } = await import('../src/edge_plugin_i18n.js')
-      edge.use(edgePluginI18n(i18n))
+      edge.use(edgePluginI18n(i18nManager))
     }
 
     /**

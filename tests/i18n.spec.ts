@@ -7,6 +7,7 @@
  * file that was distributed with this source code.
  */
 
+import vine from '@vinejs/vine'
 import { join } from 'node:path'
 import { test } from '@japa/runner'
 import { Emitter } from '@adonisjs/core/events'
@@ -14,9 +15,9 @@ import { AppFactory } from '@adonisjs/core/factories/app'
 
 import { I18n } from '../src/i18n.js'
 import { I18nManager } from '../src/i18n_manager.js'
-import { defineConfig } from '../src/define_config.js'
+import { FsLoader } from '../src/loaders/fs_loader.js'
+import { IcuFormatter } from '../src/formatters/icu_messages_formatter.js'
 import type { MissingTranslationEventPayload } from '../src/types/main.js'
-import vine from '@vinejs/vine'
 
 const app = new AppFactory().create(new URL('./', import.meta.url), () => {})
 const emitter = new Emitter<{ 'i18n:missing:translation': MissingTranslationEventPayload }>(app)
@@ -27,17 +28,11 @@ test.group('I18n', () => {
       greeting: 'The price is {price, number, ::currency/INR}',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     const i18n = new I18n('en', emitter, i18nManager)
@@ -50,17 +45,11 @@ test.group('I18n', () => {
       greeting: 'The price is {price, number, ::currency/INR}',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     const i18n = new I18n('en', emitter, i18nManager)
@@ -73,17 +62,11 @@ test.group('I18n', () => {
       greeting: 'The price is {price, number, ::currency/USD}',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     const i18n = new I18n('fr', emitter, i18nManager)
@@ -95,18 +78,11 @@ test.group('I18n', () => {
       greeting: 'The price is {price, number, ::currency/INR}',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        defaultLocale: 'fr',
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'fr',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     const i18n = new I18n('fr', emitter, i18nManager)
@@ -131,18 +107,11 @@ test.group('I18n', () => {
       greeting: 'The price is {price, number, ::currency/INR}',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        defaultLocale: 'fr',
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'fr',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     const i18n = new I18n('fr', emitter, i18nManager)
@@ -158,18 +127,11 @@ test.group('I18n', () => {
       greeting: 'The price is {price, number, ::currency/INR}',
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        defaultLocale: 'en',
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     const i18n = new I18n('fr', emitter, i18nManager)
@@ -192,17 +154,11 @@ test.group('I18n | validator messages provider', () => {
       },
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     const i18n = new I18n('en', emitter, i18nManager)
@@ -258,17 +214,11 @@ test.group('I18n | validator messages provider', () => {
       },
     })
 
-    const i18nManager = new I18nManager(
-      emitter,
-      defineConfig({
-        loaders: {
-          fs: {
-            enabled: true,
-            location: join(fs.basePath, 'resources/lang'),
-          },
-        },
-      })
-    )
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
 
     await i18nManager.loadTranslations()
     const i18n = new I18n('en', emitter, i18nManager)
