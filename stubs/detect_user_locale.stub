@@ -3,8 +3,8 @@
 ---
 to: {{ app.middlewarePath(entity.path, middlewareFileName) }}
 ---
-import type { I18n } from '@adonisjs/i18n'
-import i18n from '@adonisjs/i18n/services/main'
+import { I18n } from '@adonisjs/i18n'
+import i18nManager from '@adonisjs/i18n/services/main'
 import type { NextFn } from '@adonisjs/core/types/http'
 import { type HttpContext, RequestValidator } from '@adonisjs/core/http'
 
@@ -44,7 +44,7 @@ export default class {{ middlewareName }} {
     /**
      * Assigning i18n property to the HTTP context
      */
-    ctx.i18n = i18n.locale(language || i18n.defaultLocale)
+    ctx.i18n = i18nManager.locale(language || i18n.defaultLocale)
 
     /**
      * Binding I18n class to the request specific instance of it.
