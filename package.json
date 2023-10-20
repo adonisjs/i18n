@@ -18,7 +18,7 @@
     ".": "./build/index.js",
     "./services/main": "./build/services/i18n.js",
     "./i18n_provider": "./build/providers/i18n_provider.js",
-    "./plugin_edge": "./build/src/edge_plugin_i18n.js",
+    "./plugins/edge": "./build/src/plugins/edge.js",
     "./types": "./build/src/types/main.js"
   },
   "engines": {

@@ -14,7 +14,7 @@ import { readFile } from 'node:fs/promises'
 import { flatten, fsReadAll } from '@poppinss/utils'
 
 import debug from '../debug.js'
-import type { FsLoaderOptions, Translations, TranslationsLoaderContract } from '../types/main.js'
+import type { FsLoaderOptions, Translations, TranslationsLoaderContract } from '../types.js'
 
 /**
  * Uses the filesystem to load messages from the JSON

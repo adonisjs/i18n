@@ -16,7 +16,7 @@ import { I18n } from '../src/i18n.js'
 import { FsLoader } from '../src/loaders/fs.js'
 import { I18nManager } from '../src/i18n_manager.js'
 import { IcuFormatter } from '../src/messages_formatters/icu.js'
-import type { MissingTranslationEventPayload } from '../src/types/main.js'
+import type { MissingTranslationEventPayload } from '../src/types.js'
 
 const BASE_URL = new URL('./', import.meta.url)
 const app = new AppFactory().create(BASE_URL, () => {})

@@ -13,7 +13,7 @@ import type {
   I18nManagerConfig,
   TranslationsFormatterContract,
   MissingTranslationEventPayload,
-} from './types/main.js'
+} from './types.js'
 
 import debug from './debug.js'
 import { I18n } from './i18n.js'

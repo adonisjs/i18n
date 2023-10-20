@@ -9,9 +9,9 @@
 
 import type { PluginFn } from 'edge.js/types'
 
-import debug from './debug.js'
-import type { I18n } from './i18n.js'
-import type { I18nManager } from './i18n_manager.js'
+import debug from '../debug.js'
+import type { I18n } from '../i18n.js'
+import type { I18nManager } from '../i18n_manager.js'
 
 /**
  * The edge plugin for AdonisJS Session adds tags to read

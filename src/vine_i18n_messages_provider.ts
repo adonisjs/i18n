@@ -8,8 +8,8 @@
  */
 
 import string from '@poppinss/utils/string'
-import type { FieldContext, MessagesProviderContact } from '@vinejs/vine/types'
 import type { I18n } from './i18n.js'
+import type { FieldContext, MessagesProviderContact } from '@vinejs/vine/types'
 
 /**
  * VineJS messages provider to read validation messages

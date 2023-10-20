@@ -8,11 +8,12 @@
  */
 
 import type { Edge } from 'edge.js'
-import { I18nManager } from '../src/i18n_manager.js'
-import type { ApplicationService } from '@adonisjs/core/types'
-import type { MissingTranslationEventPayload } from '../src/types/main.js'
 import { configProvider } from '@adonisjs/core'
 import { RuntimeException } from '@poppinss/utils'
+
+import { I18nManager } from '../src/i18n_manager.js'
+import type { ApplicationService } from '@adonisjs/core/types'
+import type { MissingTranslationEventPayload } from '../src/types.js'
 
 declare module '@adonisjs/core/types' {
   export interface EventsList {
@@ -79,7 +80,7 @@ export default class I18nProvider {
      */
     const edge = await this.getEdge()
     if (edge) {
-      const { edgePluginI18n } = await import('../src/edge_plugin_i18n.js')
+      const { edgePluginI18n } = await import('../src/plugins/edge.js')
       edge.use(edgePluginI18n(i18nManager))
     }
 

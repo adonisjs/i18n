@@ -15,7 +15,7 @@ import type {
   TimeFormatOptions,
   NumberFormatOptions,
   CurrencyFormatOptions,
-} from '../types/main.js'
+} from '../types.js'
 
 /**
  * Mapping of "Intl.RelativeTimeFormatUnit" to luxon "DurationObjectUnits"

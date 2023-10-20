@@ -17,7 +17,7 @@ import type {
   FormatterFactory,
   I18nManagerConfig,
   FsLoaderOptions,
-} from './types/main.js'
+} from './types.js'
 
 /**
  * Config helper to define i18n config

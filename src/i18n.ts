@@ -12,8 +12,8 @@ import type { Emitter } from '@adonisjs/core/events'
 import debug from './debug.js'
 import type { I18nManager } from './i18n_manager.js'
 import { Formatter } from './formatters/values_formatter.js'
-import { I18nMessagesProvider } from './i18n_messages_provider.js'
-import type { MissingTranslationEventPayload } from './types/main.js'
+import type { MissingTranslationEventPayload } from './types.js'
+import { I18nMessagesProvider } from './vine_i18n_messages_provider.js'
 
 /**
  * I18n exposes the APIs to format values and translate messages
