@@ -32,14 +32,28 @@ export default class I18nProvider {
   constructor(protected app: ApplicationService) {}
 
   /**
-   * Returns edge when it's installed
+   * Registers edge plugin when edge is installed
    */
-  protected async getEdge(): Promise<Edge | null> {
+  protected async registerEdgePlugin(i18nManager: I18nManager) {
+    let edge: Edge | null = null
     try {
-      const { default: edge } = await import('edge.js')
-      return edge
-    } catch {
-      return null
+      const edgeExports = await import('edge.js')
+      edge = edgeExports.default
+    } catch {}
+
+    if (edge) {
+      const { edgePluginI18n } = await import('../src/plugins/edge.js')
+      edge.use(edgePluginI18n(i18nManager))
+    }
+  }
+
+  /**
+   * Registers repl bindings
+   */
+  protected async registerReplBindings() {
+    if (this.app.getEnvironment() === 'repl') {
+      const { registerReplBindings } = await import('../src/repl_bindings.js')
+      registerReplBindings(this.app, await this.app.container.make('repl'))
     }
   }
 
@@ -48,7 +62,7 @@ export default class I18nProvider {
    */
   register() {
     this.app.container.singleton('i18n', async (resolver) => {
-      const i18nConfigProvider = this.app.config.get('i18n', {})
+      const i18nConfigProvider = this.app.config.get('i18n')
       const config = await configProvider.resolve<any>(this.app, i18nConfigProvider)
 
       if (!config) {
@@ -75,21 +89,7 @@ export default class I18nProvider {
     const i18nManager = await this.app.container.make('i18n')
     await i18nManager.loadTranslations()
 
-    /**
-     * Registering edge plugin
-     */
-    const edge = await this.getEdge()
-    if (edge) {
-      const { edgePluginI18n } = await import('../src/plugins/edge.js')
-      edge.use(edgePluginI18n(i18nManager))
-    }
-
-    /**
-     * Register REPL bindings in the REPL environment
-     */
-    if (this.app.getEnvironment() === 'repl') {
-      const { registerReplBindings } = await import('../src/repl_bindings.js')
-      registerReplBindings(this.app, await this.app.container.make('repl'))
-    }
+    await this.registerEdgePlugin(i18nManager)
+    await this.registerReplBindings()
   }
 }
