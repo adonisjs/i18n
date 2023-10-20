@@ -11,11 +11,7 @@ import formatters from '@poppinss/intl-formatter'
 import { DateTime, type DurationObjectUnits } from 'luxon'
 
 import { format } from './relative_time_formatter.js'
-import type {
-  TimeFormatOptions,
-  NumberFormatOptions,
-  CurrencyFormatOptions,
-} from '../types.js'
+import type { TimeFormatOptions, NumberFormatOptions, CurrencyFormatOptions } from '../types.js'
 
 /**
  * Mapping of "Intl.RelativeTimeFormatUnit" to luxon "DurationObjectUnits"
