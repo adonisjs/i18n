@@ -14,9 +14,9 @@ import { Emitter } from '@adonisjs/core/events'
 import { AppFactory } from '@adonisjs/core/factories/app'
 
 import { I18n } from '../src/i18n.js'
+import { FsLoader } from '../src/loaders/fs.js'
 import { I18nManager } from '../src/i18n_manager.js'
-import { FsLoader } from '../src/loaders/fs_loader.js'
-import { IcuFormatter } from '../src/formatters/icu_messages_formatter.js'
+import { IcuFormatter } from '../src/messages_formatters/icu.js'
 import type { MissingTranslationEventPayload } from '../src/types/main.js'
 
 const app = new AppFactory().create(new URL('./', import.meta.url), () => {})

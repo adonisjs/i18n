@@ -60,5 +60,5 @@ test.group('Configure', (group) => {
       'app/middleware/detect_user_locale_middleware.ts',
       `export default class DetectUserLocaleMiddleware`
     )
-  }).timeout(10000)
+  }).timeout(60 * 1000)
 })

@@ -7,9 +7,9 @@
  * file that was distributed with this source code.
  */
 
-import { test } from '@japa/runner'
-import { IcuFormatter } from '../src/formatters/icu_messages_formatter.js'
 import { DateTime } from 'luxon'
+import { test } from '@japa/runner'
+import { IcuFormatter } from '../src/messages_formatters/icu.js'
 
 test.group('ICU message formatter', () => {
   test('format a string value', ({ assert }) => {

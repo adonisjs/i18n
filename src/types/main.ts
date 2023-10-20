@@ -7,9 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import type { FsLoader } from '../loaders/fs_loader.js'
-import type { IcuFormatter } from '../formatters/icu_messages_formatter.js'
-
 /**
  * Options for formatting a numeric value. We override loose
  * types from "Intl.NumberFormatOptions".
@@ -85,24 +82,10 @@ export type FsLoaderOptions = {
 }
 
 /**
- * Collection of loaders
- */
-export interface TranslationsLoadersList {
-  fs: (config: FsLoaderOptions, i18nConfig: I18nConfig) => FsLoader
-}
-
-/**
- * Collection of formatters
- */
-export interface TranslationsFormattersList {
-  icu: (i18nConfig: I18nConfig) => IcuFormatter
-}
-
-/**
  * Base config shared between i18n config and i18n service
  * config
  */
-type BaseI18nConfig = {
+export type BaseI18nConfig = {
   /**
    * Default locale for the application. This locale is
    * used when request locale is not supported by the
@@ -130,29 +113,30 @@ type BaseI18nConfig = {
 }
 
 /**
+ * Formatter factory is responsible for returning a
+ * formatter
+ */
+export type FormatterFactory = (i18nConfig: I18nManagerConfig) => TranslationsFormatterContract
+
+/**
+ * Loader factory is responsible for returning a
+ * loader
+ */
+export type LoaderFactory = (i18nConfig: I18nManagerConfig) => TranslationsLoaderContract
+
+/**
  * Config for the package
  */
-export interface I18nConfig extends BaseI18nConfig {
+export interface I18nManagerConfig extends BaseI18nConfig {
   /**
    * Translations format to use
    */
-  formatter: (i18nConfig: I18nConfig) => TranslationsFormatterContract
+  formatter: FormatterFactory
 
   /**
    * Configured loaders for loading translations
    */
-  loaders: ((i18nConfig: I18nConfig) => TranslationsLoaderContract)[]
-}
-
-/**
- * The service config auto resolves the formatter and loaders
- * lazily using their unique names
- */
-export interface I18nServiceConfig extends BaseI18nConfig {
-  formatter: keyof TranslationsFormattersList
-  loaders: {
-    [K in keyof TranslationsLoadersList]: Parameters<TranslationsLoadersList[K]>[0] & { driver: K }
-  }[keyof TranslationsLoadersList][]
+  loaders: LoaderFactory[]
 }
 
 /**

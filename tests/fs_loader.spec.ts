@@ -9,7 +9,7 @@
 
 import { join } from 'node:path'
 import { test } from '@japa/runner'
-import { FsLoader } from '../src/loaders/fs_loader.js'
+import { FsLoader } from '../src/loaders/fs.js'
 
 test.group('Fs loader | JSON', () => {
   test('load all .json files from the config location', async ({ fs, assert }) => {

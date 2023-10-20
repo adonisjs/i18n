@@ -10,7 +10,7 @@
 import Negotiator from 'negotiator'
 import type { Emitter } from '@adonisjs/core/events'
 import type {
-  I18nConfig,
+  I18nManagerConfig,
   TranslationsFormatterContract,
   MissingTranslationEventPayload,
 } from './types/main.js'
@@ -22,7 +22,7 @@ export class I18nManager {
   /**
    * i18n config
    */
-  #config: I18nConfig
+  #config: I18nManagerConfig
 
   /**
    * Reference to the emitter for emitting events
@@ -71,7 +71,7 @@ export class I18nManager {
 
   constructor(
     emitter: Emitter<{ 'i18n:missing:translation': MissingTranslationEventPayload } & any>,
-    config: I18nConfig
+    config: I18nManagerConfig
   ) {
     this.#config = config
     this.#emitter = emitter

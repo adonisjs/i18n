@@ -8,9 +8,20 @@
  */
 
 import type { Edge } from 'edge.js'
+import { I18nManager } from '../src/i18n_manager.js'
 import type { ApplicationService } from '@adonisjs/core/types'
+import type { MissingTranslationEventPayload } from '../src/types/main.js'
+import { configProvider } from '@adonisjs/core'
+import { RuntimeException } from '@poppinss/utils'
 
-import '../src/types/extended.js'
+declare module '@adonisjs/core/types' {
+  export interface EventsList {
+    'i18n:missing:translation': MissingTranslationEventPayload
+  }
+  export interface ContainerBindings {
+    i18n: I18nManager
+  }
+}
 
 /**
  * Registers a singleton instance of I18nManager to the container,
@@ -36,9 +47,16 @@ export default class I18nProvider {
    */
   register() {
     this.app.container.singleton('i18n', async (resolver) => {
-      const { I18nManager } = await import('../src/i18n_manager.js')
+      const i18nConfigProvider = this.app.config.get('i18n', {})
+      const config = await configProvider.resolve<any>(this.app, i18nConfigProvider)
+
+      if (!config) {
+        throw new RuntimeException(
+          'Invalid default export from "config/i18n.ts" file. Make sure to use defineConfig method'
+        )
+      }
+
       const emitter = await resolver.make('emitter')
-      const config = this.app.config.get<any>('i18n', {})
       return new I18nManager(emitter, config)
     })
   }

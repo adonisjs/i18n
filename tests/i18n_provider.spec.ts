@@ -8,12 +8,11 @@
  */
 
 import edge from 'edge.js'
-import { join } from 'node:path'
 import { test } from '@japa/runner'
 import { IgnitorFactory } from '@adonisjs/core/factories'
 
-import { defineConfig } from '../src/define_config.js'
 import { I18nManager } from '../src/i18n_manager.js'
+import { defineConfig, formatters, loaders } from '../src/define_config.js'
 
 const BASE_URL = new URL('./tmp/', import.meta.url)
 const IMPORTER = (filePath: string) => {
@@ -31,12 +30,11 @@ test.group('I18n Provider', () => {
       .merge({
         config: {
           i18n: defineConfig({
-            formatter: 'icu',
+            formatter: formatters.icu(),
             loaders: [
-              {
-                driver: 'fs',
-                location: join(fs.basePath, 'resources/lang'),
-              },
+              loaders.fs({
+                location: fs.baseUrl,
+              }),
             ],
           }),
         },
@@ -61,12 +59,11 @@ test.group('I18n Provider', () => {
       .merge({
         config: {
           i18n: defineConfig({
-            formatter: 'icu',
+            formatter: formatters.icu(),
             loaders: [
-              {
-                driver: 'fs',
-                location: join(fs.basePath, 'resources/lang'),
-              },
+              loaders.fs({
+                location: fs.baseUrl,
+              }),
             ],
           }),
         },
