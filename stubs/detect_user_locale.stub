@@ -1,8 +1,8 @@
 {{#var middlewareName = generators.middlewareName(entity.name)}}
 {{#var middlewareFileName = generators.middlewareFileName(entity.name)}}
----
-to: {{ app.middlewarePath(entity.path, middlewareFileName) }}
----
+{{{
+  exports({ to: app.middlewarePath(entity.path, middlewareFileName) })
+}}}
 import { I18n } from '@adonisjs/i18n'
 import i18nManager from '@adonisjs/i18n/services/main'
 import type { NextFn } from '@adonisjs/core/types/http'
