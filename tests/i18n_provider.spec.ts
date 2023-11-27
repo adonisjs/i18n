@@ -92,7 +92,10 @@ test.group('I18n Provider', () => {
           }),
         },
         rcFileContents: {
-          providers: [() => import('../providers/i18n_provider.js')],
+          providers: [
+            () => import('@adonisjs/core/providers/edge_provider'),
+            () => import('../providers/i18n_provider.js'),
+          ],
         },
       })
       .create(BASE_URL, {
