@@ -111,6 +111,7 @@ test.group('Fs loader | JSON', () => {
       ])
       assert.oneOf(error.message, [
         'Expected double-quoted property name in JSON at position 10',
+        'Expected double-quoted property name in JSON at position 10 (line 1 column 11)',
         'Unexpected token } in JSON at position 10',
       ])
     }
