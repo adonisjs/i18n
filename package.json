@@ -5,14 +5,9 @@
   "main": "build/index.js",
   "type": "module",
   "files": [
-    "build/providers",
-    "build/services",
-    "build/src",
-    "build/stubs",
-    "build/index.d.ts",
-    "build/index.js",
-    "build/configure.d.ts",
-    "build/configure.js"
+    "build",
+    "!build/bin",
+    "!build/tests"
   ],
   "exports": {
     ".": "./build/index.js",
@@ -30,8 +25,10 @@
     "clean": "del-cli build",
     "typecheck": "tsc --noEmit",
     "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
-    "compile": "npm run lint && npm run clean && tsc",
-    "build": "npm run compile && npm run copy:templates",
+    "precompile": "npm run lint && npm run clean",
+    "compile": "tsup-node && tsc --emitDeclarationOnly --declaration",
+    "postcompile": "npm run copy:templates",
+    "build": "npm run compile",
     "prepublishOnly": "npm run build",
     "lint": "eslint . --ext=.ts",
     "format": "prettier --write .",
@@ -66,6 +63,7 @@
     "np": "^8.0.4",
     "prettier": "^3.1.0",
     "ts-node": "^10.9.1",
+    "tsup": "^8.0.1",
     "typescript": "5.2.2"
   },
   "dependencies": {
@@ -78,8 +76,8 @@
   },
   "peerDependencies": {
     "@adonisjs/core": "^6.1.5-32",
-    "edge.js": "^6.0.0",
-    "@vinejs/vine": "^1.7.0"
+    "@vinejs/vine": "^1.7.0",
+    "edge.js": "^6.0.0"
   },
   "peerDependenciesMeta": {
     "edge.js": {
@@ -134,5 +132,19 @@
       "test_helpers/**",
       "stubs/**"
     ]
+  },
+  "tsup": {
+    "entry": [
+      "./index.ts",
+      "./services/i18n.ts",
+      "./providers/i18n_provider.ts",
+      "./src/plugins/edge.ts"
+    ],
+    "outDir": "./build",
+    "clean": true,
+    "format": "esm",
+    "dts": false,
+    "sourcemap": true,
+    "target": "esnext"
   }
 }
