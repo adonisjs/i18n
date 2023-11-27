@@ -7,7 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import type { Edge } from 'edge.js'
 import { configProvider } from '@adonisjs/core'
 import { RuntimeException } from '@poppinss/utils'
 
@@ -35,15 +34,10 @@ export default class I18nProvider {
    * Registers edge plugin when edge is installed
    */
   protected async registerEdgePlugin(i18nManager: I18nManager) {
-    let edge: Edge | null = null
-    try {
-      const edgeExports = await import('edge.js')
-      edge = edgeExports.default
-    } catch {}
-
-    if (edge) {
+    if (this.app.usingEdgeJS) {
+      const edge = await import('edge.js')
       const { edgePluginI18n } = await import('../src/plugins/edge.js')
-      edge.use(edgePluginI18n(i18nManager))
+      edge.default.use(edgePluginI18n(i18nManager))
     }
   }
 

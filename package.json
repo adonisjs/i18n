@@ -76,6 +76,19 @@
     "negotiator": "^0.6.3",
     "yaml": "^2.3.4"
   },
+  "peerDependencies": {
+    "@adonisjs/core": "^6.1.5-32",
+    "edge.js": "^6.0.0",
+    "@vinejs/vine": "^1.7.0"
+  },
+  "peerDependenciesMeta": {
+    "edge.js": {
+      "optional": true
+    },
+    "@vinejs/vine": {
+      "optional": true
+    }
+  },
   "author": "virk,adonisjs",
   "license": "MIT",
   "homepage": "https://github.com/adonisjs/antl#readme",
