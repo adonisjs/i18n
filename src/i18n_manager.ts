@@ -22,7 +22,7 @@ export class I18nManager {
   /**
    * i18n config
    */
-  #config: I18nManagerConfig
+  config: I18nManagerConfig
 
   /**
    * Reference to the emitter for emitting events
@@ -58,7 +58,7 @@ export class I18nManager {
    * Reference to the default locale defined inside the config file
    */
   get defaultLocale(): string {
-    return this.#config.defaultLocale
+    return this.config.defaultLocale
   }
 
   /**
@@ -73,7 +73,7 @@ export class I18nManager {
     emitter: Emitter<{ 'i18n:missing:translation': MissingTranslationEventPayload } & any>,
     config: I18nManagerConfig
   ) {
-    this.#config = config
+    this.config = config
     this.#emitter = emitter
   }
 
@@ -85,7 +85,7 @@ export class I18nManager {
    * config file.
    */
   supportedLocales() {
-    return this.#config.supportedLocales || this.#inferredLocales
+    return this.config.supportedLocales || this.#inferredLocales
   }
 
   /**
@@ -114,8 +114,8 @@ export class I18nManager {
      * formatters after an instance of manager has been created
      */
     if (!this.#formatter) {
-      const formatterFactory = this.#config.formatter
-      this.#formatter = formatterFactory(this.#config)
+      const formatterFactory = this.config.formatter
+      this.#formatter = formatterFactory(this.config)
     }
 
     return this.#formatter
@@ -140,8 +140,8 @@ export class I18nManager {
     debug('loading translations')
 
     const translationsStack = await Promise.all(
-      this.#config.loaders.map((loaderFactory) => {
-        return loaderFactory(this.#config).load()
+      this.config.loaders.map((loaderFactory) => {
+        return loaderFactory(this.config).load()
       })
     )
 
@@ -165,7 +165,7 @@ export class I18nManager {
      * - Locales detected from translations
      */
     this.#inferredLocales = [this.defaultLocale].concat(
-      this.#config.fallbackLocales ? Object.keys(this.#config.fallbackLocales) : []
+      this.config.fallbackLocales ? Object.keys(this.config.fallbackLocales) : []
     )
 
     /**
@@ -217,8 +217,8 @@ export class I18nManager {
     /**
      * Use explicitly defined fallback locale
      */
-    if (this.#config.fallbackLocales && this.#config.fallbackLocales[locale]) {
-      return this.#config.fallbackLocales[locale]
+    if (this.config.fallbackLocales && this.config.fallbackLocales[locale]) {
+      return this.config.fallbackLocales[locale]
     }
 
     /**
@@ -260,6 +260,6 @@ export class I18nManager {
    * Otherwise returns undefined
    */
   getFallbackMessage(identifier: string, locale: string): string | undefined {
-    return this.#config.fallback?.(identifier, locale)
+    return this.config.fallback?.(identifier, locale)
   }
 }
