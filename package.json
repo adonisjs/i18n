@@ -11,6 +11,7 @@
   ],
   "exports": {
     ".": "./build/index.js",
+    "./factories": "./build/factories/main.js",
     "./services/main": "./build/services/i18n.js",
     "./i18n_provider": "./build/providers/i18n_provider.js",
     "./plugins/edge": "./build/src/plugins/edge.js",
@@ -24,7 +25,7 @@
     "test": "c8 npm run quick:test",
     "clean": "del-cli build",
     "typecheck": "tsc --noEmit",
-    "copy:templates": "copyfiles \"stubs/**/*.stub\" build",
+    "copy:templates": "copyfiles --up=1 \"stubs/**/*.stub\" build",
     "precompile": "npm run lint && npm run clean",
     "compile": "tsup-node && tsc --emitDeclarationOnly --declaration",
     "postcompile": "npm run copy:templates",
@@ -137,6 +138,7 @@
     "entry": [
       "./index.ts",
       "./services/i18n.ts",
+      "./factories/main.ts",
       "./providers/i18n_provider.ts",
       "./src/plugins/edge.ts"
     ],
