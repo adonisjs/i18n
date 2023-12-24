@@ -8,24 +8,25 @@
  */
 
 import type Configure from '@adonisjs/core/commands/configure'
+import { stubsRoot } from './stubs/main.js'
 
 /**
  * Configures the package
  */
 export async function configure(command: Configure) {
+  const codemods = await command.createCodemods()
+
   /**
    * Publish config file
    */
-  await command.publishStub('config.stub')
+  await codemods.makeUsingStub(stubsRoot, 'config/i18n.stub', {})
 
   /**
    * Publish middleware file
    */
-  await command.publishStub('detect_user_locale.stub', {
+  await codemods.makeUsingStub(stubsRoot, 'make/middleware/detect_user_locale.stub', {
     entity: command.app.generators.createEntity('detect_user_locale'),
   })
-
-  const codemods = await command.createCodemods()
 
   /**
    * Register middleware
