@@ -178,4 +178,11 @@ export class I18n extends Formatter {
   formatRawMessage(message: string, data?: Record<string, any>): string {
     return this.#i18nManager.getFormatter().format(message, this.locale, data)
   }
+
+  /**
+   * Returns all translations
+   */
+  getTranslations(): {[lang: string]: Record<string, string>} {
+    return this.#i18nManager.getTranslations()
+  }
 }

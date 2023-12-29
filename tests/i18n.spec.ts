@@ -168,6 +168,26 @@ test.group('I18n', () => {
     assert.isFalse(i18n.hasMessage('messages.greeting'))
     assert.isTrue(i18n.hasFallbackMessage('messages.greeting'))
   })
+
+  test('returns all available translations', async ({ fs, assert }) => {
+    await fs.createJson('resources/lang/en/messages.json', {
+      greeting: 'Hello, world!',
+    })
+    await fs.createJson('resources/lang/fr/messages.json', {
+      greeting: 'Bonjour le monde !',
+    })
+
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
+
+    await i18nManager.loadTranslations()
+    const i18n = new I18n('fr', emitter, i18nManager)
+
+    assert.deepEqual(i18n.getTranslations(), {en: {'messages.greeting': 'Hello, world!'}, fr: {'messages.greeting': 'Bonjour le monde !'}})
+  })
 })
 
 test.group('I18n | validator messages provider', () => {
