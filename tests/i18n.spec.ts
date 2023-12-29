@@ -186,7 +186,10 @@ test.group('I18n', () => {
     await i18nManager.loadTranslations()
     const i18n = new I18n('fr', emitter, i18nManager)
 
-    assert.deepEqual(i18n.getTranslations(), {en: {'messages.greeting': 'Hello, world!'}, fr: {'messages.greeting': 'Bonjour le monde !'}})
+    assert.deepEqual(i18n.getTranslations(), {
+      en: { 'messages.greeting': 'Hello, world!' },
+      fr: { 'messages.greeting': 'Bonjour le monde !' },
+    })
   })
 })
 

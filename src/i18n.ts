@@ -182,7 +182,7 @@ export class I18n extends Formatter {
   /**
    * Returns all translations
    */
-  getTranslations(): {[lang: string]: Record<string, string>} {
+  getTranslations(): { [lang: string]: Record<string, string> } {
     return this.#i18nManager.getTranslations()
   }
 }
