@@ -9,5 +9,6 @@
 
 export { I18n } from './src/i18n.js'
 export { configure } from './configure.js'
+export { stubsRoot } from './stubs/main.js'
 export { I18nManager } from './src/i18n_manager.js'
 export { defineConfig, formatters, loaders } from './src/define_config.js'
