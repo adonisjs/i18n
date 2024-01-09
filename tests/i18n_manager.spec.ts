@@ -19,7 +19,7 @@ import { IcuFormatter } from '../src/messages_formatters/icu.js'
 import type { MissingTranslationEventPayload } from '../src/types.js'
 
 const BASE_URL = new URL('./', import.meta.url)
-const app = new AppFactory().create(BASE_URL, () => {})
+const app = new AppFactory().create(BASE_URL)
 const emitter = new Emitter<{ 'i18n:missing:translation': MissingTranslationEventPayload }>(app)
 
 test.group('I18nManager', () => {

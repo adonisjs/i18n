@@ -16,7 +16,7 @@ import { IcuFormatter } from '../src/messages_formatters/icu.js'
 import { defineConfig, formatters, loaders } from '../src/define_config.js'
 
 const BASE_URL = new URL('./', import.meta.url)
-const app = new AppFactory().create(BASE_URL, () => {}) as ApplicationService
+const app = new AppFactory().create(BASE_URL) as ApplicationService
 
 test.group('Define config', () => {
   test('throw error when missing formatter', ({ assert }) => {

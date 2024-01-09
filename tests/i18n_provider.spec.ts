@@ -15,12 +15,6 @@ import { I18nManager } from '../src/i18n_manager.js'
 import { defineConfig, formatters, loaders } from '../src/define_config.js'
 
 const BASE_URL = new URL('./tmp/', import.meta.url)
-const IMPORTER = (filePath: string) => {
-  if (filePath.startsWith('./') || filePath.startsWith('../')) {
-    return import(new URL(filePath, BASE_URL).href)
-  }
-  return import(filePath)
-}
 
 test.group('I18n Provider', () => {
   test('register i18n provider', async ({ fs, assert }) => {
@@ -42,9 +36,7 @@ test.group('I18n Provider', () => {
           providers: [() => import('../providers/i18n_provider.js')],
         },
       })
-      .create(BASE_URL, {
-        importer: IMPORTER,
-      })
+      .create(BASE_URL)
 
     const app = ignitor.createApp('web')
     await app.init()
@@ -64,9 +56,7 @@ test.group('I18n Provider', () => {
           providers: [() => import('../providers/i18n_provider.js')],
         },
       })
-      .create(BASE_URL, {
-        importer: IMPORTER,
-      })
+      .create(BASE_URL)
 
     const app = ignitor.createApp('web')
     await app.init()
@@ -98,9 +88,7 @@ test.group('I18n Provider', () => {
           ],
         },
       })
-      .create(BASE_URL, {
-        importer: IMPORTER,
-      })
+      .create(BASE_URL)
 
     const app = ignitor.createApp('web')
     await app.init()
@@ -134,9 +122,7 @@ test.group('I18n Provider', () => {
           providers: [() => import('../providers/i18n_provider.js')],
         },
       })
-      .create(BASE_URL, {
-        importer: IMPORTER,
-      })
+      .create(BASE_URL)
 
     const app = ignitor.createApp('repl')
     await app.init()
