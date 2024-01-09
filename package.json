@@ -140,6 +140,7 @@
       "./services/i18n.ts",
       "./factories/main.ts",
       "./providers/i18n_provider.ts",
+      "./src/types.ts",
       "./src/plugins/edge.ts"
     ],
     "outDir": "./build",
