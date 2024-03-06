@@ -42,5 +42,6 @@ export async function configure(command: Configure) {
    */
   await codemods.updateRcFile((rcFile) => {
     rcFile.addProvider('@adonisjs/i18n/i18n_provider')
+    rcFile.addMetaFile('resources/lang/**/*.json', false)
   })
 }
