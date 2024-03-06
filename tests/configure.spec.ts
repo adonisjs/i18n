@@ -20,7 +20,7 @@ test.group('Configure', (group) => {
     context.fs.basePath = fileURLToPath(BASE_URL)
   })
 
-  test('create config file and register provider', async ({ fs, assert }) => {
+  test('create config file, register provider and update meta files', async ({ fs, assert }) => {
     const ignitor = new IgnitorFactory()
       .withCoreProviders()
       .withCoreConfig()
@@ -51,6 +51,7 @@ test.group('Configure', (group) => {
     await assert.fileExists('app/middleware/detect_user_locale_middleware.ts')
     await assert.fileExists('adonisrc.ts')
     await assert.fileContains('adonisrc.ts', '@adonisjs/i18n/i18n_provider')
+    await assert.fileContains('adonisrc.ts', 'resources/lang/**/*.json')
     await assert.fileContains('config/i18n.ts', 'defineConfig')
     await assert.fileContains(
       'start/kernel.ts',
