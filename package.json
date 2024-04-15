@@ -76,9 +76,9 @@
     "yaml": "^2.4.1"
   },
   "peerDependencies": {
-    "@adonisjs/core": "^6.2.0",
-    "@vinejs/vine": "^1.7.0",
-    "edge.js": "^6.0.1"
+    "@adonisjs/core": "^6.6.0",
+    "@vinejs/vine": "^2.0.0",
+    "edge.js": "^6.0.2"
   },
   "peerDependenciesMeta": {
     "edge.js": {
