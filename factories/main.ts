@@ -72,7 +72,7 @@ export default class DetectUserLocaleMiddleware {
      * Binding I18n class to the request specific instance of it.
      * Doing so will allow IoC container to resolve an instance
      * of request specific i18n object when I18n class is
-     * injected somwhere.
+     * injected somewhere.
      */
     ctx.containerResolver.bindValue(I18n, ctx.i18n)
 
