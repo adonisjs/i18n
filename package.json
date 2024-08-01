@@ -1,7 +1,7 @@
 {
   "name": "@adonisjs/i18n",
   "description": "Internationalization for AdonisJS apps",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "engines": {
     "node": ">=18.16.0"
   },
