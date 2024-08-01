@@ -90,13 +90,13 @@
   },
   "author": "virk,adonisjs",
   "license": "MIT",
-  "homepage": "https://github.com/adonisjs/antl#readme",
+  "homepage": "https://github.com/adonisjs/i18n#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/adonisjs/antl.git"
+    "url": "git+https://github.com/adonisjs/i18n.git"
   },
   "bugs": {
-    "url": "https://github.com/adonisjs/antl/issues"
+    "url": "https://github.com/adonisjs/i18n/issues"
   },
   "keywords": [
     "intl",
