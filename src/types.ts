@@ -24,7 +24,7 @@ export type NumberFormatOptions = Intl.NumberFormatOptions & {
   currencySign?: 'accounting' | 'standard'
   currencyDisplay?: 'symbol' | 'narrowSymbol' | 'code' | 'name'
   compactDisplay?: 'short' | 'long'
-  useGrouping: 'min2' | 'auto' | 'always' | boolean
+  useGrouping?: 'min2' | 'auto' | 'always' | boolean
 }
 
 /**
