@@ -18,12 +18,13 @@
 export type NumberFormatOptions = Intl.NumberFormatOptions & {
   style?: 'decimal' | 'currency' | 'percent' | 'unit'
   unitDisplay?: 'long' | 'short' | 'narrow'
-  signDisplay?: 'auto' | 'never' | 'always' | 'exceptZero'
+  signDisplay?: 'auto' | 'always' | 'never' | 'exceptZero' | 'negative'
   notation?: 'standard' | 'scientific' | 'engineering' | 'compact'
   localeMatcher?: 'best fit' | 'lookup'
   currencySign?: 'accounting' | 'standard'
   currencyDisplay?: 'symbol' | 'narrowSymbol' | 'code' | 'name'
   compactDisplay?: 'short' | 'long'
+  useGrouping: 'min2' | 'auto' | 'always' | boolean
 }
 
 /**

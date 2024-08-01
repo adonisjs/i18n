@@ -68,7 +68,7 @@
     "typescript": "^5.5.4"
   },
   "dependencies": {
-    "@poppinss/intl-formatter": "^3.0.2",
+    "@poppinss/intl-formatter": "^3.0.3",
     "@poppinss/utils": "^6.7.3",
     "intl-messageformat": "^10.5.14",
     "luxon": "^3.4.4",
