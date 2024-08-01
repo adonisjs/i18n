@@ -1,7 +1,10 @@
 {
   "name": "@adonisjs/i18n",
-  "version": "2.1.0",
   "description": "Internationalization for AdonisJS apps",
+  "version": "2.1.0",
+  "engines": {
+    "node": ">=18.16.0"
+  },
   "main": "build/index.js",
   "type": "module",
   "files": [
@@ -15,10 +18,7 @@
     "./services/main": "./build/services/i18n.js",
     "./i18n_provider": "./build/providers/i18n_provider.js",
     "./plugins/edge": "./build/src/plugins/edge.js",
-    "./types": "./build/src/types/main.js"
-  },
-  "engines": {
-    "node": ">=18.16.0"
+    "./types": "./build/src/types.js"
   },
   "scripts": {
     "pretest": "npm run lint",
@@ -95,15 +95,15 @@
     "type": "git",
     "url": "git+https://github.com/adonisjs/antl.git"
   },
+  "bugs": {
+    "url": "https://github.com/adonisjs/antl/issues"
+  },
   "keywords": [
     "intl",
     "localization",
     "translation",
     "i18n"
   ],
-  "bugs": {
-    "url": "https://github.com/adonisjs/antl/issues"
-  },
   "eslintConfig": {
     "extends": "@adonisjs/eslint-config/package"
   },
