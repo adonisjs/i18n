@@ -93,6 +93,23 @@ test.group('Fs loader | JSON', () => {
     assert.deepEqual(messages, {})
   })
 
+  test('trim BOM from file', async ({ fs, assert }) => {
+    assert.plan(1)
+
+    const fsLoader = new FsLoader({
+      location: join(fs.basePath, 'resources/lang'),
+    })
+
+    await fs.create('resources/lang/fr.json', '\ufeff{"greeting": "hello world"}')
+
+    const messages = await fsLoader.load()
+    assert.deepEqual(messages, {
+      fr: {
+        greeting: 'hello world',
+      },
+    })
+  })
+
   test('report JSON parsing errors', async ({ fs, assert }) => {
     assert.plan(2)
 

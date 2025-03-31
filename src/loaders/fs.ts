@@ -97,7 +97,8 @@ export class FsLoader implements TranslationsLoaderContract {
   async #processJSONFile(filePath: string, messagesBag: Record<string, any>) {
     debug('loading translations from "%s"', filePath)
 
-    const contents = (await readFile(join(this.#storageBasePath, filePath), 'utf-8')).trim()
+    const untrimmedContent = await readFile(join(this.#storageBasePath, filePath), 'utf-8')
+    const contents = untrimmedContent.trim()
     const messages = this.#parseJSON(filePath, contents)
     this.#processFileTranslations(filePath, messages, messagesBag)
   }
