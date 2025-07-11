@@ -64,7 +64,13 @@ export class I18nMessagesProvider implements MessagesProviderContact {
         ...meta,
       })
     }
-
+    /**
+     * Checking if vine's meta comes with otherField
+     */
+    if (meta?.otherField) {
+      const translatedOtherFieldName = this.#i18n.resolveIdentifier(`${this.#fieldsPrefix}.${meta.otherField}`);
+      meta.otherField = this.#i18n.formatRawMessage(translatedOtherFieldName.message);
+    }
     /**
      * 2nd priority is for rule messages
      */
