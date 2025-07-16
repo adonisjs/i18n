@@ -274,4 +274,59 @@ test.group('I18n | validator messages provider', () => {
       ])
     }
   })
+
+  test('provide other field translations', async ({ fs, assert }) => {
+    assert.plan(1)
+
+    await fs.createJson('resources/lang/en/validator.json', {
+      shared: {
+        fields: {
+          title: 'Post title',
+          summary: 'Post summary',
+          description: 'Post description',
+        },
+        messages: {
+          required: 'The {field} is needed',
+        },
+      },
+    })
+
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
+
+    await i18nManager.loadTranslations()
+    const i18n = new I18n('en', emitter, i18nManager)
+
+    const schema = vine.object({
+      title: vine.string(),
+      description: vine.string(),
+      summary: vine.string().notSameAs('description'),
+    })
+
+    try {
+      await vine.validate({
+        schema,
+        data: {
+          title: 'Hello world',
+          description: 'Hello world',
+          summary: 'Hello world',
+        },
+        messagesProvider: i18n.createMessagesProvider(),
+      })
+    } catch (error) {
+      assert.deepEqual(error.messages, [
+        {
+          field: 'summary',
+          message: 'The Post summary field and Post description field must be different',
+          rule: 'notSameAs',
+          meta: {
+            otherField: 'Post description',
+          },
+        },
+      ])
+    }
+  })
 })
