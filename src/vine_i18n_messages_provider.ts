@@ -51,6 +51,17 @@ export class I18nMessagesProvider implements MessagesProviderContact {
     if (translatedFieldName) {
       fieldName = this.#i18n.formatRawMessage(translatedFieldName.message)
     }
+    /**
+     * Checking if vine's meta comes with otherField
+     */
+    if (meta?.otherField) {
+      const translatedOtherFieldName = this.#i18n.resolveIdentifier(
+        `${this.#fieldsPrefix}.${meta.otherField}`
+      )
+      if (translatedOtherFieldName) {
+        meta.otherField = this.#i18n.formatRawMessage(translatedOtherFieldName.message)
+      }
+    }
 
     /**
      * 1st priority is given to the field messages
@@ -64,7 +75,6 @@ export class I18nMessagesProvider implements MessagesProviderContact {
         ...meta,
       })
     }
-
     /**
      * 2nd priority is for rule messages
      */
