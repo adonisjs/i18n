@@ -72,11 +72,7 @@ export class IcuFormatter implements TranslationsFormatterContract {
    */
   format(message: string, locale: string, data?: Record<string, any>): string {
     return new IntlMessageFormat(message, locale, IcuFormatter.customFormats, {
-      /**
-       * Disabling type-checking here since https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Intl/NumberFormat/NumberFormat accepts "exceptZero" as the
-       * "signSymbol" but TypeScript bundled definition doesn't have it
-       */
-      formatters: MessageValuesFormatters as any,
+      formatters: MessageValuesFormatters,
       ignoreTag: true,
     }).format(data || {})
   }
