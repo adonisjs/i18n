@@ -18,22 +18,47 @@ import debug from '../debug.ts'
 import type { FsLoaderOptions, Translations, TranslationsLoaderContract } from '../types.ts'
 
 /**
- * Uses the filesystem to load messages from the JSON
- * files
+ * Filesystem loader that reads translation files from disk.
+ * Supports JSON, YAML, and YML file formats with nested directory structure
+ * for organizing translations by locale and namespace.
+ *
+ * File structure example:
+ * ```
+ * lang/
+ *   en/
+ *     messages.json
+ *     validation.yaml
+ *   fr/
+ *     messages.json
+ * ```
+ *
+ * @example
+ * ```typescript
+ * const loader = new FsLoader({ location: './lang' })
+ * const translations = await loader.load()
+ * console.log(translations.en['messages.welcome']) // "Welcome!"
+ * ```
  */
 export class FsLoader implements TranslationsLoaderContract {
   /**
-   * Base path for translation files
+   * Base path for translation files on the filesystem
+   * Resolved from URL or string path in the configuration
    */
   #storageBasePath: string
 
+  /**
+   * Creates a new FsLoader instance
+   *
+   * @param config - Configuration object containing the location of translation files
+   */
   constructor(config: FsLoaderOptions) {
     this.#storageBasePath =
       config.location instanceof URL ? fileURLToPath(config.location) : config.location
   }
 
   /**
-   * File types supported by the FsLoader
+   * File extensions supported by the FsLoader
+   * Includes JSON and YAML formats for maximum compatibility
    */
   #supportedFileTypes = ['.json', '.yaml', '.yml']
 
@@ -141,7 +166,10 @@ export class FsLoader implements TranslationsLoaderContract {
   }
 
   /**
-   * Returns an array of file paths for translation files.
+   * Returns an array of file paths for translation files
+   * Recursively scans the storage directory for supported file types
+   *
+   * @returns Promise resolving to array of relative file paths
    */
   #getTranslationFiles() {
     return fsReadAll(this.#storageBasePath, {
@@ -151,7 +179,16 @@ export class FsLoader implements TranslationsLoaderContract {
   }
 
   /**
-   * Loads messages from the lang directory
+   * Loads all translation messages from the configured directory
+   * Processes all supported file types and organizes by locale
+   *
+   * @returns Promise resolving to translations object organized by locale
+   *
+   * @example
+   * ```typescript
+   * const translations = await loader.load()
+   * // Returns: { en: { 'hello.world': 'Hello World' }, fr: { 'hello.world': 'Bonjour le monde' } }
+   * ```
    */
   async load() {
     const messagesBag: Translations = {}

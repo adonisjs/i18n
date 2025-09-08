@@ -18,9 +18,21 @@ import type {
   MissingTranslationEventPayload,
 } from './types.ts'
 
+/**
+ * I18nManager manages translation loading, locale detection, and I18n instance creation.
+ * It handles multiple loaders, fallback locales, and caching of translations.
+ *
+ * @example
+ * ```typescript
+ * const manager = new I18nManager(emitter, config)
+ * await manager.loadTranslations()
+ * const i18n = manager.locale('en')
+ * ```
+ */
 export class I18nManager {
   /**
-   * i18n config
+   * Configuration object for the I18n manager
+   * Contains default locale, supported locales, loaders, and formatter settings
    */
   config: I18nManagerConfig
 
@@ -56,6 +68,7 @@ export class I18nManager {
 
   /**
    * Reference to the default locale defined inside the config file
+   * This is the primary locale used when no specific locale is requested
    */
   get defaultLocale(): string {
     return this.config.defaultLocale
@@ -63,12 +76,19 @@ export class I18nManager {
 
   /**
    * Check if the translations has been cached or not.
-   * Use "reloadTranslations" method re-fetch translations
+   * Use "reloadTranslations" method to re-fetch translations
+   * @returns True if translations have been loaded and cached
    */
   get hasCachedTranslations(): boolean {
     return this.#hasCachedTranslations
   }
 
+  /**
+   * Creates a new I18nManager instance
+   *
+   * @param emitter - Event emitter for missing translation notifications
+   * @param config - Configuration object containing loaders, locales, and formatter
+   */
   constructor(
     emitter: Emitter<{ 'i18n:missing:translation': MissingTranslationEventPayload } & any>,
     config: I18nManagerConfig
@@ -81,8 +101,16 @@ export class I18nManager {
    * Returns an array of locales supported by the application.
    *
    * The method returns locales by inspecting the translations,
-   * when no explicit supportLocales are defined inside the
+   * when no explicit supportedLocales are defined inside the
    * config file.
+   *
+   * @returns Array of supported locale strings
+   *
+   * @example
+   * ```typescript
+   * const locales = manager.supportedLocales()
+   * console.log(locales) // ['en', 'fr', 'es']
+   * ```
    */
   supportedLocales() {
     return this.config.supportedLocales || this.#inferredLocales
@@ -90,8 +118,15 @@ export class I18nManager {
 
   /**
    * Returns an object of cached translations. The object is shared
-   * by reference and hence mutations will mutate the original
-   * copy
+   * by reference and hence mutations will mutate the original copy
+   *
+   * @returns Object containing all loaded translations by locale
+   *
+   * @example
+   * ```typescript
+   * const translations = manager.getTranslations()
+   * console.log(translations.en['hello.world']) // "Hello World"
+   * ```
    */
   getTranslations() {
     return this.#translations
@@ -99,6 +134,15 @@ export class I18nManager {
 
   /**
    * Returns an object of translations for a given locale
+   *
+   * @param locale - The locale to get translations for
+   * @returns Object containing translations for the specified locale
+   *
+   * @example
+   * ```typescript
+   * const enTranslations = manager.getTranslationsFor('en')
+   * console.log(enTranslations['hello.world']) // "Hello World"
+   * ```
    */
   getTranslationsFor(locale: string) {
     return this.#translations[locale] || {}
@@ -106,7 +150,15 @@ export class I18nManager {
 
   /**
    * Returns an instance of the translations formatter for the
-   * active formatter
+   * active formatter. Lazily instantiates the formatter on first access.
+   *
+   * @returns The configured translations formatter instance
+   *
+   * @example
+   * ```typescript
+   * const formatter = manager.getFormatter()
+   * const formatted = formatter.format('Hello {name}', 'en', { name: 'John' })
+   * ```
    */
   getFormatter() {
     /**
@@ -126,6 +178,12 @@ export class I18nManager {
    *
    * The loaded translations are cached forever and you must use
    * "reloadTranslations" method to reload them.
+   *
+   * @example
+   * ```typescript
+   * await manager.loadTranslations()
+   * console.log('Translations loaded successfully')
+   * ```
    */
   async loadTranslations() {
     if (!this.hasCachedTranslations) {
@@ -135,6 +193,13 @@ export class I18nManager {
 
   /**
    * Reload translations from the registered loaders
+   * Clears existing cache and loads fresh translations from all loaders
+   *
+   * @example
+   * ```typescript
+   * await manager.reloadTranslations()
+   * console.log('Translations reloaded successfully')
+   * ```
    */
   async reloadTranslations() {
     debug('loading translations')
@@ -191,7 +256,19 @@ export class I18nManager {
 
   /**
    * Returns the most appropriate supported locale based upon the user
-   * languages
+   * languages using content negotiation
+   *
+   * @param userLanguage - Single language string or array of preferred languages
+   * @returns The best matching supported locale or null if no match found
+   *
+   * @example
+   * ```typescript
+   * const locale = manager.getSupportedLocaleFor('en-US,fr;q=0.9')
+   * console.log(locale) // 'en' (if supported)
+   *
+   * const localeArray = manager.getSupportedLocaleFor(['fr', 'en'])
+   * console.log(localeArray) // 'fr' (if supported)
+   * ```
    */
   getSupportedLocaleFor(userLanguage: string | string[]): string | null {
     /**
@@ -211,7 +288,16 @@ export class I18nManager {
 
   /**
    * Returns the fallback locale for a given locale. Returns the default
-   * locale when no fallback is defined
+   * locale when no fallback is defined or no close match is found
+   *
+   * @param locale - The locale to find a fallback for
+   * @returns The fallback locale string
+   *
+   * @example
+   * ```typescript
+   * const fallback = manager.getFallbackLocaleFor('en-CA')
+   * console.log(fallback) // 'en' (closest match) or defaultLocale
+   * ```
    */
   getFallbackLocaleFor(locale: string): string {
     /**
@@ -248,6 +334,19 @@ export class I18nManager {
 
   /**
    * Returns an instance of I18n for a given locale
+   * Uses the default locale if none is provided
+   *
+   * @param locale - Optional locale string, defaults to defaultLocale
+   * @returns New I18n instance for the specified locale
+   *
+   * @example
+   * ```typescript
+   * const i18n = manager.locale('fr')
+   * const message = i18n.t('hello.world')
+   *
+   * // Uses default locale
+   * const defaultI18n = manager.locale()
+   * ```
    */
   locale(locale?: string) {
     return new I18n(locale || this.defaultLocale, this.#emitter, this)
@@ -255,9 +354,17 @@ export class I18nManager {
 
   /**
    * Returns the fallback message for an identifier and locale
-   * when the "config.fallback" property is defined.
+   * when the "config.fallback" function is defined.
    *
-   * Otherwise returns undefined
+   * @param identifier - The translation identifier
+   * @param locale - The locale to get fallback message for
+   * @returns Fallback message string or undefined if not configured
+   *
+   * @example
+   * ```typescript
+   * const fallback = manager.getFallbackMessage('missing.key', 'en')
+   * console.log(fallback) // Custom fallback or undefined
+   * ```
    */
   getFallbackMessage(identifier: string, locale: string): string | undefined {
     return this.config.fallback?.(identifier, locale)

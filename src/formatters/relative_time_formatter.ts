@@ -99,7 +99,20 @@ const UNITS_FORMATTER = [
 ]
 
 /**
- * Formats a relative time to a string with "auto" unit
+ * Formats a relative time to a string with automatic unit selection.
+ * Selects the most appropriate unit (seconds, minutes, hours, days, months, years)
+ * based on the magnitude of the time difference.
+ *
+ * @param formatter - The Intl.RelativeTimeFormat instance to use for formatting
+ * @param diff - The time difference in milliseconds
+ * @returns Formatted relative time string (e.g., "2 days ago", "in 3 hours")
+ *
+ * @example
+ * ```typescript
+ * const formatter = new Intl.RelativeTimeFormat('en')
+ * format(formatter, -86400000) // "1 day ago" (-24 hours in ms)
+ * format(formatter, 3600000)   // "in 1 hour" (1 hour in ms)
+ * ```
  */
 export function format(formatter: Intl.RelativeTimeFormat, diff: number): string {
   const absDiff = Math.abs(diff)

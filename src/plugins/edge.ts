@@ -14,8 +14,25 @@ import type { I18n } from '../i18n.ts'
 import type { I18nManager } from '../i18n_manager.ts'
 
 /**
- * The edge plugin for AdonisJS Session adds tags to read
- * flash messages
+ * Edge template engine plugin for AdonisJS I18n integration.
+ * Adds global helpers and functions for accessing translations in templates.
+ *
+ * Provides the following global helpers:
+ * - `i18n`: Default I18n instance for the default locale
+ * - `t()`: Translation function that uses the current I18n context
+ * - `getDefaultLocale()`: Returns the default locale string
+ * - `getSupportedLocales()`: Returns array of supported locales
+ *
+ * @param i18n - The I18nManager instance to integrate with Edge
+ * @returns Edge plugin function
+ *
+ * @example
+ * ```typescript
+ * // In Edge template:
+ * {{ t('hello.world', { name: 'John' }) }}
+ * {{ getDefaultLocale() }}
+ * {{ getSupportedLocales() }}
+ * ```
  */
 export const edgePluginI18n: (i18n: I18nManager) => PluginFn<undefined> = (i18n) => {
   debug('registering edge helpers')

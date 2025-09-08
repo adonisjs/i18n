@@ -11,7 +11,18 @@ import type { Repl } from '@adonisjs/core/repl'
 import type { ApplicationService } from '@adonisjs/core/types'
 
 /**
- * Registers REPL bindings
+ * Registers REPL bindings for the I18n service.
+ * Adds a `loadI18n` method to the REPL that loads the I18n service into the context.
+ *
+ * @param app - The AdonisJS application service instance
+ * @param Repl - The REPL instance to register bindings on
+ *
+ * @example
+ * ```typescript
+ * // In REPL after calling this function:
+ * await loadI18n()
+ * i18n.t('hello.world')
+ * ```
  */
 export function registerReplBindings(app: ApplicationService, Repl: Repl) {
   Repl.addMethod(
