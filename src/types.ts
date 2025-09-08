@@ -33,7 +33,6 @@ export type NumberFormatOptions = Intl.NumberFormatOptions & {
  * "style", "unit", and "unitDisplay" options.
  */
 export type CurrencyFormatOptions = Omit<NumberFormatOptions, 'style' | 'unit' | 'unitDisplay'> & {
-  // Currency is always required
   currency: string
 }
 

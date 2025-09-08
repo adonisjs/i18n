@@ -7,9 +7,9 @@
  * file that was distributed with this source code.
  */
 
-import string from '@poppinss/utils/string'
-import type { I18n } from './i18n.js'
+import string from '@adonisjs/core/helpers/string'
 import type { FieldContext, MessagesProviderContact } from '@vinejs/vine/types'
+import type { I18n } from './i18n.js'
 
 /**
  * VineJS messages provider to read validation messages

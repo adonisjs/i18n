@@ -8,7 +8,7 @@
  */
 
 import { test } from '@japa/runner'
-import { ApplicationService } from '@adonisjs/core/types'
+import { type ApplicationService } from '@adonisjs/core/types'
 import { AppFactory } from '@adonisjs/core/factories/app'
 
 import { FsLoader } from '../src/loaders/fs.js'

@@ -8,7 +8,7 @@
  */
 
 import formatters from '@poppinss/intl-formatter'
-import { Formats, IntlMessageFormat } from 'intl-messageformat'
+import { type Formats, IntlMessageFormat } from 'intl-messageformat'
 import type {
   TimeFormatOptions,
   NumberFormatOptions,

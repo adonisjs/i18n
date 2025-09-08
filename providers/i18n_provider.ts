@@ -8,10 +8,10 @@
  */
 
 import { configProvider } from '@adonisjs/core'
-import { RuntimeException } from '@poppinss/utils'
+import { RuntimeException } from '@adonisjs/core/exceptions'
+import type { ApplicationService } from '@adonisjs/core/types'
 
 import { I18nManager } from '../src/i18n_manager.js'
-import type { ApplicationService } from '@adonisjs/core/types'
 import type { MissingTranslationEventPayload } from '../src/types.js'
 
 declare module '@adonisjs/core/types' {

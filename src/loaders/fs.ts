@@ -10,8 +10,9 @@
 import yaml from 'yaml'
 import { fileURLToPath } from 'node:url'
 import { join, extname } from 'node:path'
+import { flatten } from '@poppinss/utils'
 import { readFile } from 'node:fs/promises'
-import { flatten, fsReadAll } from '@poppinss/utils'
+import { fsReadAll } from '@adonisjs/core/helpers'
 
 import debug from '../debug.js'
 import type { FsLoaderOptions, Translations, TranslationsLoaderContract } from '../types.js'

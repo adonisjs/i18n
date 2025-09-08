@@ -10,13 +10,13 @@
 import { Emitter } from '@adonisjs/core/events'
 import type { NextFn } from '@adonisjs/core/types/http'
 import { AppFactory } from '@adonisjs/core/factories/app'
-import { ApplicationService, EventsList } from '@adonisjs/core/types'
 import { type HttpContext, RequestValidator } from '@adonisjs/core/http'
+import { type ApplicationService, type EventsList } from '@adonisjs/core/types'
 
 import { I18n } from '../src/i18n.js'
 import { FsLoader } from '../src/loaders/fs.js'
-import { I18nManagerConfig } from '../src/types.js'
 import { I18nManager } from '../src/i18n_manager.js'
+import { type I18nManagerConfig } from '../src/types.js'
 import { IcuFormatter } from '../src/messages_formatters/icu.js'
 
 /**
