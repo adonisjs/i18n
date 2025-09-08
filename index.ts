@@ -7,8 +7,8 @@
  * file that was distributed with this source code.
  */
 
-export { I18n } from './src/i18n.js'
-export { configure } from './configure.js'
-export { stubsRoot } from './stubs/main.js'
-export { I18nManager } from './src/i18n_manager.js'
-export { defineConfig, formatters, loaders } from './src/define_config.js'
+export { I18n } from './src/i18n.ts'
+export { configure } from './configure.ts'
+export { stubsRoot } from './stubs/main.ts'
+export { I18nManager } from './src/i18n_manager.ts'
+export { defineConfig, formatters, loaders } from './src/define_config.ts'

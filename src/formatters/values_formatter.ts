@@ -10,8 +10,8 @@
 import formatters from '@poppinss/intl-formatter'
 import { DateTime, type DurationObjectUnits } from 'luxon'
 
-import { format } from './relative_time_formatter.js'
-import type { TimeFormatOptions, NumberFormatOptions, CurrencyFormatOptions } from '../types.js'
+import { format } from './relative_time_formatter.ts'
+import type { TimeFormatOptions, NumberFormatOptions, CurrencyFormatOptions } from '../types.ts'
 
 /**
  * Mapping of "Intl.RelativeTimeFormatUnit" to luxon "DurationObjectUnits"

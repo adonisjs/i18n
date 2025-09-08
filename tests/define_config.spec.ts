@@ -11,9 +11,9 @@ import { test } from '@japa/runner'
 import { type ApplicationService } from '@adonisjs/core/types'
 import { AppFactory } from '@adonisjs/core/factories/app'
 
-import { FsLoader } from '../src/loaders/fs.js'
-import { IcuFormatter } from '../src/messages_formatters/icu.js'
-import { defineConfig, formatters, loaders } from '../src/define_config.js'
+import { FsLoader } from '../src/loaders/fs.ts'
+import { IcuFormatter } from '../src/messages_formatters/icu.ts'
+import { defineConfig, formatters, loaders } from '../src/define_config.ts'
 
 const BASE_URL = new URL('./', import.meta.url)
 const app = new AppFactory().create(BASE_URL) as ApplicationService

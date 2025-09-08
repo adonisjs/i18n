@@ -14,8 +14,8 @@ import { flatten } from '@poppinss/utils'
 import { readFile } from 'node:fs/promises'
 import { fsReadAll } from '@adonisjs/core/helpers'
 
-import debug from '../debug.js'
-import type { FsLoaderOptions, Translations, TranslationsLoaderContract } from '../types.js'
+import debug from '../debug.ts'
+import type { FsLoaderOptions, Translations, TranslationsLoaderContract } from '../types.ts'
 
 /**
  * Uses the filesystem to load messages from the JSON

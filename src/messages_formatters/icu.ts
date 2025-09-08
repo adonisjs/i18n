@@ -13,7 +13,7 @@ import type {
   TimeFormatOptions,
   NumberFormatOptions,
   TranslationsFormatterContract,
-} from '../types.js'
+} from '../types.ts'
 
 /**
  * Formatters for ICU message. We need the memoized

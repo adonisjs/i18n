@@ -9,7 +9,7 @@
 
 import string from '@adonisjs/core/helpers/string'
 import type { FieldContext, MessagesProviderContact } from '@vinejs/vine/types'
-import type { I18n } from './i18n.js'
+import type { I18n } from './i18n.ts'
 
 /**
  * VineJS messages provider to read validation messages

@@ -10,13 +10,13 @@
 import Negotiator from 'negotiator'
 import type { Emitter } from '@adonisjs/core/events'
 
-import debug from './debug.js'
-import { I18n } from './i18n.js'
+import debug from './debug.ts'
+import { I18n } from './i18n.ts'
 import type {
   I18nManagerConfig,
   TranslationsFormatterContract,
   MissingTranslationEventPayload,
-} from './types.js'
+} from './types.ts'
 
 export class I18nManager {
   /**

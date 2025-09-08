@@ -12,11 +12,11 @@ import { test } from '@japa/runner'
 import { Emitter } from '@adonisjs/core/events'
 import { AppFactory } from '@adonisjs/core/factories/app'
 
-import { I18n } from '../src/i18n.js'
-import { FsLoader } from '../src/loaders/fs.js'
-import { I18nManager } from '../src/i18n_manager.js'
-import { IcuFormatter } from '../src/messages_formatters/icu.js'
-import type { MissingTranslationEventPayload } from '../src/types.js'
+import { I18n } from '../src/i18n.ts'
+import { FsLoader } from '../src/loaders/fs.ts'
+import { I18nManager } from '../src/i18n_manager.ts'
+import { IcuFormatter } from '../src/messages_formatters/icu.ts'
+import type { MissingTranslationEventPayload } from '../src/types.ts'
 
 const BASE_URL = new URL('./', import.meta.url)
 const app = new AppFactory().create(BASE_URL)

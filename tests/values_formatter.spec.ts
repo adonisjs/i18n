@@ -9,7 +9,7 @@
 
 import { DateTime } from 'luxon'
 import { test } from '@japa/runner'
-import { Formatter } from '../src/formatters/values_formatter.js'
+import { Formatter } from '../src/formatters/values_formatter.ts'
 
 test.group('Formatter', () => {
   test('format a number', ({ assert }) => {

@@ -7,12 +7,12 @@
  * file that was distributed with this source code.
  */
 
-import edge from 'edge.js'
+import edge from 'edge.ts'
 import { test } from '@japa/runner'
 import { IgnitorFactory } from '@adonisjs/core/factories'
 
-import { I18nManager } from '../src/i18n_manager.js'
-import { defineConfig, formatters, loaders } from '../src/define_config.js'
+import { I18nManager } from '../src/i18n_manager.ts'
+import { defineConfig, formatters, loaders } from '../src/define_config.ts'
 
 const BASE_URL = new URL('./tmp/', import.meta.url)
 

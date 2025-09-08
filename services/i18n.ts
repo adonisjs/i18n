@@ -8,7 +8,7 @@
  */
 
 import app from '@adonisjs/core/services/app'
-import { type I18nManager } from '../src/i18n_manager.js'
+import { type I18nManager } from '../src/i18n_manager.ts'
 
 let i18nManager: I18nManager
 

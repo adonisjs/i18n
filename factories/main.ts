@@ -13,11 +13,11 @@ import { AppFactory } from '@adonisjs/core/factories/app'
 import { type HttpContext, RequestValidator } from '@adonisjs/core/http'
 import { type ApplicationService, type EventsList } from '@adonisjs/core/types'
 
-import { I18n } from '../src/i18n.js'
-import { FsLoader } from '../src/loaders/fs.js'
-import { I18nManager } from '../src/i18n_manager.js'
-import { type I18nManagerConfig } from '../src/types.js'
-import { IcuFormatter } from '../src/messages_formatters/icu.js'
+import { I18n } from '../src/i18n.ts'
+import { FsLoader } from '../src/loaders/fs.ts'
+import { I18nManager } from '../src/i18n_manager.ts'
+import { type I18nManagerConfig } from '../src/types.ts'
+import { IcuFormatter } from '../src/messages_formatters/icu.ts'
 
 /**
  * Notify TypeScript about i18n property

@@ -9,7 +9,7 @@
 
 import { DateTime } from 'luxon'
 import { test } from '@japa/runner'
-import { IcuFormatter } from '../src/messages_formatters/icu.js'
+import { IcuFormatter } from '../src/messages_formatters/icu.ts'
 
 test.group('ICU message formatter', () => {
   test('format a string value', ({ assert }) => {

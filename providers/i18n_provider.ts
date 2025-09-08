@@ -11,8 +11,8 @@ import { configProvider } from '@adonisjs/core'
 import { RuntimeException } from '@adonisjs/core/exceptions'
 import type { ApplicationService } from '@adonisjs/core/types'
 
-import { I18nManager } from '../src/i18n_manager.js'
-import type { MissingTranslationEventPayload } from '../src/types.js'
+import { I18nManager } from '../src/i18n_manager.ts'
+import type { MissingTranslationEventPayload } from '../src/types.ts'
 
 declare module '@adonisjs/core/types' {
   export interface EventsList {
