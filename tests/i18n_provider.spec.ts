@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import edge from 'edge.ts'
+import edge from 'edge.js'
 import { test } from '@japa/runner'
 import { IgnitorFactory } from '@adonisjs/core/factories'
 
