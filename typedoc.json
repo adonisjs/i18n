@@ -1,0 +1,20 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "name": "@adonisjs/i18n",
+  "includeVersion": true,
+  "excludeExternals": true,
+  "entryPoints": [
+    "./index.ts",
+    "./services/i18n.ts",
+    "./factories/main.ts",
+    "./providers/i18n_provider.ts",
+    "./src/types.ts",
+    "./src/plugins/edge.ts"
+  ],
+  "excludePrivate": true,
+  "excludeProtected": true,
+  "excludeInternal": true,
+  "readme": "none",
+  "gitRevision": "main",
+  "sort": ["source-order"]
+}
