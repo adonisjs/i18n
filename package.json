@@ -64,26 +64,34 @@
     "prettier": "^3.7.4",
     "release-it": "^19.1.0",
     "tsdown": "^0.18.1",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "yaml": "^2.8.2"
   },
   "dependencies": {
     "@poppinss/intl-formatter": "^3.1.0",
     "@poppinss/utils": "^7.0.0-next.4",
     "intl-messageformat": "^11.0.2",
     "luxon": "^3.7.2",
-    "negotiator": "^1.0.0",
-    "yaml": "^2.8.2"
+    "negotiator": "^1.0.0"
   },
   "peerDependencies": {
-    "@adonisjs/core": "^7.0.0-next.0",
+    "@adonisjs/assembler": "^8.0.0-next.26",
+    "@adonisjs/core": "^7.0.0-next.16",
     "@vinejs/vine": "^3.0.0 || ^4.0.0",
-    "edge.js": "^6.0.2"
+    "edge.js": "^6.4.0",
+    "yaml": "^2.8.2"
   },
   "peerDependenciesMeta": {
-    "edge.js": {
+    "@adonisjs/assembler": {
       "optional": true
     },
     "@vinejs/vine": {
+      "optional": true
+    },
+    "edge.js": {
+      "optional": true
+    },
+    "yaml": {
       "optional": true
     }
   },

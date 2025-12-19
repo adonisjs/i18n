@@ -7,7 +7,6 @@
  * file that was distributed with this source code.
  */
 
-import yaml from 'yaml'
 import { fileURLToPath } from 'node:url'
 import { join, extname } from 'node:path'
 import { flatten } from '@poppinss/utils'
@@ -133,10 +132,17 @@ export class FsLoader implements TranslationsLoaderContract {
    * Wraps JSON.parse to raise exception with the file path when
    * unable to parse JSON
    */
-  #parseYaml(filePath: string, contents: string): Record<string, any> {
+  async #parseYaml(filePath: string, contents: string): Promise<Record<string, any>> {
     try {
-      return yaml.parse(contents)
+      const yaml = await import('yaml')
+      return yaml.default.parse(contents)
     } catch (error) {
+      if (error.code === 'ERR_MODULE_NOT_FOUND') {
+        throw new Error(
+          'Cannot parse YAML i18n files. Make sure to first install the "yaml" package'
+        )
+      }
+
       const offset = error.source?.range?.start
       const stack = error.stack!.split('\n')
 
@@ -145,7 +151,7 @@ export class FsLoader implements TranslationsLoaderContract {
       }
 
       /**
-       * Patching the stack to include the JSON file path
+       * Patching the stack to include the YAML file path
        */
       stack.splice(1, 0, `    at anonymous (${filePath})`)
 
@@ -161,7 +167,7 @@ export class FsLoader implements TranslationsLoaderContract {
     debug('loading translations from "%s"', filePath)
 
     const contents = await readFile(join(this.#storageBasePath, filePath), 'utf-8')
-    const messages = this.#parseYaml(filePath, contents)
+    const messages = await this.#parseYaml(filePath, contents)
     this.#processFileTranslations(filePath, messages, messagesBag)
   }
 
