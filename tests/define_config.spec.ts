@@ -60,7 +60,7 @@ test.group('Define config', () => {
       formatter: formatters.icu(),
     }).resolver(app)
 
-    const loader = config.loaders[0](config)
+    const loader = config.loaders[0](config) as FsLoader
 
     assert.deepEqual(loader.serveFiles, {
       location: BASE_URL,
