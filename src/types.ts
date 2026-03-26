@@ -84,7 +84,7 @@ export type FsLoaderOptions = {
    * Enable this option to register an HTTP route for serving
    * translation files from the file system loader location.
    */
-  serveFiles: true
+  serveFiles?: true
 
   /**
    * Base route path used to expose translation files when
