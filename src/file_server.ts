@@ -13,7 +13,7 @@ import { createReadStream } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import type { HttpContext } from '@adonisjs/core/http'
 
-import { FsLoader } from './loaders/fs.ts'
+import type { FsLoader } from './loaders/fs.ts'
 
 const MIME_TYPES: Record<string, string> = {
   '.json': 'application/json; charset=utf-8',
