@@ -11,6 +11,7 @@ import { configProvider } from '@adonisjs/core'
 import { RuntimeException } from '@adonisjs/core/exceptions'
 import type { ApplicationService } from '@adonisjs/core/types'
 
+import { createFileServer } from '../src/file_server.ts'
 import { I18nManager } from '../src/i18n_manager.ts'
 import type { MissingTranslationEventPayload } from '../src/types.ts'
 
@@ -82,6 +83,22 @@ export default class I18nProvider {
      */
     const i18nManager = await this.app.container.make('i18n')
     await i18nManager.loadTranslations()
+
+    /**
+     * Serve files over HTTP when using FS loader with "serveFiles" option enabled.
+     */
+    const router = await this.app.container.make('router')
+    i18nManager.config.loaders.forEach((loaderFactory, index) => {
+      const loader = loaderFactory(i18nManager.config)
+
+      if (!loader.serveFiles) {
+        return
+      }
+
+      router
+        .get(loader.serveFiles.routePattern, createFileServer(loader.serveFiles.location))
+        .as(`i18n.fs.${index}.serve`)
+    })
 
     await this.registerEdgePlugin(i18nManager)
     await this.registerReplBindings()

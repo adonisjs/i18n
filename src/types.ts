@@ -79,6 +79,18 @@ export interface TranslationsLoaderContract {
  */
 export type FsLoaderOptions = {
   location: string | URL
+
+  /**
+   * Enable this option to register an HTTP route for serving
+   * translation files from the file system loader location.
+   */
+  serveFiles: true
+
+  /**
+   * Base route path used to expose translation files when
+   * "serveFiles" is enabled. Defaults to "/lang".
+   */
+  routeBasePath?: string
 }
 
 /**

@@ -53,6 +53,7 @@ test.group('Configure', (group) => {
     await assert.fileContains('adonisrc.ts', '@adonisjs/i18n/i18n_provider')
     await assert.fileContains('adonisrc.ts', 'resources/lang/**/*.{json,yaml,yml}')
     await assert.fileContains('config/i18n.ts', 'defineConfig')
+    await assert.fileContains('config/i18n.ts', 'serveFiles: true')
     await assert.fileContains(
       'start/kernel.ts',
       `() => import('#middleware/detect_user_locale_middleware')`

@@ -39,6 +39,11 @@ import type { FsLoaderOptions, Translations, TranslationsLoaderContract } from '
  * ```
  */
 export class FsLoader implements TranslationsLoaderContract {
+  serveFiles?: {
+    routePattern: string
+    location: string | URL
+  }
+
   /**
    * Base path for translation files on the filesystem
    * Resolved from URL or string path in the configuration
@@ -53,6 +58,14 @@ export class FsLoader implements TranslationsLoaderContract {
   constructor(config: FsLoaderOptions) {
     this.#storageBasePath =
       config.location instanceof URL ? fileURLToPath(config.location) : config.location
+
+    if (config.serveFiles) {
+      const routeBasePath = config.routeBasePath || 'lang'
+      this.serveFiles = {
+        location: config.location,
+        routePattern: `${routeBasePath.replace(/\/$/, '')}/*`,
+      }
+    }
   }
 
   /**

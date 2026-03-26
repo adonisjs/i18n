@@ -48,4 +48,23 @@ test.group('Define config', () => {
     assert.isFunction(config.loaders[0])
     assert.instanceOf(config.loaders[0](config), FsLoader)
   })
+
+  test('attach serve files metadata to fs loader', async ({ assert }) => {
+    const config = await defineConfig({
+      loaders: [
+        loaders.fs({
+          location: BASE_URL,
+          serveFiles: true,
+        }),
+      ],
+      formatter: formatters.icu(),
+    }).resolver(app)
+
+    const loader = config.loaders[0](config)
+
+    assert.deepEqual(loader.serveFiles, {
+      location: BASE_URL,
+      routePattern: 'lang/*',
+    })
+  })
 })
