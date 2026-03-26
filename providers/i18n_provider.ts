@@ -97,7 +97,7 @@ export default class I18nProvider {
       }
 
       router
-        .get(loader.serveFiles.routePattern, createFileServer(loader.serveFiles.location))
+        .get(loader.serveFiles.routePattern, createFileServer(loader))
         .as(`i18n.fs.${index}.serve`)
     })
 

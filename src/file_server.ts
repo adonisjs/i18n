@@ -13,6 +13,8 @@ import { createReadStream } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import type { HttpContext } from '@adonisjs/core/http'
 
+import { FsLoader } from './loaders/fs.ts'
+
 const MIME_TYPES: Record<string, string> = {
   '.json': 'application/json; charset=utf-8',
   '.yaml': 'text/yaml; charset=utf-8',
@@ -27,7 +29,13 @@ function decodeLocation(location: string): string {
   }
 }
 
-export function createFileServer(location: string | URL) {
+export function createFileServer(loader: FsLoader) {
+  const location = loader.serveFiles?.location
+
+  if (!location) {
+    throw new Error('Cannot create file server without a serveFiles-enabled fs loader')
+  }
+
   const basePath = location instanceof URL ? fileURLToPath(location) : location
   const resolvedBasePath = resolve(basePath)
 
