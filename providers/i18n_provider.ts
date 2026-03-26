@@ -14,6 +14,7 @@ import type { ApplicationService } from '@adonisjs/core/types'
 import { createFileServer } from '../src/file_server.ts'
 import { I18nManager } from '../src/i18n_manager.ts'
 import type { MissingTranslationEventPayload } from '../src/types.ts'
+import { FsLoader } from '../src/loaders/fs.ts'
 
 declare module '@adonisjs/core/types' {
   export interface EventsList {
@@ -91,7 +92,7 @@ export default class I18nProvider {
     i18nManager.config.loaders.forEach((loaderFactory, index) => {
       const loader = loaderFactory(i18nManager.config)
 
-      if (!loader.serveFiles) {
+      if (!(loader instanceof FsLoader) || !loader.serveFiles) {
         return
       }
 
