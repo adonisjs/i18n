@@ -18,6 +18,7 @@ import { FsLoader } from '../src/loaders/fs.ts'
 import { I18nManager } from '../src/i18n_manager.ts'
 import { IcuFormatter } from '../src/messages_formatters/icu.ts'
 import type { MissingTranslationEventPayload } from '../src/types.ts'
+import { I18nMessagesProvider } from '../src/vine_i18n_messages_provider.ts'
 
 const app = new AppFactory().create(new URL('./', import.meta.url), () => {})
 const emitter = new Emitter<{ 'i18n:missing:translation': MissingTranslationEventPayload }>(app)
@@ -339,6 +340,50 @@ test.group('I18n | validator messages provider', () => {
             originalField: 'Password',
             otherField: 'Password confirmation',
           },
+        },
+      ])
+    }
+  })
+
+  test('change message translation when extended', async ({ fs, assert }) => {
+    assert.plan(1)
+
+    await fs.createJson('resources/lang/en/validator.json', {
+      shared: { fields: { numberField: 'Number field' } },
+    })
+
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
+
+    await i18nManager.loadTranslations()
+    const i18n = new I18n('en', emitter, i18nManager)
+
+    const schema = vine.object({ number_field: vine.number() })
+
+    class CamelCaseProvider extends I18nMessagesProvider {
+      translateField(name: string | number) {
+        if (typeof name === 'string') {
+          name = name.replaceAll(/_(\w)/g, (_, letter) => letter.toUpperCase())
+        }
+        return super.translateField(name)
+      }
+    }
+
+    try {
+      await vine.validate({
+        schema,
+        data: { number_field: 'string' },
+        messagesProvider: new CamelCaseProvider('validator.shared', i18n),
+      })
+    } catch (error) {
+      assert.deepEqual(error.messages, [
+        {
+          field: 'number_field',
+          message: 'The Number field field must be a number',
+          rule: 'number',
         },
       ])
     }

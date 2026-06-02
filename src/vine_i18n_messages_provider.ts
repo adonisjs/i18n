@@ -85,9 +85,9 @@ export class I18nMessagesProvider implements MessagesProviderContact {
     /**
      * Translating field names
      */
-    const fieldName = this.#translateField(field.name)
-    if (meta?.otherField) meta.otherField = this.#translateField(meta.otherField)
-    if (meta?.originalField) meta.originalField = this.#translateField(meta.originalField)
+    const fieldName = this.translateField(field.name)
+    if (meta?.otherField) meta.otherField = this.translateField(meta.otherField)
+    if (meta?.originalField) meta.originalField = this.translateField(meta.originalField)
 
     /**
      * 1st priority is given to the field messages
@@ -121,7 +121,10 @@ export class I18nMessagesProvider implements MessagesProviderContact {
     })
   }
 
-  #translateField(name: string | number) {
+  /**
+   * Translates a field name using the configured prefix.
+   */
+  translateField(name: string | number) {
     const translatedFieldName = this.#i18n.resolveIdentifier(`${this.#fieldsPrefix}.${name}`)
     if (translatedFieldName) {
       return this.#i18n.formatRawMessage(translatedFieldName.message)
