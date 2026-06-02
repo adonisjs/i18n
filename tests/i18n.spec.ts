@@ -284,6 +284,8 @@ test.group('I18n | validator messages provider', () => {
           title: 'Post title',
           summary: 'Post summary',
           description: 'Post description',
+          password: 'Password',
+          password_confirmation: 'Password confirmation',
         },
         messages: {
           required: 'The {field} is needed',
@@ -304,6 +306,7 @@ test.group('I18n | validator messages provider', () => {
       title: vine.string(),
       description: vine.string(),
       summary: vine.string().notSameAs('description'),
+      password: vine.string().confirmed(),
     })
 
     try {
@@ -313,6 +316,8 @@ test.group('I18n | validator messages provider', () => {
           title: 'Hello world',
           description: 'Hello world',
           summary: 'Hello world',
+          password: 'Password',
+          password_confirmation: 'Passwor',
         },
         messagesProvider: i18n.createMessagesProvider(),
       })
@@ -324,6 +329,15 @@ test.group('I18n | validator messages provider', () => {
           rule: 'notSameAs',
           meta: {
             otherField: 'Post description',
+          },
+        },
+        {
+          field: 'password_confirmation',
+          message: 'The Password field and Password confirmation field must be the same',
+          rule: 'confirmed',
+          meta: {
+            originalField: 'Password',
+            otherField: 'Password confirmation',
           },
         },
       ])

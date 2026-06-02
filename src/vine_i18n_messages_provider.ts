@@ -83,24 +83,11 @@ export class I18nMessagesProvider implements MessagesProviderContact {
     meta?: Record<string, any>
   ) {
     /**
-     * Translating field name
+     * Translating field names
      */
-    let fieldName = field.name
-    const translatedFieldName = this.#i18n.resolveIdentifier(`${this.#fieldsPrefix}.${field.name}`)
-    if (translatedFieldName) {
-      fieldName = this.#i18n.formatRawMessage(translatedFieldName.message)
-    }
-    /**
-     * Checking if vine's meta comes with otherField
-     */
-    if (meta?.otherField) {
-      const translatedOtherFieldName = this.#i18n.resolveIdentifier(
-        `${this.#fieldsPrefix}.${meta.otherField}`
-      )
-      if (translatedOtherFieldName) {
-        meta.otherField = this.#i18n.formatRawMessage(translatedOtherFieldName.message)
-      }
-    }
+    const fieldName = this.#translateField(field.name)
+    if (meta?.otherField) meta.otherField = this.#translateField(meta.otherField)
+    if (meta?.originalField) meta.originalField = this.#translateField(meta.originalField)
 
     /**
      * 1st priority is given to the field messages
@@ -132,5 +119,13 @@ export class I18nMessagesProvider implements MessagesProviderContact {
       field: fieldName,
       ...meta,
     })
+  }
+
+  #translateField(name: string | number) {
+    const translatedFieldName = this.#i18n.resolveIdentifier(`${this.#fieldsPrefix}.${name}`)
+    if (translatedFieldName) {
+      return this.#i18n.formatRawMessage(translatedFieldName.message)
+    }
+    return name
   }
 }
