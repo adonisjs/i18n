@@ -92,9 +92,8 @@ export class I18nMessagesProvider implements MessagesProviderContact {
     /**
      * 1st priority is given to the field messages
      */
-    const fieldMessage = this.#i18n.resolveIdentifier(
-      `${this.#messagesPrefix}.${field.wildCardPath}.${rule}`
-    )
+    const fieldIdentifier = `${this.#messagesPrefix}.${field.wildCardPath}.${rule}`
+    const fieldMessage = this.#i18n.resolveIdentifier(fieldIdentifier)
     if (fieldMessage) {
       return this.#i18n.formatRawMessage(fieldMessage.message, {
         field: fieldName,
@@ -104,7 +103,8 @@ export class I18nMessagesProvider implements MessagesProviderContact {
     /**
      * 2nd priority is for rule messages
      */
-    const ruleMessage = this.#i18n.resolveIdentifier(`${this.#messagesPrefix}.${rule}`)
+    const ruleIdentifier = `${this.#messagesPrefix}.${rule}`
+    const ruleMessage = this.#i18n.resolveIdentifier(ruleIdentifier)
     if (ruleMessage) {
       return this.#i18n.formatRawMessage(ruleMessage.message, {
         field: fieldName,
@@ -113,11 +113,15 @@ export class I18nMessagesProvider implements MessagesProviderContact {
     }
 
     /**
-     * Fallback to default message
+     * 3rd priority is a fallback message
      */
-    return string.interpolate(defaultMessage, {
-      field: fieldName,
-      ...meta,
+    return this.getFallbackMessage({
+      defaultMessage,
+      rule,
+      field,
+      meta,
+      ruleIdentifier,
+      fieldIdentifier,
     })
   }
 
@@ -130,5 +134,27 @@ export class I18nMessagesProvider implements MessagesProviderContact {
       return this.#i18n.formatRawMessage(translatedFieldName.message)
     }
     return name
+  }
+
+  /**
+   * Returns a fallback for a non-translated message
+   */
+  getFallbackMessage({
+    defaultMessage,
+    field,
+    meta,
+  }: {
+    defaultMessage: string
+    rule: string
+    field: FieldContext
+    meta?: Record<string, any>
+    ruleIdentifier: string
+    fieldIdentifier: string
+  }) {
+    const fieldName = this.translateField(field.name)
+    return string.interpolate(defaultMessage, {
+      field: fieldName,
+      ...meta,
+    })
   }
 }
