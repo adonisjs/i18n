@@ -17,8 +17,9 @@ import { I18n } from '../src/i18n.ts'
 import { FsLoader } from '../src/loaders/fs.ts'
 import { I18nManager } from '../src/i18n_manager.ts'
 import { IcuFormatter } from '../src/messages_formatters/icu.ts'
-import type { MissingTranslationEventPayload } from '../src/types.ts'
+import type { FallbackMessageOptions, MissingTranslationEventPayload } from '../src/types.ts'
 import { I18nMessagesProvider } from '../src/vine_i18n_messages_provider.ts'
+import type { FieldContext } from '@vinejs/vine/types'
 
 const app = new AppFactory().create(new URL('./', import.meta.url), () => {})
 const emitter = new Emitter<{ 'i18n:missing:translation': MissingTranslationEventPayload }>(app)
@@ -383,6 +384,48 @@ test.group('I18n | validator messages provider', () => {
         {
           field: 'number_field',
           message: 'The Number field field must be a number',
+          rule: 'number',
+        },
+      ])
+    }
+  })
+
+  test('change fallback message when extended', async ({ fs, assert }) => {
+    assert.plan(1)
+
+    await fs.createJson('resources/lang/en/validator.json', {
+      shared: { fields: { numberField: 'Number field' } },
+    })
+
+    const i18nManager = new I18nManager(emitter, {
+      defaultLocale: 'en',
+      formatter: () => new IcuFormatter(),
+      loaders: [() => new FsLoader({ location: join(fs.basePath, 'resources/lang') })],
+    })
+
+    await i18nManager.loadTranslations()
+    const i18n = new I18n('da', emitter, i18nManager)
+
+    const schema = vine.object({ number_field: vine.number() })
+
+    class FallbackProvider extends I18nMessagesProvider {
+      getFallbackMessage(options: FallbackMessageOptions) {
+        if (i18n.locale === 'en') return super.getFallbackMessage(options)
+        return i18n.t(options.ruleIdentifier, options.meta)
+      }
+    }
+
+    try {
+      await vine.validate({
+        schema,
+        data: { number_field: 'string' },
+        messagesProvider: new FallbackProvider('validator.shared', i18n),
+      })
+    } catch (error) {
+      assert.deepEqual(error.messages, [
+        {
+          field: 'number_field',
+          message: 'translation missing: da, validator.shared.messages.number',
           rule: 'number',
         },
       ])

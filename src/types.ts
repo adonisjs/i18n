@@ -7,6 +7,8 @@
  * file that was distributed with this source code.
  */
 
+import type { FieldContext } from '@vinejs/vine/types'
+
 /**
  * Options for formatting a numeric value. We override loose
  * types from "Intl.NumberFormatOptions".
@@ -146,4 +148,13 @@ export type MissingTranslationEventPayload = {
   locale: string
   identifier: string
   hasFallback: boolean
+}
+
+export type FallbackMessageOptions = {
+  defaultMessage: string
+  rule: string
+  field: FieldContext
+  meta?: Record<string, any>
+  ruleIdentifier: string
+  fieldIdentifier: string
 }
