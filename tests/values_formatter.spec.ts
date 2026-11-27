@@ -133,25 +133,46 @@ test.group('Formatter', () => {
      * Diff value as a string
      */
     const isoDate = '2021-10-04T10:00:00'
-    const isoDiff = Math.ceil(Math.abs(DateTime.fromISO(isoDate).diffNow('years').years))
+    const isoDiff = Math.trunc(Math.abs(DateTime.fromISO(isoDate).diffNow('years').years))
     assert.equal(formatter.formatRelativeTime(isoDate, 'auto'), `${isoDiff} years ago`)
 
-    const isoMonthsDiff = Math.ceil(Math.abs(DateTime.fromISO(isoDate).diffNow('months').months))
+    const isoMonthsDiff = Math.trunc(Math.abs(DateTime.fromISO(isoDate).diffNow('months').months))
     assert.equal(formatter.formatRelativeTime(isoDate, 'months'), `${isoMonthsDiff} months ago`)
 
     /**
      * Diff value as a luxon date
      */
     const luxonDate = DateTime.fromISO('2021-10-04T10:00:00')
-    const luxonDiff = Math.ceil(Math.abs(luxonDate.diffNow('years').years))
+    const luxonDiff = Math.trunc(Math.abs(luxonDate.diffNow('years').years))
     assert.equal(formatter.formatRelativeTime(luxonDate, 'auto'), `${luxonDiff} years ago`)
 
     /**
      * Diff value as JS date
      */
     const jsDate = new Date('2021-10-04T10:00:00')
-    const jsDiff = Math.ceil(Math.abs(DateTime.fromJSDate(jsDate).diffNow('years').years))
+    const jsDiff = Math.trunc(Math.abs(DateTime.fromJSDate(jsDate).diffNow('years').years))
     assert.equal(formatter.formatRelativeTime(jsDate, 'auto'), `${jsDiff} years ago`)
+  })
+
+  test('truncate past and future time diffs towards zero', ({ assert }) => {
+    const formatter = new Formatter('en')
+    const minutesFromNow = (minutes: number) => new Date(Date.now() + minutes * 60_000)
+
+    /**
+     * Past values
+     */
+    assert.equal(formatter.formatRelativeTime(minutesFromNow(-61), 'auto'), '1 hour ago')
+    assert.equal(formatter.formatRelativeTime(minutesFromNow(-25 * 60), 'days'), '1 day ago')
+    assert.equal(formatter.formatRelativeTime(-59_500, 'auto'), '59 seconds ago')
+    assert.equal(formatter.formatRelativeTime(-86_340_000, 'auto'), '23 hours ago')
+
+    /**
+     * Future values
+     */
+    assert.equal(formatter.formatRelativeTime(minutesFromNow(61), 'auto'), 'in 1 hour')
+    assert.equal(formatter.formatRelativeTime(minutesFromNow(25 * 60), 'days'), 'in 1 day')
+    assert.equal(formatter.formatRelativeTime(59_500, 'auto'), 'in 59 seconds')
+    assert.equal(formatter.formatRelativeTime(86_340_000, 'auto'), 'in 23 hours')
   })
 
   test('format a value to its plural form', ({ assert }) => {

@@ -26,7 +26,7 @@ const UNITS = {
 const SECONDS_FORMATTER = {
   test: (diff: number) => diff < UNITS.minutes,
   format: (formatter: Intl.RelativeTimeFormat, diff: number) => {
-    return formatter.format(Math.floor(diff / UNITS.seconds), 'seconds')
+    return formatter.format(Math.trunc(diff / UNITS.seconds), 'seconds')
   },
 }
 
@@ -37,7 +37,7 @@ const SECONDS_FORMATTER = {
 const MINUTES_FORMATTER = {
   test: (diff: number) => diff < UNITS.hours,
   format: (formatter: Intl.RelativeTimeFormat, diff: number) => {
-    return formatter.format(Math.floor(diff / UNITS.minutes), 'minutes')
+    return formatter.format(Math.trunc(diff / UNITS.minutes), 'minutes')
   },
 }
 
@@ -48,7 +48,7 @@ const MINUTES_FORMATTER = {
 const HOURS_FORMATTER = {
   test: (diff: number) => diff < UNITS.days,
   format: (formatter: Intl.RelativeTimeFormat, diff: number) => {
-    return formatter.format(Math.floor(diff / UNITS.hours), 'hours')
+    return formatter.format(Math.trunc(diff / UNITS.hours), 'hours')
   },
 }
 
@@ -59,7 +59,7 @@ const HOURS_FORMATTER = {
 const DAYS_FORMATTER = {
   test: (diff: number) => diff < UNITS.months,
   format: (formatter: Intl.RelativeTimeFormat, diff: number) => {
-    return formatter.format(Math.floor(diff / UNITS.days), 'days')
+    return formatter.format(Math.trunc(diff / UNITS.days), 'days')
   },
 }
 
@@ -70,7 +70,7 @@ const DAYS_FORMATTER = {
 const MONTHS_FORMATTER = {
   test: (diff: number) => diff < UNITS.years,
   format: (formatter: Intl.RelativeTimeFormat, diff: number) => {
-    return formatter.format(Math.floor(diff / UNITS.months), 'months')
+    return formatter.format(Math.trunc(diff / UNITS.months), 'months')
   },
 }
 
@@ -81,7 +81,7 @@ const MONTHS_FORMATTER = {
 const YEARS_FORMATTER = {
   test: (_: number) => true,
   format: (formatter: Intl.RelativeTimeFormat, diff: number) => {
-    return formatter.format(Math.floor(diff / UNITS.years), 'years')
+    return formatter.format(Math.trunc(diff / UNITS.years), 'years')
   },
 }
 
