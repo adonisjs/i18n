@@ -121,7 +121,7 @@ test.group('Fs loader | JSON', () => {
 
     try {
       await fsLoader.load()
-    } catch (error) {
+    } catch (error: any) {
       assert.oneOf(error.stack.split('\n')[1].trim(), [
         'at anonymous (en/validator/shared.json)',
         'at anonymous (en\\validator\\shared.json)',
@@ -251,7 +251,7 @@ test.group('Fs loader | YAML', () => {
 
     try {
       await fsLoader.load()
-    } catch (error) {
+    } catch (error: any) {
       assert.oneOf(error.stack.split('\n')[1].trim(), [
         'at anonymous (en/validator/shared.yaml)',
         'at anonymous (en\\validator\\shared.yaml)',

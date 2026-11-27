@@ -205,7 +205,7 @@ test.group('I18n | validator messages provider', () => {
         data: { tags: '' },
         messagesProvider: i18n.createMessagesProvider(),
       })
-    } catch (error) {
+    } catch (error: any) {
       assert.deepEqual(error.messages, [
         {
           field: 'title',
@@ -260,7 +260,7 @@ test.group('I18n | validator messages provider', () => {
 
     try {
       await vine.validate({ schema, data: {}, messagesProvider: i18n.createMessagesProvider() })
-    } catch (error) {
+    } catch (error: any) {
       assert.deepEqual(error.messages, [
         {
           field: 'title',
@@ -322,7 +322,7 @@ test.group('I18n | validator messages provider', () => {
         },
         messagesProvider: i18n.createMessagesProvider(),
       })
-    } catch (error) {
+    } catch (error: any) {
       assert.deepEqual(error.messages, [
         {
           field: 'summary',
@@ -378,7 +378,7 @@ test.group('I18n | validator messages provider', () => {
         data: { number_field: 'string' },
         messagesProvider: new CamelCaseProvider('validator.shared', i18n),
       })
-    } catch (error) {
+    } catch (error: any) {
       assert.deepEqual(error.messages, [
         {
           field: 'number_field',

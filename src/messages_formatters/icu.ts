@@ -8,7 +8,7 @@
  */
 
 import formatters from '@poppinss/intl-formatter'
-import { type Formats, IntlMessageFormat } from 'intl-messageformat'
+import { type Formats, type Formatters, IntlMessageFormat } from 'intl-messageformat'
 import type {
   TimeFormatOptions,
   NumberFormatOptions,
@@ -19,8 +19,13 @@ import type {
  * Formatters for ICU message. We need the memoized
  * version for performance
  */
-const MessageValuesFormatters = {
-  getNumberFormat: formatters.number,
+const MessageValuesFormatters: Formatters = {
+  /**
+   * intl-messageformat types the options with its own superset of
+   * "Intl.NumberFormatOptions". The memoized formatter passes them
+   * to "Intl.NumberFormat" as they are.
+   */
+  getNumberFormat: formatters.number as Formatters['getNumberFormat'],
   getDateTimeFormat: formatters.date,
   getPluralRules: formatters.plural,
 }
