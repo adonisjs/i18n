@@ -250,7 +250,7 @@ export class Formatter {
 
     return unit === 'auto'
       ? format(formatter, diff)
-      : formatter.format(typeof value === 'number' ? diff : Math.floor(diff), unit)
+      : formatter.format(typeof value === 'number' ? diff : Math.trunc(diff), unit)
   }
 
   /**
