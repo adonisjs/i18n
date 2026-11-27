@@ -103,7 +103,7 @@ export class FsLoader implements TranslationsLoaderContract {
   #parseJSON(filePath: string, contents: string): Record<string, any> {
     try {
       return JSON.parse(contents)
-    } catch (error) {
+    } catch (error: any) {
       const stack = error.stack!.split('\n')
 
       /**
@@ -136,7 +136,7 @@ export class FsLoader implements TranslationsLoaderContract {
     try {
       const yaml = await import('yaml')
       return yaml.default.parse(contents)
-    } catch (error) {
+    } catch (error: any) {
       if (error.code === 'ERR_MODULE_NOT_FOUND') {
         throw new Error(
           'Cannot parse YAML i18n files. Make sure to first install the "yaml" package'
